@@ -46,9 +46,10 @@ service.interceptors.response.use(
     if(response.status===200){
       const res = response.data;
       if (res.code != 0) {
-        if(res.msg) {
+        if (!response.config.hideToast) {
           MessageToast.error(res.msg)
         }
+        return Promise.reject(res.msg);
       }
       return {data: res.data, res};
       // if (res.code == 0) {
@@ -67,7 +68,9 @@ service.interceptors.response.use(
     if (error.config && error.config.loading === true) {
       hideLoading()
     }
-    MessageToast.error(error.message)
+    if (!error.config.hideToast === true) {
+      MessageToast.error(error.message);
+    }
     return Promise.reject(error)
   }
 )

@@ -51,8 +51,10 @@ service.interceptors.response.use(
       }else if(res.code == 40752) {
         store.dispatch(removeUserInfo());
       }
-      MessageToast.error(res.msg)
-      return Promise.reject('error')
+      if (!response.config.hideToast) {
+        MessageToast.error(res.msg)
+      }
+      return Promise.reject(res.msg);
     }else{
       return Promise.reject(response.data.message);
     }
@@ -62,7 +64,9 @@ service.interceptors.response.use(
     if (error.config && error.config.loading === true) {
       hideLoading()
     }
-    MessageToast.error(error.message)
+    if (!error.config.hideToast === true) {
+      MessageToast.error(error.message);
+    }
     return Promise.reject(error)
   }
 )

@@ -49,6 +49,7 @@ export function exchangeCommitHashApi(data) {
     url: '/exchange/commithash',
     method: 'post',
     data,
-    loading: true,
+    loading: false,
+    hideToast: true,
   })
 }
