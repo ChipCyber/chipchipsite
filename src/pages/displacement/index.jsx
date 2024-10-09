@@ -7,7 +7,7 @@ import useBreakpointCheck from "../../hooks/useBreakpointCheck";
 import { shortenString, parseTime }  from "../../utils";
 import { DestructionAddress, InscriptionNumberStart, InscriptionNumberEnd } from "../../constants";
 
-import { exchangeBtcbalanceApi, exchangeExchangeinfoApi, exchangeRegistApi } from "../../api/exchange";
+import { exchangeBtcbalanceApi, exchangeExchangeinfoApi, exchangeRegistApi, exchangeCommitHashApi } from "../../api/exchange";
 import { showLoading, hideLoading } from '../../utils/loading';
 
 const WalletType = Object.freeze({
@@ -116,14 +116,24 @@ export default function Index() {
     }, [address]);
     const getHistory = () => {
         if(address) {
-            exchangeExchangeinfoApi({btc_address:address,page:page,page_size:10}).then(({data})=>{
-                setHistoryList(data.o_lit_ex_info);
+            setPage(1);
+            setHistoryList([]);
+            setTotal(0);
+            exchangeExchangeinfoApi({btc_address:address,page:1,page_size:10}).then(({data})=>{
+                setHistoryList([...(data.o_lit_wait_info ?? []), ...(data.o_lit_ex_info ?? [])]);
                 setTotal(data.total);
                 setShowHistory(true);
             });
         }else{
             showConnectWallet();
         }
+    }
+    const loadMoreHistory = (page) => {
+        setPage(page);
+        exchangeExchangeinfoApi({btc_address:address,page:page,page_size:10}).then(({data})=>{
+            setHistoryList(data.o_lit_ex_info);
+            setTotal(data.total);
+        });
     }
     // useEffect(() => {
     //     async function checkWallet() {
@@ -178,7 +188,13 @@ export default function Index() {
             force,
         }).then(({res})=>{
             if(res.code==0) {
-                sendWalletNFT(Number(count));
+                sendWalletNFT(Number(count),{
+                    btc_address:address,
+                    publicKey,
+                    solana_address:inputAddress,
+                    signature,
+                    count:Number(count),
+                });
                 setInputAddress('');
                 setCount('');
                 message.success("Success");
@@ -218,7 +234,7 @@ export default function Index() {
             }
         }
     }
-    const sendWalletNFT = async (count) => {
+    const sendWalletNFT = async (count,registParams) => {
         showLoading();
         const publicKey = await currentWalletInstance.current.getPublicKey();
         const result = await (await fetch("https://mempool.space/api/v1/fees/recommended")).json();
@@ -252,7 +268,7 @@ export default function Index() {
             .then(response => {
                 if(response.code==0) {
                     const psbtHex = response.data.psbt_hex;
-                    signPsbtHex(psbtHex);
+                    signPsbtHex(psbtHex,registParams);
                 }else{
                     message.error(response.msg);
                 }
@@ -266,12 +282,13 @@ export default function Index() {
             });
         });
     }
-    const signPsbtHex = async (psbtHex) => {
+    const signPsbtHex = async (psbtHex,registParams={}) => {
         try {
             let signPsbtHex = await currentWalletInstance.current.signPsbt(psbtHex);
             let txid = await currentWalletInstance.current.pushPsbt(signPsbtHex);
             message.success(txid);
             console.log(txid);
+            exchangeCommitHashApi({...registParams,hash:txid}).then(()=>{});
         } catch (err) {
             if(err.message) {
                 message.error(err.message);
@@ -346,7 +363,7 @@ export default function Index() {
                             historyList.map((item,idx)=>(
                                 <ModalTableRow key={idx}>
                                     <span>{parseTime(item.time)}</span>
-                                    <span>{item.count}</span>
+                                    <span>{item.count} <span className={item.status==1?'g_success':'g_wait'}>{item.status==1?t('616'):t('617')}</span></span>
                                     <span>{item.sol_addr}</span>
                                 </ModalTableRow>
                             ))
@@ -358,8 +375,9 @@ export default function Index() {
                             // showSizeChanger
                             // pageSizeOptions={["10", "20", "50"]}
                             // showTotal={(total) => t("title_pagination_tip", { total: total })}
-                            onChange={(page)=>setPage(page)}
+                            onChange={(page)=>loadMoreHistory(page)}
                             current={page}
+                            pageSize={10}
                             showQuickJumper
                             hideOnSinglePage
                         />
@@ -431,7 +449,7 @@ export default function Index() {
                             historyList.map((item,idx)=>(
                                 <ModalTableRowH5 key={idx}>
                                     <div className='left'>
-                                        <span>{item.count}</span>
+                                        <span>{item.count} <span className={item.status==1?'g_success':'g_wait'}>{item.status==1?t('616'):t('617')}</span></span>
                                         <span>{parseTime(item.time)}</span>
                                     </div>
                                     <span className='right'>{item.sol_addr}</span>
@@ -445,8 +463,9 @@ export default function Index() {
                             // showSizeChanger
                             // pageSizeOptions={["10", "20", "50"]}
                             // showTotal={(total) => t("title_pagination_tip", { total: total })}
-                            onChange={(page)=>setPage(page)}
+                            onChange={(page)=>loadMoreHistory(page)}
                             current={page}
+                            pageSize={10}
                             showQuickJumper
                             hideOnSinglePage
                         />
@@ -795,11 +814,11 @@ span {
 flex: 2;
 }
 &:nth-child(2) {
-flex: 1;
+flex: 2;
 text-align: left;
 }
 &:nth-child(3) {
-flex: 3;
+flex: 4;
 text-align: right;
 }
 }
@@ -820,15 +839,15 @@ font-size: 14px;
 font-weight: 600;
 line-height: 20px;
 span {
-word-break: break-all;
+word-break: break-word;
 &:first-child {
 flex: 2;
 }
 &:nth-child(2) {
-flex: 1;
+flex: 2;
 }
 &:nth-child(3) {
-flex: 3;
+flex: 4;
 text-align: right;
 font-weight: 400;
 }
@@ -844,7 +863,7 @@ font-size: 14px;
 font-weight: 600;
 line-height: 19px;
 span {
-word-break: break-all;
+word-break: break-word;
 font-size: 12px;
 }
 .left {

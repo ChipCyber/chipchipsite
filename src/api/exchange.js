@@ -28,12 +28,25 @@ export function exchangeExchangeinfoApi(data) {
 }
 /**
  * 提交确认销毁信息
- * @param (uid btc_address solana_address count)
+ * @param (publicKey signature btc_address solana_address count)
  * @returns void
  */
 export function exchangeRegistApi(data) {
   return request({
     url: '/exchange/regist',
+    method: 'post',
+    data,
+    loading: true,
+  })
+}
+/**
+ * 提交确认销毁hash
+ * @param (publicKey signature btc_address solana_address count hash)
+ * @returns void
+ */
+export function exchangeCommitHashApi(data) {
+  return request({
+    url: '/exchange/commithash',
     method: 'post',
     data,
     loading: true,
