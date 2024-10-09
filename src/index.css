@@ -1,0 +1,147 @@
+/* @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800');
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,600,700,900'); */
+
+* {
+  outline: none !important;
+}
+
+body {
+  --page-max-width: 2600px;
+  --page-min-width: 1300px;
+  --blue: #007bff;
+  --indigo: #6610f2;
+  --purple: #6f42c1;
+  --pink: #e83e8c;
+  --red: #dc3545;
+  --orange: #fd7e14;
+  --yellow: #ffc107;
+  --green: #28a745;
+  --teal: #20c997;
+  --cyan: #17a2b8;
+  --white: #fff;
+  --gray: #6c757d;
+  --gray-dark: #343a40;
+  --primary: #007bff;
+  --secondary: #6c757d;
+  --success: #28a745;
+  --info: #17a2b8;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --font-family-sans-serif: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  --font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+  margin: 0;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-size: 1rem;
+  font-weight: normal;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+  background-color: #fff;
+}
+
+html {
+  font-family: sans-serif;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -ms-overflow-style: scrollbar;
+  -webkit-tap-highlight-color: transparent;
+}
+.carousel .control-dots .dot{
+  border-radius: 0% !important;
+  width: 20px !important;
+  height: 2px !important;
+  margin: 0px !important;
+  border-radius: 50px !important;
+}
+.carousel .control-dots{
+  margin: 5px 0 !important;
+}
+.carousel .control-dots .dot.selected{
+  opacity: 0.8 !important;
+}
+
+/* swiper */
+:root {
+  --swiper-theme-color: #000000 !important;
+}
+
+/* antd */
+.ant-pagination {
+  text-align: center;
+}
+.ant-pagination.mini .ant-pagination-prev {
+  background: #FFF !important;
+}
+.ant-pagination.mini .ant-pagination-next {
+  background: #FFF !important;
+}
+.ant-pagination.mini .ant-pagination-item {
+  background: #FFF !important;
+}
+.ant-pagination-item-ellipsis {
+  color: #FDCD6F !important;
+}
+.ant-dropdown-menu, .ant-dropdown-menu-submenu-title {
+  color: #FFF !important;
+  background-color: #262227 !important;
+}
+.ant-dropdown, .ant-dropdown-menu-item {
+  color: #FFF !important;
+}
+.ant-dropdown-menu {
+  border-radius: 6px !important;
+  overflow: hidden;
+}
+.ant-dropdown-menu-item:hover, .ant-dropdown-menu-submenu-title:hover {
+  background-color: #11121F !important;
+}
+.anticon.ant-input-clear-icon {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* font */
+
+
+.global_tooltip {
+  max-width: 300px !important;
+  white-space: break-spaces;
+}
+.global_tooltip .ant-tooltip-content {
+  margin-right: -5px;
+}
+.global_tooltip .ant-tooltip-inner {
+  border-radius: 4px;
+  font-size: 12px;
+  color: rgba(170, 172, 174, 1) !important;
+  background-color: #1B1A1A !important;
+}
+.global_tooltip .ant-tooltip-arrow-content {
+  width: 8px;
+  height: 8px;
+  background-color: #1B1A1A !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+img { -webkit-touch-callout: none; }
+input[type='number'] {
+  -moz-appearance:textfield;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+
+
