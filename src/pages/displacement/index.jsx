@@ -275,7 +275,7 @@ export default function Index() {
             })
             .catch(err => {
                 if(err.message) {
-                    message.error(err.message);
+                    message.error('brc420:'+err.message);
                 }
             }).finally(()=>{
                 hideLoading();
@@ -291,7 +291,7 @@ export default function Index() {
             exchangeCommitHashApi({...registParams,hash:txid}).then(()=>{});
         } catch (err) {
             if(err.message) {
-                message.error(err.message);
+                message.error('push:'+err.message);
             }
         }
     }
