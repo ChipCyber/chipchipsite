@@ -65,6 +65,7 @@ export default function Index() {
             setBalance(null);
             setWalletType(null);
             if(currentWalletInstance.current) {
+                currentWalletInstance.current.disconnect();
                 currentWalletInstance.current.removeListener("accountsChanged", handleAccountsChanged);
             }
             currentWalletInstance.current = null;
@@ -234,11 +235,9 @@ export default function Index() {
             }
         }
     }
-    const sendWalletNFT = async (count,registParams) => {
+    const sendWalletNFT = (count,registParams) => {
         showLoading();
-        const publicKey = await currentWalletInstance.current.getPublicKey();
-        const result = await (await fetch("https://mempool.space/api/v1/fees/recommended")).json();
-        getInscriptions(0,count,(done)=>{
+        getInscriptions(0,count,async (done)=>{
             if(!done) {
                 hideLoading();
                 return;
@@ -250,6 +249,25 @@ export default function Index() {
                 hideLoading();
                 return;
             }
+            if(walletType==WalletType.OKX) {
+                currentWalletInstance.current.transferNft({
+                    from: address,
+                    to: DestructionAddress,
+                    data: submitIds,
+                }).then(data=>{
+                    const txhash = data.txhash;
+                    exchangeCommitHashApi({...registParams,hash:txhash}).then(()=>{});
+                }).catch(err => {
+                    if(err.message) {
+                        message.error(err.message);
+                    }
+                }).finally(()=>{
+                    hideLoading();
+                });
+                return;
+            }
+            const publicKey = await currentWalletInstance.current.getPublicKey();
+            const result = await (await fetch("https://mempool.space/api/v1/fees/recommended")).json();
             let params = {
                 payment_from:address,
                 payment_from_pub_key:publicKey,
@@ -272,8 +290,7 @@ export default function Index() {
                 }else{
                     message.error(response.msg);
                 }
-            })
-            .catch(err => {
+            }).catch(err => {
                 if(err.message) {
                     message.error('brc420:'+err.message);
                 }
