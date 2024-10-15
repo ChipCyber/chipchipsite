@@ -17,16 +17,30 @@ import * as serviceWorker from './serviceWorker';
 
 message.config({duration:1.5,maxCount:1});
 
-ReactDOM.render(
-    <StrictMode>
-        <Providers>
-            <GlobalStyle />
-            <I18nextProvider i18n={i18n}>
-                <App />
-            </I18nextProvider>
-        </Providers>
-    </StrictMode>,
-document.getElementById('root'));
+const rootElement = document.getElementById("root");
+if (rootElement.hasChildNodes()) {
+    ReactDOM.hydrate(
+        <StrictMode>
+            <Providers>
+                <GlobalStyle />
+                <I18nextProvider i18n={i18n}>
+                    <App />
+                </I18nextProvider>
+            </Providers>
+        </StrictMode>,
+    rootElement);
+}else{
+    ReactDOM.render(
+        <StrictMode>
+            <Providers>
+                <GlobalStyle />
+                <I18nextProvider i18n={i18n}>
+                    <App />
+                </I18nextProvider>
+            </Providers>
+        </StrictMode>,
+    rootElement);
+}
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

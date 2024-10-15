@@ -65,12 +65,16 @@
     "start": "craco start",
     "build": "craco build",
     "build:test": "cross-env NODE_ENV=production REACT_APP_ENV=test craco build",
+    "postbuild": "react-snap",
     "test": "craco test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "buildAndDeploy": "react-scripts build && echo 'yfii.finance' >> ./build/CNAME && gh-pages -d build",
     "deploy": "echo 'yfii.finance' >> ./build/CNAME && gh-pages -d build",
     "kovanDeploy": "echo 'kovan.yfii.finance' >> ./build/CNAME && gh-pages -d build -r git@github.com:yfii/kovan.yfii.finance.git"
+  },
+  "reactSnap": {
+    "inlineCss": true
   },
   "browserslist": {
     "production": [
@@ -90,6 +94,7 @@
     "postcss": "^8.4.31",
     "postcss-pxtorem": "^5.1.1",
     "react-cookies": "^0.1.1",
+    "react-snap": "^1.23.0",
     "sass": "^1.69.5",
     "terser-webpack-plugin": "^4.2.3"
   },
