@@ -667,16 +667,17 @@ height: 100%;
 }
 `
 const DialogM = styled(DialogContent)`
-width: calc(100% - 50px);
-margin: 60px auto 0;
-max-height: calc(100vh - 60px);
-overflow-y: auto;
-padding: 0 30px;
-border-radius: 8px;
-background: #362F42;
+width: calc(100% - 50px) !important;
+margin: 60px auto 0 !important;
+max-height: calc(100vh - 60px) !important;
+overflow-y: auto !important;
+padding: 0 30px !important;
+border-radius: 8px !important;
+background: #362F42 !important;
+color: ${({ theme }) => theme.colors.text} !important;
 ${({ theme }) => theme.mediaQueries.sm}{
-    width: 475px;
-    padding: 25px 38px;
+    width: 475px !important;
+    padding: 25px 38px !important;
 };
 `
 const Group = styled.div`

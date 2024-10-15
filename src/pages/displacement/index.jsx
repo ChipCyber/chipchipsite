@@ -769,14 +769,14 @@ font-size: 16px;
 };
 `
 const DialogM = styled(DialogContent)`
-width: calc(100% - 50px);
-margin: 15vh auto 0;
-padding: 16px 20px;
-border-radius: 12px;
-background: #362F42;
+width: calc(100% - 50px) !important;
+padding: 16px 20px !important;
+border-radius: 12px !important;
+background: #362F42 !important;
+color: ${({ theme }) => theme.colors.text} !important;
 ${({ theme }) => theme.mediaQueries.sm}{
-    width: 600px;
-    padding: 26px 40px;
+    width: 600px !important;
+    padding: 26px 40px !important;
 };
 `
 const ModalHeader = styled.div`
