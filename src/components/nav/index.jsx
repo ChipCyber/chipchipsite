@@ -186,7 +186,7 @@ class Nav extends Component {
         // console.log('pathname :>> ', pathname);
         return (
             <NavBody>
-                <NavLogo onClick={()=>history.push('/')} src={require('../../assets/nav/logo.png').default}/>
+                <NavLogo onClick={()=>history.push('/')} src={require('../../assets/nav/logo.png').default} alt='logo'/>
                 <NavCenter>
                     <NavCenterLink to='/' onClick={this.closeMenu} isActive={()=>pathname==='/'}>{t('100')}</NavCenterLink>
                     <NavCenterLink to='/displacement' onClick={this.closeMenu} isActive={()=>pathname==='/displacement'}>{t('207')}</NavCenterLink>
@@ -220,9 +220,9 @@ class Nav extends Component {
                     </PModal>}
                     </PersonalBody>
                     } */}
-                    <BtnImg onClick={()=>history.push('/download')} src={require('../../assets/nav/download.png').default}/>
+                    <BtnImg onClick={()=>history.push('/download')} src={require('../../assets/nav/download.png').default} alt='download'/>
                     <LanguageButton/>
-                    <MenuImg onClick={()=>this.setState({showMenu:!showMenu})} src={showMenu?require('../../assets/nav/menu_close.png').default:require('../../assets/nav/menu.png').default}/>
+                    <MenuImg onClick={()=>this.setState({showMenu:!showMenu})} src={showMenu?require('../../assets/nav/menu_close.png').default:require('../../assets/nav/menu.png').default} alt='menu'/>
                 </NavRight>
                 <DialogOverlay
                     style={{ height: '100vh', zIndex: 99, background: 'hsla(0, 0%, 0%, 0.6)' }}
