@@ -54,7 +54,7 @@ service.interceptors.response.use(
       if (!response.config.hideToast) {
         MessageToast.error(res.msg)
       }
-      return Promise.reject(res.msg);
+      return Promise.reject({res});
     }else{
       return Promise.reject(response.data.message);
     }
