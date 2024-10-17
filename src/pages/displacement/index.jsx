@@ -188,18 +188,18 @@ export default function Index() {
             count:Number(count),
             force,
         }).then(({res})=>{
-            if(res.code==0) {
-                sendWalletNFT(Number(count),{
-                    btc_address:address,
-                    publicKey,
-                    solana_address:inputAddress,
-                    signature,
-                    count:Number(count),
-                });
-                setInputAddress('');
-                setCount('');
-                message.success("Success");
-            }else if(res.code==-1) {
+            sendWalletNFT(Number(count),{
+                btc_address:address,
+                publicKey,
+                solana_address:inputAddress,
+                signature,
+                count:Number(count),
+            });
+            setInputAddress('');
+            setCount('');
+            message.success("Success");
+        }).catch(({res})=>{
+            if(res.code==-1) {
                 Modal.confirm({
                     title: `${t('613')} ${res.msg}`,
                     content: `${t('614')} ${inputAddress}`,

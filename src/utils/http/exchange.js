@@ -49,7 +49,7 @@ service.interceptors.response.use(
         if (!response.config.hideToast) {
           MessageToast.error(res.msg)
         }
-        return Promise.reject(res.msg);
+        return Promise.reject({res});
       }
       return {data: res.data, res};
       // if (res.code == 0) {
