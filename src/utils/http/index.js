@@ -54,20 +54,19 @@ service.interceptors.response.use(
       if (!response.config.hideToast) {
         MessageToast.error(res.msg)
       }
-      return Promise.reject({res});
+      return Promise.reject(res);
     }else{
-      return Promise.reject(response.data.message);
+      return Promise.reject({code:response.status, msg:response.data.message});
     }
   },
   error => {
-    // console.log('error :>> ', error);
     if (error.config && error.config.loading === true) {
       hideLoading()
     }
     if (!error.config.hideToast === true) {
       MessageToast.error(error.message);
     }
-    return Promise.reject(error)
+    return Promise.reject({code:-9999,msg:error.message});
   }
 )
 
