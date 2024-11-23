@@ -8,11 +8,10 @@ import {
 } from "../../constants";
 
 const quarters = [
-    { name: '2024 Q3', startDate: new Date('2024-07-01'), endDate: new Date('2024-09-30'), seq: 1 },
-    { name: '2024 Q4', startDate: new Date('2024-10-01'), endDate: new Date('2024-12-31'), seq: 2 },
-    { name: '2025 Q1', startDate: new Date('2025-01-01'), endDate: new Date('2025-03-31'), seq: 3 },
-    { name: '2025 Q2', startDate: new Date('2025-04-01'), endDate: new Date('2025-06-30'), seq: 4 },
-    { name: '2025 Q3', startDate: new Date('2025-07-01'), endDate: new Date('2025-07-31'), seq: 5 }
+    { name: '2024 Q4', startDate: new Date('2024-10-01'), endDate: new Date('2024-12-31'), seq: 1 },
+    { name: '2025 Q1', startDate: new Date('2025-01-01'), endDate: new Date('2025-03-31'), seq: 2 },
+    { name: '2025 Q2', startDate: new Date('2025-04-01'), endDate: new Date('2025-06-30'), seq: 3 },
+    { name: '2025 Q3', startDate: new Date('2025-07-01'), endDate: new Date('2025-07-31'), seq: 4 }
 ];
 const convertToUTC8 = (date) => {
     const utcDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
@@ -219,12 +218,13 @@ export default function Index() {
 }
 
 const ContentH5 = styled.div`
+position: relative;
 margin-top: 38px;
 display: flex;
 gap: 10px;
 .middle {
 width: 24px;
-height: 1370px;
+height: 1969px;
 }
 `
 const ItemH5 = styled.div`
@@ -242,16 +242,16 @@ ${ItemH5}:nth-child(1) {
 top: 0;
 }
 ${ItemH5}:nth-child(2) {
-top: 150px;
+top: 160px;
 }
 ${ItemH5}:nth-child(3) {
-top: 472px;
+top: 510px;
 }
 ${ItemH5}:nth-child(4) {
-top: 970px;
+top: 1065px;
 }
 ${ItemH5}:nth-child(5) {
-top: 1350px;
+top: 1646px;
 }
 `
 const ItemH5Title = styled.div`
@@ -270,16 +270,19 @@ ${ItemH5Title} {
 align-self: flex-start;
 }
 ${ItemH5}:nth-child(1) {
-top: 58px;
+top: 60px;
 }
 ${ItemH5}:nth-child(2) {
-top: 295px;
+top: 320px;
 }
 ${ItemH5}:nth-child(3) {
-top: 680px;
+top: 735px;
 }
 ${ItemH5}:nth-child(4) {
-top: 1165px;
+top: 1388px;
+}
+${ItemH5}:nth-child(5) {
+top: 1890px;
 }
 `
 const ItemH5Row = styled.div`
@@ -459,8 +462,8 @@ position: relative;
 width: max-content;
 `
 const Img = styled.img`
-width: 1091px;
-height: 1520px;
+width: 1102px;
+height: 1961px;
 `
 const Item = styled.div`
 position: absolute;
@@ -497,14 +500,19 @@ left: 158px;
 }
 &:nth-of-type(7) {
 top: 880px;
-right: 76px;
+right: 40px;
+width: 380px;
 }
 &:nth-of-type(8) {
-bottom: 0;
-right: 63px;
-transform: translateY(calc(100% + 10px));
+top: 1530px;
+right: 68px;
 }
 &:nth-of-type(9) {
+top: 1530px;
+left: 158px;
+width: 400px;
+}
+&:nth-of-type(10) {
 bottom: 0;
 left: 158px;
 transform: translateY(calc(100% + 10px));
