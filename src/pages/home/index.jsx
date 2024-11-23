@@ -198,7 +198,7 @@ export default function Home() {
                             <Top1TipRow>{t('110')}</Top1TipRow>
                         </Top1Tip>
                         <Top1TipBtnRow>
-                            {/* <Top1TipBtn to='/ido'>IDO</Top1TipBtn> */}
+                            <Top1TipDisabledBtn disabled>Fair Launch</Top1TipDisabledBtn>
                             <Top1TipBorderBtn className='custom' to='/airdrop'>{t('101')}</Top1TipBorderBtn>
                             <Top1TipBorderBtn className='custom' to='/displacement'>{t('111')}</Top1TipBorderBtn>
                             <Top1TipBorderBtn className='custom' to='/download'>
@@ -255,11 +255,6 @@ export default function Home() {
                             <div className='desc'>{t('118')}</div>
                         </Top3RowItem>
                         <Top3RowItem>
-                            <img src={require('../../assets/home/img3_item2.png').default}/>
-                            <div className='title'>{t('119')}</div>
-                            <div className='desc'>{t('120')}</div>
-                        </Top3RowItem>
-                        <Top3RowItem>
                             <img src={require('../../assets/home/img3_item3.png').default}/>
                             <div className='title'>{t('121')}</div>
                             <div className='desc'>{t('122')}</div>
@@ -268,6 +263,11 @@ export default function Home() {
                             <img src={require('../../assets/home/img3_item4.png').default}/>
                             <div className='title'>{t('123')}</div>
                             <div className='desc'>{t('124')}</div>
+                        </Top3RowItem>
+                        <Top3RowItem>
+                            <img src={require('../../assets/home/img3_item2.png').default}/>
+                            <div className='title'>{t('119')}</div>
+                            <div className='desc'>{t('120')}</div>
                         </Top3RowItem>
                     </Top3Row>
                 </Top3>
@@ -490,7 +490,7 @@ export default function Home() {
                     <div className='desc'>{t('106')}</div>
                     <div className='tip'>{t('107')}<br/>{t('109')}<br/>{t('108')}<br/>{t('110')}</div>
                     <div className='row'>
-                        {/* <Top1TipBtn to='/ido'>Get IDO</Top1TipBtn> */}
+                        <Top1TipDisabledBtn disabled>Fair Launch</Top1TipDisabledBtn>
                         <Top1TipBorderBtn to='/airdrop'>{t('101')}</Top1TipBorderBtn>
                     </div>
                     <div className='row'>
@@ -534,11 +534,6 @@ export default function Home() {
                     <img className='icon' src={require('../../assets/home/h5/img3_item1.png').default}/>
                 </Top3H5Item>
                 <Top3H5Item>
-                    <div className='title'>{t('119')}</div>
-                    <div className='desc'>{t('120')}</div>
-                    <img className='icon' src={require('../../assets/home/h5/img3_item2.png').default}/>
-                </Top3H5Item>
-                <Top3H5Item>
                     <div className='title'>{t('121')}</div>
                     <div className='desc'>{t('122')}</div>
                     <img className='icon' src={require('../../assets/home/h5/img3_item3.png').default}/>
@@ -547,6 +542,11 @@ export default function Home() {
                     <div className='title'>{t('123')}</div>
                     <div className='desc'>{t('124')}</div>
                     <img className='icon' src={require('../../assets/home/h5/img3_item4.png').default}/>
+                </Top3H5Item>
+                <Top3H5Item>
+                    <div className='title'>{t('119')}</div>
+                    <div className='desc'>{t('120')}</div>
+                    <img className='icon' src={require('../../assets/home/h5/img3_item2.png').default}/>
                 </Top3H5Item>
             </Top3H5>
             <Top4H5>
@@ -1468,6 +1468,25 @@ font-size: 18px;
 height: 52px;
 };
 `
+const Top1TipDisabledBtn = styled.button`
+text-align: center;
+flex: 1;
+border-radius: 32px;
+font-size: 14px;
+font-weight: 500;
+height: 48px;
+line-height: 48px;
+padding: 0;
+border-radius: 32px;
+background: linear-gradient(258deg, #75F6A3 5.58%, #FEAD1D 88.85%);
+color: ${({theme})=>theme.colors.textPrimary};
+${({ theme }) => theme.mediaQueries.sm}{
+padding: 0 25px;
+flex: unset;
+font-size: 18px;
+height: 52px;
+};
+`
 const Top1TipBorderBtn = styled(NavLink)`
 text-align: center;
 flex: 1;
@@ -1671,7 +1690,7 @@ display: flex;
 gap: 35px;
 `
 const Top4Row1Left = styled.div`
-flex: 3;
+flex: 2.5;
 .title {
 margin-top: 48px;
 font-size: 28px;
@@ -1701,7 +1720,7 @@ transform: translate(-50%, -50%);
 ${({ theme }) => theme.mediaQueries.sm}{
 img {
 top: -200px;
-left: -30%;
+left: -10%;
 width: auto;
 height: auto;
 transform: none;
