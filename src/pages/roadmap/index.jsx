@@ -11,7 +11,8 @@ const quarters = [
     { name: '2024 Q3', startDate: new Date('2024-07-01'), endDate: new Date('2024-09-30'), seq: 1 },
     { name: '2024 Q4', startDate: new Date('2024-10-01'), endDate: new Date('2024-12-31'), seq: 2 },
     { name: '2025 Q1', startDate: new Date('2025-01-01'), endDate: new Date('2025-03-31'), seq: 3 },
-    { name: '2025 Q2', startDate: new Date('2025-04-01'), endDate: new Date('2025-06-30'), seq: 4 }
+    { name: '2025 Q2', startDate: new Date('2025-04-01'), endDate: new Date('2025-06-30'), seq: 4 },
+    { name: '2025 Q3', startDate: new Date('2025-07-01'), endDate: new Date('2025-07-31'), seq: 5 }
 ];
 const convertToUTC8 = (date) => {
     const utcDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
@@ -79,32 +80,44 @@ export default function Index() {
                         </Item>
                         <Item>
                             <ItemTitle>Q3 2024</ItemTitle>
-                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('148')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('149')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('150')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('152')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('153')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('154')}</ItemRow>
-                            {/* <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('155')}</ItemRow> */}
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1481')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1482')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1483')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1484')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1485')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1486')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1487')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1488')}</ItemRow>
                         </Item>
                         <Item>
                             <ItemTitle>Q4 2024</ItemTitle>
-                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('151')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('156')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('157')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('158')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('159')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('160')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1491')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1492')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1493')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1494')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1495')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1496')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1497')}</ItemRow>
                         </Item>
                         <Item>
                             <ItemTitle>Q1 2025</ItemTitle>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('161')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('162')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('163')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('164')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1501')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1502')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1503')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1504')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1505')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1506')}</ItemRow>
                         </Item>
                         <Item>
                             <ItemTitle>Q2 2025</ItemTitle>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1511')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1512')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1513')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1514')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1515')}</ItemRow>
+                        </Item>
+                        <Item>
+                            <ItemTitle>Q3 2025</ItemTitle>
                             <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('165')}<br/><Btn className='custom' onClick={()=>openUrl(JoinNowUrl)}><span>{t('166')}</span><img src={require('../../assets/home/arrow_enter.png').default}/></Btn></ItemRow>
                         </Item>
                     </Body>
@@ -142,16 +155,21 @@ export default function Index() {
                         </ItemH5>
                         <ItemH5>
                             <ItemH5Title>Q4 2024</ItemH5Title>
-                            <ItemH5Row>{t('151')}</ItemH5Row>
-                            <ItemH5Row>{t('156')}</ItemH5Row>
-                            <ItemH5Row>{t('157')}</ItemH5Row>
-                            <ItemH5Row>{t('158')}</ItemH5Row>
-                            <ItemH5Row>{t('159')}</ItemH5Row>
-                            <ItemH5Row>{t('160')}</ItemH5Row>
+                            <ItemH5Row>{t('1491')}</ItemH5Row>
+                            <ItemH5Row>{t('1492')}</ItemH5Row>
+                            <ItemH5Row>{t('1493')}</ItemH5Row>
+                            <ItemH5Row>{t('1494')}</ItemH5Row>
+                            <ItemH5Row>{t('1495')}</ItemH5Row>
+                            <ItemH5Row>{t('1496')}</ItemH5Row>
+                            <ItemH5Row>{t('1497')}</ItemH5Row>
                         </ItemH5>
                         <ItemH5>
                             <ItemH5Title>Q2 2025</ItemH5Title>
-                            <ItemH5Row>{t('165')}<br/><a href={JoinNowUrl} target='__blank'>{t('166')}</a></ItemH5Row>
+                            <ItemH5Row>{t('1511')}</ItemH5Row>
+                            <ItemH5Row>{t('1512')}</ItemH5Row>
+                            <ItemH5Row>{t('1513')}</ItemH5Row>
+                            <ItemH5Row>{t('1514')}</ItemH5Row>
+                            <ItemH5Row>{t('1515')}</ItemH5Row>
                         </ItemH5>
                     </Left>
                     {currentQuarterSeq==1&&<img className='middle' src={require('../../assets/roadmap/h5/bg1.png').default}/>}
@@ -172,20 +190,27 @@ export default function Index() {
                         </ItemH5>
                         <ItemH5>
                             <ItemH5Title>Q3 2024</ItemH5Title>
-                            <ItemH5Row>{t('148')}</ItemH5Row>
-                            <ItemH5Row>{t('149')}</ItemH5Row>
-                            <ItemH5Row>{t('150')}</ItemH5Row>
-                            <ItemH5Row>{t('152')}</ItemH5Row>
-                            <ItemH5Row>{t('153')}</ItemH5Row>
-                            <ItemH5Row>{t('154')}</ItemH5Row>
-                            {/* <ItemH5Row>{t('155')}</ItemH5Row> */}
+                            <ItemH5Row>{t('1481')}</ItemH5Row>
+                            <ItemH5Row>{t('1482')}</ItemH5Row>
+                            <ItemH5Row>{t('1483')}</ItemH5Row>
+                            <ItemH5Row>{t('1484')}</ItemH5Row>
+                            <ItemH5Row>{t('1485')}</ItemH5Row>
+                            <ItemH5Row>{t('1486')}</ItemH5Row>
+                            <ItemH5Row>{t('1487')}</ItemH5Row>
+                            <ItemH5Row>{t('1488')}</ItemH5Row>
                         </ItemH5>
                         <ItemH5>
                             <ItemH5Title>Q1 2025</ItemH5Title>
-                            <ItemH5Row>{t('161')}</ItemH5Row>
-                            <ItemH5Row>{t('162')}</ItemH5Row>
-                            <ItemH5Row>{t('163')}</ItemH5Row>
-                            <ItemH5Row>{t('164')}</ItemH5Row>
+                            <ItemH5Row>{t('1501')}</ItemH5Row>
+                            <ItemH5Row>{t('1502')}</ItemH5Row>
+                            <ItemH5Row>{t('1503')}</ItemH5Row>
+                            <ItemH5Row>{t('1504')}</ItemH5Row>
+                            <ItemH5Row>{t('1505')}</ItemH5Row>
+                            <ItemH5Row>{t('1506')}</ItemH5Row>
+                        </ItemH5>
+                        <ItemH5>
+                            <ItemH5Title>Q3 2025</ItemH5Title>
+                            <ItemH5Row>{t('165')}<br/><a href={JoinNowUrl} target='__blank'>{t('166')}</a></ItemH5Row>
                         </ItemH5>
                     </Right>
                 </ContentH5>
@@ -425,6 +450,9 @@ filter: blur(80px);
 const Content = styled.div`
 position: relative;
 padding: 318px 30px 440px;
+display: flex;
+align-items: center;
+justify-content: center;
 `
 const Body = styled.div`
 position: relative;

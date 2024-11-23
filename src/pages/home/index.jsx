@@ -198,7 +198,7 @@ export default function Home() {
                             <Top1TipRow>{t('110')}</Top1TipRow>
                         </Top1Tip>
                         <Top1TipBtnRow>
-                            <Top1TipBtn to='/ido'>IDO</Top1TipBtn>
+                            {/* <Top1TipBtn to='/ido'>IDO</Top1TipBtn> */}
                             <Top1TipBorderBtn className='custom' to='/airdrop'>{t('101')}</Top1TipBorderBtn>
                             <Top1TipBorderBtn className='custom' to='/displacement'>{t('111')}</Top1TipBorderBtn>
                             <Top1TipBorderBtn className='custom' to='/download'>
@@ -244,6 +244,11 @@ export default function Home() {
                         <img src={require('../../assets/home/img31.png').default}/>
                     </Top3Top>
                     <Top3Row className='wow animate__animated animate__fadeInDown'>
+                        <Top3RowItem>
+                            <img src={require('../../assets/home/img3_item0.png').default}/>
+                            <div className='title'>{t('197')}</div>
+                            <div className='desc'>{t('198')}</div>
+                        </Top3RowItem>
                         <Top3RowItem>
                             <img src={require('../../assets/home/img3_item1.png').default}/>
                             <div className='title'>{t('117')}</div>
@@ -295,12 +300,13 @@ export default function Home() {
                                         </Top4Row1LeftCardItem>
                                     </Top4Row1LeftCardContent>
                                 </Top4Row1LeftCard>
-                                <Top2Btn className='custom' onClick={()=>history.push('/ido')}>
-                                    <span>IDO</span>
+                                <Top2Btn className='custom' disabled>
+                                    <span>Fair Launch</span>
                                     <img src={require('../../assets/home/arrow_enter.png').default}/>
                                 </Top2Btn>
                             </Top4Row1Left>
-                            <Chart ref={(node) => { ref(node); chartRef.current = node; }}></Chart>
+                            {/* <Chart ref={(node) => { ref(node); chartRef.current = node; }}></Chart> */}
+                            <Chart><img src={require("../../assets/home/chart_icon.png").default} alt='icon'/></Chart>
                         </Top4Row1>
                         <Top4Row2>
                             <Top4Row2Img className='wow animate__animated animate__fadeInLeft' src={require('../../assets/home/img42.png').default}/>
@@ -363,7 +369,7 @@ export default function Home() {
                             </Top6RowItem>
                             <Top6RowItem>
                                 <div className='title'>
-                                    <span style={{color:'#1AE796'}}>Q2 2025</span>
+                                    <span style={{color:'#1AE796'}}>Q3 2025</span>
                                 </div>
                                 <Top6Tip className='wow animate__animated animate__fadeInRight'>
                                     <Top6TipRow>{t('165')}<br/><a href='' target='__blank'>{t('166')}</a></Top6TipRow>
@@ -484,7 +490,7 @@ export default function Home() {
                     <div className='desc'>{t('106')}</div>
                     <div className='tip'>{t('107')}<br/>{t('109')}<br/>{t('108')}<br/>{t('110')}</div>
                     <div className='row'>
-                        <Top1TipBtn to='/ido'>Get IDO</Top1TipBtn>
+                        {/* <Top1TipBtn to='/ido'>Get IDO</Top1TipBtn> */}
                         <Top1TipBorderBtn to='/airdrop'>{t('101')}</Top1TipBorderBtn>
                     </div>
                     <div className='row'>
@@ -518,6 +524,11 @@ export default function Home() {
             <Top3H5>
                 <div className='t_title'>{t('116')}</div>
                 <Top3H5Item>
+                    <div className='title'>{t('197')}</div>
+                    <div className='desc'>{t('198')}</div>
+                    <img className='icon' src={require('../../assets/home/h5/img3_item0.png').default}/>
+                </Top3H5Item>
+                <Top3H5Item>
                     <div className='title'>{t('117')}</div>
                     <div className='desc'>{t('118')}</div>
                     <img className='icon' src={require('../../assets/home/h5/img3_item1.png').default}/>
@@ -543,7 +554,8 @@ export default function Home() {
                 <div className='t_sub_title'>{t('126')}</div>
                 <div className='desc'>{t('127')}</div>
                 <div className='desc'>{t('128')}<a href={GitbookTokenUrl} target='__blank'>Gitbook</a></div>
-                <Chart ref={(node) => { ref(node); chartRef.current = node; }}></Chart>
+                {/* <Chart ref={(node) => { ref(node); chartRef.current = node; }}></Chart> */}
+                <Chart><img src={require("../../assets/home/h5/chart_icon.png").default} alt='icon'/></Chart>
                 <Top4H5Card>
                     <img className='icon' src={require('../../assets/home/h5/img41.png').default}/>
                     <Top4H5CardItem>
@@ -559,8 +571,8 @@ export default function Home() {
                         <div className='item_desc'>{t('344')}</div>
                     </Top4H5CardItem>
                 </Top4H5Card>
-                <BtnH5 className='custom' onClick={()=>history.push('/ido')}>
-                    <span>Get IDO</span>
+                <BtnH5 className='custom' disabled>
+                    <span>Fair Launch</span>
                     <img src={require('../../assets/nav/login_arrow.png').default}/>
                 </BtnH5>
             </Top4H5>
@@ -610,7 +622,7 @@ export default function Home() {
                         </Top7H5Item>
                         <Top7H5Item>
                             <div className='title'>
-                                <span style={{color:'#1AE796'}}>Q2 2025</span>
+                                <span style={{color:'#1AE796'}}>Q3 2025</span>
                             </div>
                             <div className='desc'>{t('165')}<br/><a href='#' target='__blank'>{t('166')}</a></div>
                         </Top7H5Item>
@@ -865,7 +877,7 @@ color: ${({theme})=>theme.colors.textSubtle};
 }
 .icon {
 position: absolute;
-top: -20px;
+top: -15px;
 right: 30px;
 width: 68px;
 }
@@ -1604,10 +1616,10 @@ margin: 0 auto;
 `
 const Top3RowItem = styled.div`
 background-image: url(${ItemBg});
-background-size: 310px 548px;
+background-size: 250px 502px;
 padding: 26px 20px;
-width: 310px;
-height: 548px;
+width: 250px;
+height: 502px;
 flex-shrink: 0;
 position: relative;
 img {
@@ -1619,13 +1631,13 @@ width: 170px;
 z-index: 1;
 }
 .title {
-margin-top: 200px;
-font-size: 28px;
+margin-top: 150px;
+font-size: 24px;
 font-weight: 500;
 }
 .desc {
-margin-top: 45px;
-font-size: 18px;
+margin-top: 20px;
+font-size: 16px;
 color: ${({theme})=>theme.colors.textSubtle};
 }
 `
@@ -1677,6 +1689,24 @@ text-decoration: underline;
 const Chart = styled.div`
 flex: 2;
 aspect-ratio: 1;
+position: relative;
+img {
+position: absolute;
+left: 50%;
+top: 50%;
+width: 150%;
+height: 150%;
+transform: translate(-50%, -50%);
+}
+${({ theme }) => theme.mediaQueries.sm}{
+img {
+top: -200px;
+left: -30%;
+width: auto;
+height: auto;
+transform: none;
+}
+};
 `
 const Top4Row1LeftCard = styled.div`
 position: relative;

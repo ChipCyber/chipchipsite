@@ -31,7 +31,7 @@ import NewsDetail from "./pages/news/detail";
 import Download from "./pages/download";
 import Displacement from "./pages/displacement";
 import Roadmap from "./pages/roadmap";
-import IDO from "./pages/ido";
+// import IDO from "./pages/ido";
 
 function App() {
   const { changeLanguage } = useLanguage();
@@ -109,11 +109,11 @@ function App() {
                 <Roadmap/>
                 <Footer/>
               </Route>
-              <Route path="/ido" exact>
+              {/* <Route path="/ido" exact>
                 <Nav/>
                 <IDO/>
                 <Footer/>
-              </Route>
+              </Route> */}
               <Redirect from='/*' to="/"/>
             </Switch>
           </ScrollToTop>

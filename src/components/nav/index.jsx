@@ -191,7 +191,8 @@ class Nav extends Component {
                     <NavCenterLink to='/' onClick={this.closeMenu} isActive={()=>pathname==='/'}>{t('100')}</NavCenterLink>
                     <NavCenterLink to='/displacement' onClick={this.closeMenu} isActive={()=>pathname==='/displacement'}>{t('207')}</NavCenterLink>
                     <NavCenterLink to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLink>
-                    <NavCenterLink to='/ido' onClick={this.closeMenu} isActive={()=>pathname==='/ido'}>IDO</NavCenterLink>
+                    {/* <NavCenterLink to='/ido' onClick={this.closeMenu} isActive={()=>pathname==='/ido'}>IDO</NavCenterLink> */}
+                    <NavCenterLinkDisabled>Fair Launch</NavCenterLinkDisabled>
                     <NavCenterLink to='/roadmap' onClick={this.closeMenu} isActive={()=>pathname==='/roadmap'}>{t('102')}</NavCenterLink>
                     <NavCenterLink to='/news' onClick={this.closeMenu} isActive={()=>pathname==='/news'}>{t('103')}</NavCenterLink>
                     {/* <NavCenterNoLink className='custom'>
@@ -278,7 +279,7 @@ class Nav extends Component {
                             <Row><NavLink to='/' onClick={this.closeMenu}>{t('100')}</NavLink></Row>
                             <Row><NavLink to='/displacement' onClick={this.closeMenu}>{t('207')}</NavLink></Row>
                             <Row><NavLink to='/airdrop' onClick={this.closeMenu}>{t('101')}</NavLink></Row>
-                            <Row><NavLink to='/ido' onClick={this.closeMenu}>IDO</NavLink></Row>
+                            {/* <Row><NavLink to='/ido' onClick={this.closeMenu}>IDO</NavLink></Row> */}
                             <Row><NavLink to='/roadmap' onClick={this.closeMenu}>{t('102')}</NavLink></Row>
                             <Row><NavLink to='/news' onClick={this.closeMenu}>{t('103')}</NavLink></Row>
                         </Group>
@@ -360,6 +361,14 @@ display: flex;
 };
 `
 const NavCenterLink = styled(NavLink)`
+font-size: 18px;
+color: ${({ theme }) => theme.colors.textSubtle};
+&.active {
+    color: ${({ theme }) => theme.colors.text};
+}
+`
+const NavCenterLinkDisabled = styled.div`
+cursor: no-drop;
 font-size: 18px;
 color: ${({ theme }) => theme.colors.textSubtle};
 &.active {
