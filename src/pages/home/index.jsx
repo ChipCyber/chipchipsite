@@ -472,7 +472,7 @@ export default function Home() {
                             <div className='row'>
                                 <a href={SocialMediaMediumUrl} target='__blank'><img src={require('../../assets/home/c_xx.png').default}/></a>
                                 <a href={SocialMediaTwitterUrl} target='__blank'><img src={require('../../assets/home/c_twitter.png').default}/></a>
-                                <a href={SocialMediaDiscordUrl} target='__blank'><img src={require('../../assets/home/c_discord.png').default}/></a>
+                                {/* <a href={SocialMediaDiscordUrl} target='__blank'><img src={require('../../assets/home/c_discord.png').default}/></a> */}
                                 <a href={SocialMediaTelegramUrl} target='__blank'><img src={require('../../assets/home/c_telegram.png').default}/></a>
                             </div>
                         </div>
@@ -732,13 +732,13 @@ export default function Home() {
                     </div>
                     <img className='arrow' src={require('../../assets/nav/login_arrow.png').default}/>
                 </div>
-                <div className='row' onClick={()=>openUrl(SocialMediaDiscordUrl)}>
+                {/* <div className='row' onClick={()=>openUrl(SocialMediaDiscordUrl)}>
                     <div className='left'>
                         <img className='icon' src={require('../../assets/home/h5/c_discord.png').default}/>
                         <span>{t('176')}</span>
                     </div>
                     <img className='arrow' src={require('../../assets/nav/login_arrow.png').default}/>
-                </div>
+                </div> */}
                 <div className='row' onClick={()=>openUrl(SocialMediaTelegramUrl)}>
                     <div className='left'>
                         <img className='icon' src={require('../../assets/home/h5/c_telegram.png').default}/>
