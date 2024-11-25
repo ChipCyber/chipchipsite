@@ -15,6 +15,7 @@ export default function Index() {
     const { language } = useLanguage();
     const shouldRender = useBreakpointCheck();
     const [exchange, setExchange] = useState(false);
+    const [count, setCount] = useState('');
     const [openInvestRecord, setOpenInvestRecord] = useState(false);
     const [openReceiveRecord, setOpenReceiveRecord] = useState(false);
     const [openWhitelistResult, setOpenWhitelistResult] = useState(false);
@@ -26,13 +27,19 @@ export default function Index() {
             setFaqList(data);
         });
     }, [language]);
+    const handleChange = (event) => {
+        const newValue = event.target.value;
+        if (newValue === '' || /^[1-9]\d*$/.test(newValue)) {
+            setCount(newValue);
+        }
+    };
     const renderW = () => (
         <>
         <Top>
             <TopContent>
                 <TopLeft>
                     <div className='row'>
-                        <img width={50} height={50} src={require("@/assets/mint/icon.png").default} alt='icon'/>
+                        <img width={50} height={50} src={require("@/assets/mint/chip.png").default} alt='icon'/>
                         <div className='row_tip'>
                             <span className='row_tip_t1'>CHIP</span>
                             <span className='row_tip_t2'>CHIPCHIP</span>
@@ -60,13 +67,112 @@ export default function Index() {
                         <div onClick={()=>setExchange(false)} className={exchange==false?'active':''}>Buy</div>
                         <div onClick={()=>setExchange(true)} className={exchange?'active':''}>Sell</div>
                     </TopMenu>
+                    <TopSwapBody>
+                        <TopInput>
+                            <p className='tip'>From</p>
+                            <div className='input_row'>
+                                <input type='number' min={1} value={count} onChange={handleChange} placeholder='0.00'/>
+                                <div className='input_right'>
+                                    <button className='max'>MAX</button>
+                                    <img width={28} height={28} src={exchange?require("@/assets/mint/chip.png").default:require("@/assets/mint/sol.png").default} alt='icon'/>
+                                    <span>{exchange?'CHIP':'SOL'}</span>
+                                    <p className='balance'>Balance：--</p>
+                                </div>
+                            </div>
+                        </TopInput>
+                        <img onClick={()=>setExchange(!exchange)} className='exchange' width={52} height={52} src={require("@/assets/mint/exchange.png").default} alt='exchange'/>
+                        <TopInput>
+                            <p className='tip'>To</p>
+                            <div className='input_row'>
+                                <input type='number' disabled placeholder='0.00'/>
+                                <div className='input_right'>
+                                    <img width={28} height={28} src={exchange?require("@/assets/mint/sol.png").default:require("@/assets/mint/chip.png").default} alt='icon'/>
+                                    <span>{exchange?'SOL':'CHIP'}</span>
+                                </div>
+                            </div>
+                        </TopInput>
+                    </TopSwapBody>
+                    <SureBtn disabled>{exchange?'Sell':'Buy'}</SureBtn>
                 </TopRight>
             </TopContent>
         </Top>
         <img style={{width:'100%'}} src={require('../../assets/home/logo_row.png').default}/>
         <Content>
-
+            <LeftInvest>
+                <div className='header'>
+                    <img src={require('../../assets/ido/invest.png').default}/>
+                    <span>Transaction</span>
+                </div>
+                <LeftInvestTableHeader>
+                    <span>Time</span>
+                    <span>Type</span>
+                    <span>Price</span>
+                    <span>From</span>
+                    <span>To</span>
+                </LeftInvestTableHeader>
+                <LeftInvestTableContent>
+                    {renderNoData()}
+                </LeftInvestTableContent>
+            </LeftInvest>
+            <Right>
+                <div className='header'>
+                    <img src={require('../../assets/ido/info.png').default}/>
+                    <span>Info</span>
+                </div>
+                <RightContent>
+                    <RightRow>
+                        <p>Market Cap：</p>
+                        <p>--</p>
+                    </RightRow>
+                    <RightRow>
+                        <p>Total Supply：</p>
+                        <p>10 B</p>
+                    </RightRow>
+                    <RightRow>
+                        <p>Issue Price：</p>
+                        <p>--</p>
+                    </RightRow>
+                    <RightRow>
+                        <p>Holder：</p>
+                        <p>--</p>
+                    </RightRow>
+                    <RightRow>
+                        <p>Chain：</p>
+                        <p>Solana</p>
+                    </RightRow>
+                </RightContent>
+                <RightData>
+                    <p className='subTitle'>Introduction</p>
+                    <p className='subDesc'>$CHIP 代币价格直接代表了社区的共识高度，$CHIP 将采取公平发射的方式，所有人包括发起团队都没有免费的筹码。联合曲线是一个伟大的发明，所有人都可以在自己价值预期拿到筹码，让我们一起引领 Gamble Game、GambleFi、Gamble Chain 的到来。No Gamble No Future！拥有 $CHIP，成为一个 100 亿美金市值项目的掌门人。</p>
+                </RightData>
+            </Right>
         </Content>
+        <Introduce>
+            <IntroduceContent>
+                <div>
+                    <p className='title'>CHIPCHIP 为什么要做公平发射？</p>
+                    <p className='desc'>作为CHIPCHIP的发起团队，我们需要建立一个基础的社区金库来保证早期项目开发工作的进展，伴随CHIP代币的发行，我们将会朝着去中心化治理的方向持续努力，完全去中心化的随机数方案、通用的游戏发行激励方案、去中心化资金托管合约、去中心化的分红方案、去中心化的发展治理，需要有一个相对中心化的团队进行发起再逐步去中心化，我们将会建立一个全球化且受社区监管的开发团队，来实现玩家们的伟大愿景。我们发起团队耗费了 18 个月时间，花费了数百万资金，这根本不重要，有了社区，我们就可以做一切的事！</p>
+                </div>
+                <img width={396} height={392} src={require("@/assets/mint/icon1.png").default} alt='icon'/>
+            </IntroduceContent>
+            <IntroduceStartContent>
+                <img width={517} height={387} src={require("@/assets/mint/icon2.png").default} alt='icon'/>
+                <div>
+                    <p className='title'>为什么要投资CHIPCHIP？</p>
+                    <div className='tip'>
+                        <img src={require('../../assets/ido/star.png').default}/>
+                        <span>{t('313')}：</span>
+                    </div>
+                    <p className='desc'></p>
+                    <IntroduceTipContent>
+                        <IntroduceTipRow>多链链游，web2、web3用户均可使用，具备百万级用户体量的潜力。</IntroduceTipRow>
+                        <IntroduceTipRow>棋牌赛道，天花板高，教育门槛低，打牌组局自带裂变属性，用户获取成本低，但盈利能力巨大。</IntroduceTipRow>
+                        <IntroduceTipRow>堪比Web2级别的丝滑体验，娱乐竞技属性兼顾，出圈效应拉满。</IntroduceTipRow>
+                        <IntroduceTipRow>团队在Poker领域和Web3领域有成功创业经历。</IntroduceTipRow>
+                    </IntroduceTipContent>
+                </div>
+            </IntroduceStartContent>
+        </Introduce>
         <Evaluate>
             <img className='bg' src={require('../../assets/ido/bottom_bg.png').default}/>
             <EvaluateContent>
@@ -367,8 +473,7 @@ export default function Index() {
     )
     const renderNoData = () => (
         <NoData>
-            <img src={require('../../assets/noData.png').default}/>
-            <span>{t('375')}</span>
+            <span>{t('7011')}</span>
         </NoData>
     );
     return (
@@ -457,30 +562,15 @@ export default function Index() {
 }
 
 const NoData = styled.div`
+height: 100%;
 display: flex;
 flex-direction: column;
 align-items: center;
-padding: 25px 0 16px;
-img {
-width: 40px;
-}
-span {
-margin-top: 13px;
+justify-content: center;
 font-size: 16px;
-font-weight: 600;
-line-height: 18.933px;
-opacity: 0.2;
-}
+color #7C7676;
 ${({ theme }) => theme.mediaQueries.sm}{
-padding: 32px 0 16px;
-img {
-width: 60px;
-}
-span {
-margin-top: 16px;
-font-size: 21px;
-line-height: 37.867px;
-}
+font-size: 18px;
 };
 `
 
@@ -752,7 +842,7 @@ justify-content: center;
 gap: 46px;
 `
 const TopLeft = styled.div`
-width: 790px;
+flex: 1 0 0;
 .row {
 display: flex;
 align-items: center;
@@ -802,6 +892,7 @@ gap: 32px;
 }
 `
 const TopRight = styled.div`
+flex-shrink: 0;
 width: 475px;
 height: 550px;
 border-radius: 4px;
@@ -809,7 +900,7 @@ background: #241F2D;
 padding: 24px 30px 60px;
 `
 const TopMenu = styled.div`
-margin-bottom: 48px;
+margin-bottom: 32px;
 display: flex;
 gap: 30px;
 position: relative;
@@ -833,6 +924,64 @@ padding-bottom: 15px;
     background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
     }
 }
+}
+`
+const TopSwapBody = styled.div`
+position: relative;
+margin-bottom: 30px;
+.exchange {
+cursor: pointer;
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+}
+`
+const TopInput = styled.div`
+margin-bottom: 15px;
+border-radius: 4px;
+background: #121212;
+padding: 10px 20px;
+height: 136px;
+.tip {
+font-size: 14px;
+font-weight: 600;
+opacity: 0.4;
+}
+.input_row {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    input, input[disabled] {
+        flex: 1;
+        width: 100%;
+        color: #FFF;
+        background: none;
+        border: none;
+        border-color: transparent;
+        font-size: 42px;
+        font-weight: 600;
+    }
+    .input_right {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 18px;
+        .max {
+            color: #76EBA7;
+            font-size: 18px;
+            font-weight: 600;
+            background: transparent;
+        }
+        .balance {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            opacity: 0.3;
+            font-size: 14px;
+        }
+    }
 }
 `
 const RuleTip = styled.ul`
@@ -897,19 +1046,192 @@ font-weight: 700;
 const Content = styled.div`
 position: relative;
 padding: 13px 10px 0;
+box-sizing: content-box;
 ${({ theme }) => theme.mediaQueries.sm}{
-padding: 54px 105px 76px;
+padding: 55px 60px;
 display: flex;
-gap: 30px;
+gap: 46px;
+height: 706px;
 };
 `
-const Left = styled.div`
-flex: 1 0 0;
+const Introduce = styled.div`
+display: flex;
+flex-direction: column;
+align-items: stretch;
+gap: 44px;
+padding: 13px 10px 0;
+margin-bottom: 15px;
+${({ theme }) => theme.mediaQueries.sm}{
+padding: 0 60px;
+margin-bottom: 42px;
+};
+`
+const IntroduceContent = styled.div`
+border-radius: 18px;
+background: #1C1A22;
+display: flex;
+gap: 109px;
+padding: 74px 90px;
+.title {
+color: #CE67FF;
+font-size: 38px;
+font-weight: 500;
+}
+.desc {
+margin-top: 36px;
+font-size: 21px;
+opacity: 0.6;
+line-height: 32px;
+}
+`
+const IntroduceStartContent = styled.div`
+border-radius: 18px;
+background: #1C1A22;
+display: flex;
+padding: 45px 40px 30px;
+.title {
+color: #CE67FF;
+font-size: 38px;
+font-weight: 500;
+margin-bottom: 36px;
+}
+.tip {
+padding-left: 0;
+margin-bottom: 16px;
+display: flex;
+align-items: center;
+gap: 12px;
+font-size: 14px;
+font-weight: 700;
+line-height: 18px;
+background: linear-gradient(258deg, #75F6A3 5.58%, #FEAD1D 88.85%);
+background-clip: text;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+img {
+width: 14px;
+height: 14px;
+}
+}
+${({ theme }) => theme.mediaQueries.sm}{
+.tip {
+padding-left: 20px;
+margin-bottom: 28px;
+font-size: 21px;
+line-height: 32px;
+img {
+width: 24px;
+height: 24px;
+}
+}
+}
+`
+const IntroduceTipContent = styled.ul`
+list-style-type: none;
+color: rgba(255,255,255,0.6);
+`
+const IntroduceTipRow = styled.li`
+margin-bottom: 10px;
+font-size: 14px;
+line-height: 21px;
+position: relative;
+padding-left: 10px;
+&:before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 5px;
+    width: 4px;
+    height: 4px;
+    background-color: rgba(255,255,255,0.6);
+    border-radius: 50%;
+}
+${({ theme }) => theme.mediaQueries.sm}{
+font-size: 21px;
+line-height: 30px;
+&:before {
+    top: 12px;
+}
+};
 `
 const Right = styled.div`
-flex: 1 0 0;
+flex-shrink: 0;
+width: 475px;
+border-radius: 8px;
+border: 2px solid #2B292E;
+padding: 35px 30px 0;
+.header {
+display: flex;
+align-items: center;
+gap: 5px;
+font-size: 16px;
+font-weight: 600;
+line-height: 18px;
+img {
+width: 16px;
+height: 16px;
+}
+}
+${({ theme }) => theme.mediaQueries.sm}{
+border-radius: 18px;
+.header {
+gap: 10px;
+font-size: 32px;
+line-height: 32px;
+img {
+width: 30px;
+height: 30px;
+}
+}
+};
+`
+const RightContent = styled.div`
+margin-top: 35px;
+padding: 0 12px;
+display: flex;
+flex-direction: column;
+gap: 20px;
+`
+const RightRow = styled.div`
+display: flex;
+align-items: center;
+justify-content: space-between;
+p {
+    &:nth-child(1) {
+        font-size: 16px;
+        font-weight: 500;
+        opacity: 0.5;
+    }
+    &:nth-child(2) {
+        font-size: 21px;
+        font-weight: 700;
+    }
+}
+`
+const RightData = styled.div`
+.subTitle {
+margin-top: 22px;
+font-size: 14px;
+font-weight: 600;
+line-height: 20px;
+}
+.subDesc {
+margin: 15px 8px 0;
+font-size: 16px;
+font-weight: 500;
+opacity: 0.5;
+}
+${({ theme }) => theme.mediaQueries.sm}{
+.subTitle {
+margin-top: 46px;
+font-size: 24px;
+font-weight: 600;
+line-height: 32px;
+}
+};
 `
 const LeftInvest = styled.div`
+flex: 1;
 padding: 15px 15px 5px;
 border-radius: 8px;
 border: 2px solid #2B292E;
@@ -926,7 +1248,7 @@ height: 16px;
 }
 }
 ${({ theme }) => theme.mediaQueries.sm}{
-padding: 44px 40px 15px;
+padding: 35px 30px 0;
 border-radius: 18px;
 .header {
 gap: 12px;
@@ -957,9 +1279,6 @@ opacity: 0.6;
 &:nth-child(2) {
 flex: 2;
 }
-&:last-child {
-text-align: right;
-}
 }
 ${({ theme }) => theme.mediaQueries.sm}{
 margin-top: 34px;
@@ -976,13 +1295,11 @@ line-height: 32px;
 &:first-child {
 flex: 1;
 }
-&:last-child {
-text-align: right;
-}
 }
 };
 `
 const LeftInvestTableContent = styled.div`
+height: 425px;
 margin-top: 4px;
 max-height: 80vh;
 overflow-y: auto;
@@ -1142,374 +1459,6 @@ line-height: 37px;
 }
 };
 `
-const RightOperate = styled.div`
-border-radius: 18px;
-border: 2px solid #2B292E;
-padding: 30px 40px 46px;
-.header {
-position: relative;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 16px;
-font-weight: 600;
-.left {
-position: relative;
-margin-right: -3px;
-width: 268px;
-height: 60px;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-span {
-position: relative;
-z-index: 1;
-}
-img {
-position: absolute;
-left: 0;
-top: 0;
-width: 100%;
-height: 100%;
-}
-}
-.right {
-&.disabled {
-cursor: no-drop;
-}
-position: relative;
-margin-left: -3px;
-width: 268px;
-height: 60px;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-span {
-position: relative;
-z-index: 1;
-}
-img {
-position: absolute;
-left: 0;
-top: 0;
-width: 100%;
-height: 100%;
-}
-}
-}
-`
-const RightOperateToken = styled.div`
-margin-top: 12px;
-height: 60px;
-padding: 0 11px;
-display: flex;
-gap: 8px;
-align-items: center;
-border-radius: 8px;
-border: 3px solid #30293C;
-img {
-width: 38px;
-height: 38px;
-}
-.content {
-display: flex;
-flex-direction: column;
-.title {
-font-size: 18px;
-font-weight: 600;
-}
-.desc {
-font-size: 13px;
-font-weight: 300;
-opacity: 0.4;
-}
-}
-${({ theme }) => theme.mediaQueries.sm}{
-margin-top: 30px;
-height: 92px;
-padding: 0 18px;
-img {
-width: 58px;
-height: 58px;
-}
-.content {
-.title {
-font-size: 28px;
-}
-.desc {
-font-size: 16px;
-}
-}
-};
-`
-const RightFundraising = styled.div`
-margin-top: 24px;
-padding: 0 8px;
-.title {
-font-size: 14px;
-font-weight: 600;
-line-height: 20px;
-}
-.row {
-margin-top: 10px;
-font-size: 12px;
-font-weight: 300;
-opacity: 0.4;
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding-right: 10px;
-}
-.line {
-margin-top: 15px;
-height: 12px;
-position: relative;
-border-radius: 10px;
-background: rgba(255,255,255,0.1);
-&::before {
-position: absolute;
-content: '';
-left: 0;
-top: 0;
-height: 100%;
-width: var(--w);
-border-radius: 10px;
-background: #7DC2BD;
-}
-}
-${({ theme }) => theme.mediaQueries.sm}{
-.title {
-font-size: 24px;
-line-height: 32px;
-}
-.row {
-margin-top: 16px;
-font-size: 16px;
-}
-.line {
-margin-top: 20px;
-height: 20px;
-}
-};
-`
-const RightCard = styled.div`
-margin-top: 30px;
-padding: 20px 18px 24px;
-border-radius: 3px;
-background: #241F2D;
-font-size: 14px;
-.title {
-margin-bottom: 10px;
-font-weight: 600;
-line-height: 20px;
-}
-.input {
-border-radius: 3px;
-background: #121212;
-padding: 0 10px 0 20px;
-height: 40px;
-display: flex;
-align-items: center;
-gap: 10px;
-    input {
-        flex: 1;
-        height: 100%;
-        font-size: 13px;
-        font-weight: 500;
-    }
-    button {
-        position: relative;
-        background: transparent;
-        font-size: 13px;
-        &:hover {
-            .choose {
-            display: block;
-            }
-        }
-        img {
-        width: 14px;
-        height: 14px;
-        }
-        .choose {
-            position: absolute;
-            z-index: 1;
-            display: none;
-            top: 100%;
-            right: 0;
-            padding: 20px 15px;
-            border-radius: 8px;
-            background: #362F42;
-            width: 205px;
-            .c_row {
-                font-size: 18px;
-                margin-top: 20px;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                img {
-                    width: 11px;
-                    height: 7px;
-                }
-                &:first-child {
-                    margin-top: 0;
-                }
-                &.active {
-                    font-weight: 600;
-                }
-            }
-        }
-    }
-}
-.balance {
-margin-top: 10px;
-text-align: right;
-font-size: 12px;
-opacity: 0.4;
-}
-.address {
-margin-top: 16px;
-border-radius: 33px;
-background: #121212;
-padding-left: 20px;
-padding-right: 5px;
-height: 40px;
-display: flex;
-align-items: center;
-gap: 10px;
-input {
-flex: 1;
-height: 100%;
-font-size: 13px;
-font-weight: 600;
-}
-button {
-background: transparent;
-font-size: 13px;
-font-weight: 600;
-border-radius: 16px;
-background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
-padding: 0 15px;
-height: 32px;
-line-height: 32px;
-}
-}
-${({ theme }) => theme.mediaQueries.sm}{
-margin-top: 40px;
-padding: 30px 34px;
-border-radius: 4px;
-font-size: 24px;
-.title {
-margin-bottom: 22px;
-line-height: 32px;
-}
-.input {
-border-radius: 4px;
-padding: 0 30px;
-height: 60px;
-    input {
-        font-size: 16px;
-        font-weight: 600;
-    }
-    button {
-        font-size: 18px;
-        &:hover {
-            .choose {
-            display: block;
-            }
-        }
-        img {
-        width: 10px;
-        height: 10px;
-        }
-    }
-}
-.balance {
-margin-top: 15px;
-font-size: 16px;
-}
-.address {
-margin-top: 18px;
-border-radius: 33px;
-background: #121212;
-padding-left: 30px;
-padding-right: 10px;
-height: 52px;
-input {
-font-size: 16px;
-}
-button {
-font-size: 16px;
-border-radius: 32px;
-height: 42px;
-line-height: 42px;
-}
-}
-};
-`
-const RightCardReceiveInfo = styled.div`
-margin-top: 16px;
-margin-bottom: 5px;
-display: flex;
-flex-direction: row;
-flex-wrap: wrap;
-row-gap: 25px;
-div {
-width: 50%;
-display: flex;
-flex-direction: column;
-&:nth-child(1) {
-width: 80%;
-}
-&:nth-child(2) {
-width: 20%;
-}
-&:nth-child(3) {
-width: 100%;
-}
-&:last-child {
-width: 100%;
-.value {
-color: ${({theme})=>theme.colors.success};
-}
-}
-.value {
-font-size: 18px;
-font-weight: 700;
-}
-.value_desc {
-margin-top: 8px;
-font-size: 13px;
-font-weight: 500;
-opacity: 0.6;
-}
-}
-${({ theme }) => theme.mediaQueries.sm}{
-margin-top: 40px;
-margin-bottom: 18px;
-row-gap: 36px;
-div {
-width: 50%;
-&:nth-child(1) {
-width: 50%;
-}
-&:nth-child(2) {
-width: 50%;
-}
-&:nth-child(3) &:last-child {
-width: 50%;
-}
-.value {
-font-size: 21px;
-}
-.value_desc {
-margin-top: 10px;
-font-size: 16px;
-}
-}
-};
-`
 const SureBtn = styled.button`
 margin-top: 20px;
 font-size: 15px;
@@ -1523,52 +1472,6 @@ margin-top: 22px;
 font-size: 18px;
 height: 53px;
 border-radius: 32px;
-};
-`
-const RecordBtn = styled.div`
-cursor: pointer;
-margin-top: 35px;
-padding: 0 16px;
-font-size: 18px;
-font-weight: 600;
-display: flex;
-gap: 8px;
-align-items: center;
-img {
-width: 28px;
-height: 28px;
-}
-`
-const RightCardBody = styled.div`
-margin-top: 20px;
-padding: 2px 0 10px 12px;
-border-radius: 4px;
-border: 1.5px solid #362F42;
-${({ theme }) => theme.mediaQueries.sm}{
-margin-top: unset;
-padding: 10px 0 20px 20px;
-border-radius: 12px;
-border: 2px solid #362F42;
-};
-`
-const RightCardBodyRow = styled.div`
-padding: 10px 0;
-display: flex;
-align-items: center;
-gap: 6px;
-font-size: 13px;
-font-weight: 500;
-img {
-width: 15px;
-height: 15px;
-}
-${({ theme }) => theme.mediaQueries.sm}{
-gap: 10px;
-font-size: 16px;
-img {
-width: 24px;
-height: 24px;
-}
 };
 `
 const RightAbout = styled.div`

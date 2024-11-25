@@ -26,7 +26,7 @@ const GlobalStyle = createGlobalStyle`
   }
   p {
     line-height: 1.5;
-    margin: 0.2em 0;
+    margin: 0;
   }
   
   input {

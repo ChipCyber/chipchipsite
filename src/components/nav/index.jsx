@@ -199,7 +199,7 @@ class Nav extends Component {
         )
     }
     renderNav() {
-        const {t,i18n,history,location:{pathname},userInfo,showLogin,setShowLogin,currentAddress} = this.props;
+        const {t,i18n,history,location:{pathname},userInfo,showLogin,setShowLogin,currentWalletAddress} = this.props;
         const {showMenu,showMore,showPModal,countdown} = this.state;
         // console.log('pathname :>> ', pathname);
         return (
@@ -225,16 +225,16 @@ class Nav extends Component {
                     </NavCenterNoLink> */}
                 </NavCenter>
                 <NavRight>
-                    {isEmpty(currentAddress)?
+                    {isEmpty(currentWalletAddress)?
                     <LoginBtn className='custom' onClick={()=>this.connectWallet()}>{t('602')}</LoginBtn>
                     :
                     <LoginBtn className='custom'>
                         <img src={require("@/assets/nav/wallet.png").default} alt='icon'/>
-                        <span>{shortenNameAddress(currentAddress)}</span>
+                        <span>{shortenNameAddress(currentWalletAddress)}</span>
                         {showPModal&&<WalletModal className='modal'>
                         <WalletModalContent>
                             <span>Wallet</span>
-                            <p>Address: {shortenAddress(currentAddress)}</p>
+                            <p>Address: {shortenAddress(currentWalletAddress)}</p>
                             <LoginBtn className='custom' onClick={()=>this.disconnect()}>Disconnect</LoginBtn>
                         </WalletModalContent>
                         </WalletModal>}
@@ -845,7 +845,7 @@ ${({theme})=>theme.mediaQueries.sm} {
 
 const mapStateToProps = (state) => ({
     userInfo: state.user.userInfo,
-    currentAddress: state.user.currentAddress,
+    currentWalletAddress: state.user.currentWalletAddress,
     showLogin: state.config.showLogin,
 });
 
