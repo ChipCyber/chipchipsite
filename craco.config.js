@@ -1,6 +1,7 @@
 const CracoLessPlugin = require('craco-less');
 const TerserPlugin = require('terser-webpack-plugin');
 const { NODE_ENV } = process.env;
+const path = require('path');
 
 const Webpack = {
   production: {
@@ -48,5 +49,10 @@ module.exports = {
       ]
     }
   },
-  webpack: Webpack[NODE_ENV],
+  webpack: {
+    ...Webpack[NODE_ENV],
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
+  },
 }

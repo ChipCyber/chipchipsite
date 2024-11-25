@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux';
-import { setUserInfo, removeUserInfo } from '../../store/userSlice';
-import { setShowLogin, setCloseLogin } from '../../store/configSlice';
+import { setUserInfo, removeUserInfo, setWalletInfo, removeWalletInfo } from '@/store/userSlice';
+import { setShowLogin, setCloseLogin } from '@/store/configSlice';
 import { withTranslation } from 'react-i18next'
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { message } from 'antd';
 import { withRouter,NavLink } from "react-router-dom"
 import LanguageButton from './languageButton'
-import { sendEmailApi, loginEmailApi, loginGoogleAuthApi } from '../../api';
-import { maskEmail } from '../../utils';
-import { GoogleClientId } from '../../constants';
-import { isEmpty } from '../../constants/constantsFunction';
+import { sendEmailApi, loginEmailApi, loginGoogleAuthApi } from '@/api';
+import { maskEmail, shortenNameAddress, shortenAddress } from '@/utils';
+import { GoogleClientId } from '@/constants';
+import { isEmpty } from '@/constants/constantsFunction';
 import {
     HoldemUrl,
     AOFUrl,
@@ -21,12 +21,14 @@ import {
     UserAgreementUrl,
     PrivacyPolicyUrl,
     BlogUrl,
-} from "../../constants";
+} from "@/constants";
+import { WalletType, NetworkType, runConnectWallet } from "@/wallet";
 
 class Nav extends Component {
     state = {
         showMenu: false,
         showMore: true,
+        showWModal: true,
         showPModal: true,
         email: '',
         code: '',
@@ -173,6 +175,22 @@ class Nav extends Component {
             this.setState({showPModal:true});
         }, 200);
     }
+    connectWallet = () => {
+        runConnectWallet(WalletType.OKX, NetworkType.Solana).then(data=>{
+            this.props.setWalletInfo({
+                address: data.address,
+                walletType: WalletType.OKX,
+                networkType: NetworkType.Solana,
+            });
+        });
+    }
+    disconnect = () => {
+        this.props.removeWalletInfo();
+        this.setState({showWModal:false});
+        setTimeout(() => {
+            this.setState({showWModal:true});
+        }, 200);
+    }
     render() {
         return (
             <Root ref={this.navRef}>
@@ -181,12 +199,12 @@ class Nav extends Component {
         )
     }
     renderNav() {
-        const {t,i18n,history,location:{pathname},userInfo,showLogin,setShowLogin} = this.props;
+        const {t,i18n,history,location:{pathname},userInfo,showLogin,setShowLogin,currentAddress} = this.props;
         const {showMenu,showMore,showPModal,countdown} = this.state;
         // console.log('pathname :>> ', pathname);
         return (
             <NavBody>
-                <NavLogo onClick={()=>history.push('/')} src={require('../../assets/nav/logo.png').default} alt='logo'/>
+                <NavLogo onClick={()=>history.push('/')} src={require('@/assets/nav/logo.png').default} alt='logo'/>
                 <NavCenter>
                     <NavCenterLink to='/' onClick={this.closeMenu} isActive={()=>pathname==='/'}>{t('100')}</NavCenterLink>
                     <NavCenterLink to='/displacement' onClick={this.closeMenu} isActive={()=>pathname==='/displacement'}>{t('207')}</NavCenterLink>
@@ -197,7 +215,7 @@ class Nav extends Component {
                     <NavCenterLink to='/news' onClick={this.closeMenu} isActive={()=>pathname==='/news'}>{t('103')}</NavCenterLink>
                     {/* <NavCenterNoLink className='custom'>
                         <span>{t('104')}</span>
-                        <img src={require('../../assets/arrow_down.png').default}/>
+                        <img src={require('@/assets/arrow_down.png').default}/>
                         {showMore&&<Modal className='modal'>
                             <ModalContent>
                                 <ModalRow to='/news' onClick={this.closeMore}>{t('103')}</ModalRow>
@@ -207,23 +225,34 @@ class Nav extends Component {
                     </NavCenterNoLink> */}
                 </NavCenter>
                 <NavRight>
-                    {/* {isEmpty(userInfo)||isEmpty(userInfo.token)?
-                    <LoginBtn className='custom' onClick={()=>setShowLogin()}>{t('105')}</LoginBtn>
+                    {isEmpty(currentAddress)?
+                    <LoginBtn className='custom' onClick={()=>this.connectWallet()}>{t('602')}</LoginBtn>
                     :
-                    <PersonalBody>
-                        <img src={require('../../assets/nav/personal.png').default}/>
-                        {showPModal&&<PModal className='modal'>
-                        <PModalContent>
-                            <img src={require('../../assets/nav/personal.png').default}/>
-                            <div>{maskEmail(userInfo.email)}</div>
-                            <button type='button' default onClick={()=>this.logout()}>{t('1105')}</button>
-                        </PModalContent>
-                    </PModal>}
-                    </PersonalBody>
-                    } */}
-                    <BtnImg onClick={()=>history.push('/download')} src={require('../../assets/nav/download.png').default} alt='download'/>
+                    <LoginBtn className='custom'>
+                        <img src={require("@/assets/nav/wallet.png").default} alt='icon'/>
+                        <span>{shortenNameAddress(currentAddress)}</span>
+                        {showPModal&&<WalletModal className='modal'>
+                        <WalletModalContent>
+                            <span>Wallet</span>
+                            <p>Address: {shortenAddress(currentAddress)}</p>
+                            <LoginBtn className='custom' onClick={()=>this.disconnect()}>Disconnect</LoginBtn>
+                        </WalletModalContent>
+                        </WalletModal>}
+                    </LoginBtn>
+                    // <PersonalBody>
+                    //     <img src={require('@/assets/nav/personal.png').default}/>
+                    //     {showPModal&&<PModal className='modal'>
+                    //     <PModalContent>
+                    //         <img src={require('@/assets/nav/personal.png').default}/>
+                    //         <div>{maskEmail(userInfo.email)}</div>
+                    //         <button type='button' default onClick={()=>this.logout()}>{t('1105')}</button>
+                    //     </PModalContent>
+                    // </PModal>}
+                    // </PersonalBody>
+                    }
+                    <BtnImg onClick={()=>history.push('/download')} src={require('@/assets/nav/download.png').default} alt='download'/>
                     <LanguageButton/>
-                    <MenuImg onClick={()=>this.setState({showMenu:!showMenu})} src={showMenu?require('../../assets/nav/menu_close.png').default:require('../../assets/nav/menu.png').default} alt='menu'/>
+                    <MenuImg onClick={()=>this.setState({showMenu:!showMenu})} src={showMenu?require('@/assets/nav/menu_close.png').default:require('@/assets/nav/menu.png').default} alt='menu'/>
                 </NavRight>
                 <DialogOverlay
                     style={{ height: '100vh', zIndex: 99, background: 'hsla(0, 0%, 0%, 0.6)' }}
@@ -233,7 +262,7 @@ class Nav extends Component {
                     <DialogC aria-label='login'>
                         <LoginHeader>
                             <div className='title'>{t('105')}</div>
-                            <img className='close' onClick={this.closeLogin} src={require('../../assets/nav/close.png').default}/>
+                            <img className='close' onClick={this.closeLogin} src={require('@/assets/nav/close.png').default}/>
                         </LoginHeader>
                         <LoginRow>
                             <div className='title'>{t('186')}</div>
@@ -250,20 +279,20 @@ class Nav extends Component {
                         </LoginRow>
                         <LoginSureBtn className='custom' disabled={isEmpty(this.state.email)||isEmpty(this.state.code)} onClick={this.sureLogin}>
                             <span>{t('105')}</span>
-                            <img src={require('../../assets/nav/login_arrow.png').default}/>
+                            <img src={require('@/assets/nav/login_arrow.png').default}/>
                         </LoginSureBtn>
                         <LoginLine>{t('1104')}</LoginLine>
                         <LoginOtherRow>
                             <LoginOtherRowItem>
-                                <LoginOtherBtn onClick={()=>this.handleGoogleAuthClick()}><img src={require('../../assets/nav/google.png').default}/></LoginOtherBtn>
+                                <LoginOtherBtn onClick={()=>this.handleGoogleAuthClick()}><img src={require('@/assets/nav/google.png').default}/></LoginOtherBtn>
                                 <span>Google</span>
                             </LoginOtherRowItem>
                             <LoginOtherRowItem>
-                                <LoginOtherBtn onClick={()=>this.handleMetamaskAuthClick()}><img src={require('../../assets/nav/metamask.png').default}/></LoginOtherBtn>
+                                <LoginOtherBtn onClick={()=>this.handleMetamaskAuthClick()}><img src={require('@/assets/nav/metamask.png').default}/></LoginOtherBtn>
                                 <span>Metamask</span>
                             </LoginOtherRowItem>
                             <LoginOtherRowItem>
-                                <LoginOtherBtn onClick={()=>this.handlePhantomAuthClick()}><img src={require('../../assets/nav/phantom.png').default}/></LoginOtherBtn>
+                                <LoginOtherBtn onClick={()=>this.handlePhantomAuthClick()}><img src={require('@/assets/nav/phantom.png').default}/></LoginOtherBtn>
                                 <span>Phantom</span>
                             </LoginOtherRowItem>
                         </LoginOtherRow>
@@ -402,25 +431,82 @@ height: 14px;
 const NavRight = styled.div`
 display: flex;
 align-items: center;
-gap: 20px;
+gap: 10px;
 ${({ theme }) => theme.mediaQueries.sm}{
-gap: 25px;
+gap: 20px;
 };
 `
-const LoginBtn = styled.button`
-height: 30px;
+const LoginBtn = styled.div`
+position: relative;
+cursor: pointer;
+height: 26px;
 font-size: 13px;
-font-weight: 600;
 border: none;
-padding: 0 12px;
-border-radius: 6px;
+padding: 0 10px;
+border-radius: 13px;
 background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
-color: #FFFFFF;
+color: #000;
+display: flex;
+align-items: center;
+gap: 6px;
+img {
+width: 20px;
+height: 20px;
+}
 ${({ theme }) => theme.mediaQueries.sm}{
 font-size: 16px;
-height: 40px;
-padding: 0 22px;
+height: 36px;
+padding: 0 16px;
+border-radius: 16px;
+gap: 10px;
+};
+&:hover {
+    .modal {
+        display: block;
+    }
+}
+&:blur {
+    .modal {
+        display: none;
+    }
+}
+`
+const WalletModal = styled.div`
+position: absolute;
+display: none;
+top: 30px;
+right: -30px;
+z-index: 100;
+${({theme})=>theme.mediaQueries.sm} {
+    top: 25px;
+    right: 0;
+};
+`
+const WalletModalContent = styled.div`
+margin-top: 0;
+padding: 12px 12px 15px;
+background: #252525;
+color: #FFF;
+width: 220px;
+display: flex;
+flex-direction: column;
+align-items: flex-start;
 border-radius: 8px;
+p {
+margin-top: 5px;
+margin-bottom: 20px;
+color: #A29999;
+font-size: 14px;
+}
+${({theme})=>theme.mediaQueries.sm} {
+margin-top: 20px;
+padding: 24px 26px 30px;
+width: 300px;
+p {
+margin-top: 15px;
+margin-bottom: 40px;
+font-size: 16px;
+}
 };
 `
 const PersonalBody = styled.div`
@@ -506,7 +592,6 @@ width: 204px;
 `
 const BtnImg = styled.img`
 cursor: pointer;
-margin-left: 12px;
 width: 32px;
 height: 32px;
 display: none;
@@ -760,12 +845,15 @@ ${({theme})=>theme.mediaQueries.sm} {
 
 const mapStateToProps = (state) => ({
     userInfo: state.user.userInfo,
+    currentAddress: state.user.currentAddress,
     showLogin: state.config.showLogin,
 });
 
 const mapDispatchToProps = {
     setUserInfo,
     removeUserInfo,
+    setWalletInfo,
+    removeWalletInfo,
     setShowLogin,
     setCloseLogin,
 };

@@ -123,7 +123,7 @@ export function shortenNameAddress(address, before = 2, end = 4) {
     return '';
   }
   if(address&&address.length>=42) {
-      return `${address.substring(0, before + 2)}**${address.substring(42 - end)}`
+      return `${address.substring(0, before + 2)}**${address.substring(address.length - end)}`
   }else{
       return address;
   }
@@ -133,7 +133,7 @@ export function shortenAddress(address, before = 4, end = 4) {
     return '';
   }
   if(address&&address.length>=42) {
-      return `${address.substring(0, before + 2)}****${address.substring(42 - end)}`
+      return `${address.substring(0, before + 2)}****${address.substring(address.length - end)}`
   }else{
       return address;
   }
@@ -143,7 +143,7 @@ export function shortenLongAddress(address, chars = 16) {
     return '';
   }
   if(address&&address.length>=42) {
-      return `${address.substring(0, 2)}****${address.substring(42 - chars)}`
+      return `${address.substring(0, 2)}****${address.substring(address.length - chars)}`
   }else{
       return address;
   }

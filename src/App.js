@@ -7,6 +7,7 @@ import WOW from 'wowjs';
 import 'animate.css';
 
 import { useTranslation } from "react-i18next";
+import { useDispatch } from 'react-redux';
 // import { injected, loadCache } from "./sotres/connectors.jsx";
 // import DocumentTitle from 'react-document-title'
 
@@ -32,13 +33,27 @@ import Download from "./pages/download";
 import Displacement from "./pages/displacement";
 import Roadmap from "./pages/roadmap";
 // import IDO from "./pages/ido";
+import Mint from "./pages/mint";
+
+import { setWalletInfo } from '@/store/userSlice';
+import { recentConnector } from "@/wallet";
 
 function App() {
   const { changeLanguage } = useLanguage();
   const location = useLocation();
+  const dispatch = useDispatch();
   useEffect(() => {
     new WOW.WOW().init({offset: 200, mobile: true});
   }, [location.pathname]);
+  useEffect(() => {
+    recentConnector().then(data=>{
+      dispatch(setWalletInfo({
+        address: data.address,
+        walletType: data.wallet,
+        networkType: data.network,
+      }));
+    });
+  }, []);
   const { i18n } = useTranslation();
   const [curLanguage, setCurLanguage] = useState('');
   useEffect(()=>{
@@ -114,6 +129,11 @@ function App() {
                 <IDO/>
                 <Footer/>
               </Route> */}
+              <Route path="/mint" exact>
+                <Nav/>
+                <Mint/>
+                <Footer/>
+              </Route>
               <Redirect from='/*' to="/"/>
             </Switch>
           </ScrollToTop>
