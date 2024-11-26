@@ -231,56 +231,129 @@ export default function Index() {
     const renderM = () => (
         <>
         <TopH5>
-            <img src={require('../../assets/ido/h5/img1.png').default}/>
-            <div className='title'>Initial DEX Offering</div>
-            <div className='desc'>{t('300')}</div>
-            {/* <div className='tip'>{t('301')}</div> */}
-        </TopH5>
-        <div style={{overflow:'hidden',height:30}}>
-            <img style={{objectFit:'contain',verticalAlign:'top',height:'100%'}} src={require('../../assets/home/h5/logo_row.png').default}/>
-        </div>
-        <RuleH5>
-            <div className='title'>{t('302')}</div>
-            <RuleTip>
-                <RuleTipRow>{t('303')}</RuleTipRow>
-                {/* <RuleTipRow>{t('304')}</RuleTipRow> */}
-            </RuleTip>
-            <div className='icon'>
-                <img src={require('../../assets/ido/h5/img2.png').default}/>
+            <div className='row'>
+                <img width={35} height={35} src={require("@/assets/mint/chip.png").default} alt='icon'/>
+                <div className='row_tip'>
+                    <span className='row_tip_t1'>CHIP</span>
+                    <span className='row_tip_t2'>CHIPCHIP</span>
+                </div>
             </div>
-            <div className='subTitle'>{t('305')}</div>
-            <Time>
-                <TimeItem>
-                    <img src={require('../../assets/ido/time.png').default}/>
-                    <span>--</span>
-                </TimeItem>
-                <span>{t('366')}</span>
-                <TimeItem>
-                    <img src={require('../../assets/ido/time.png').default}/>
-                    <span>--</span>
-                </TimeItem>
-                <span>{t('367')}</span>
-                <TimeItem>
-                    <img src={require('../../assets/ido/time.png').default}/>
-                    <span>--</span>
-                </TimeItem>
-                <span>{t('368')}</span>
-                <TimeItem>
-                    <img src={require('../../assets/ido/time.png').default}/>
-                    <span>--</span>
-                </TimeItem>
-                <span>{t('369')}</span>
-            </Time>
-        </RuleH5>
+            <p className='row_tip_t3'>投资属于玩家的poker 平台</p>
+            <TopChart>
+                <div className='bg'></div>
+                <div className='start'>
+                    <p>即将开始倒计时</p>
+                    <Time>
+                        <TimeItem>--</TimeItem>
+                        <span>:</span>
+                        <TimeItem>--</TimeItem>
+                        <span>:</span>
+                        <TimeItem>--</TimeItem>
+                        <span>:</span>
+                        <TimeItem>--</TimeItem>
+                    </Time>
+                </div>
+            </TopChart>
+            <TopRight>
+                <TopMenu>
+                    <div onClick={()=>setExchange(false)} className={exchange==false?'active':''}>Buy</div>
+                    <div onClick={()=>setExchange(true)} className={exchange?'active':''}>Sell</div>
+                </TopMenu>
+                <TopSwapBody>
+                    <TopInput>
+                        <p className='tip'>From</p>
+                        <div className='input_row'>
+                            <input type='number' min={1} value={count} onChange={handleChange} placeholder='0.00'/>
+                            <div className='input_right'>
+                                <button className='max'>MAX</button>
+                                <img width={28} height={28} src={exchange?require("@/assets/mint/chip.png").default:require("@/assets/mint/sol.png").default} alt='icon'/>
+                                <span>{exchange?'CHIP':'SOL'}</span>
+                                <p className='balance'>Balance：--</p>
+                            </div>
+                        </div>
+                    </TopInput>
+                    <img onClick={()=>setExchange(!exchange)} className='exchange' width={45} height={45} src={require("@/assets/mint/exchange.png").default} alt='exchange'/>
+                    <TopInput>
+                        <p className='tip'>To</p>
+                        <div className='input_row'>
+                            <input type='number' disabled placeholder='0.00'/>
+                            <div className='input_right'>
+                                <img width={28} height={28} src={exchange?require("@/assets/mint/sol.png").default:require("@/assets/mint/chip.png").default} alt='icon'/>
+                                <span>{exchange?'SOL':'CHIP'}</span>
+                            </div>
+                        </div>
+                    </TopInput>
+                </TopSwapBody>
+                <SureBtn disabled>{exchange?'Sell':'Buy'}</SureBtn>
+            </TopRight>
+        </TopH5>
         <Content>
-            
             <MenuH5>
                 <div onClick={()=>setMenuIndex(0)} className={menuIndex==0?'active':''}>{t('181')}</div>
-                <div onClick={()=>setMenuIndex(1)} className={menuIndex==1?'active':''}>{t('373')}</div>
+                <div onClick={()=>setMenuIndex(1)} className={menuIndex==1?'active':''}>交易记录</div>
             </MenuH5>
+            {menuIndex==0&&renderAboutM()}
+            {menuIndex==1&&renderRecordM()}
+            <Introduce>
+                <div>
+                    <p className='title'>CHIPCHIP 为什么要做公平发射？</p>
+                    <p className='desc'>作为CHIPCHIP的发起团队，我们需要建立一个基础的社区金库来保证早期项目开发工作的进展，伴随CHIP代币的发行，我们将会朝着去中心化治理的方向持续努力，完全去中心化的随机数方案、通用的游戏发行激励方案、去中心化资金托管合约、去中心化的分红方案、去中心化的发展治理，需要有一个相对中心化的团队进行发起再逐步去中心化，我们将会建立一个全球化且受社区监管的开发团队，来实现玩家们的伟大愿景。我们发起团队耗费了 18 个月时间，花费了数百万资金，这根本不重要，有了社区，我们就可以做一切的事！</p>
+                </div>
+                <div>
+                    <p className='title'>为什么要投资CHIPCHIP？</p>
+                    <div className='tip'>
+                        <img src={require('../../assets/ido/star.png').default}/>
+                        <span>{t('313')}：</span>
+                    </div>
+                    <p className='desc'></p>
+                    <IntroduceTipContent>
+                        <IntroduceTipRow>多链链游，web2、web3用户均可使用，具备百万级用户体量的潜力。</IntroduceTipRow>
+                        <IntroduceTipRow>棋牌赛道，天花板高，教育门槛低，打牌组局自带裂变属性，用户获取成本低，但盈利能力巨大。</IntroduceTipRow>
+                        <IntroduceTipRow>堪比Web2级别的丝滑体验，娱乐竞技属性兼顾，出圈效应拉满。</IntroduceTipRow>
+                        <IntroduceTipRow>团队在Poker领域和Web3领域有成功创业经历。</IntroduceTipRow>
+                    </IntroduceTipContent>
+                </div>
+            </Introduce>
         </Content>
-        {menuIndex==0&&renderAboutM()}
-        {menuIndex==1&&renderTokenM()}
+        <EvaluateH5>
+            <img className='bg' src={require('../../assets/ido/h5/bottom_bg.png').default}/>
+            <div className='title'>{t('363')}</div>
+            <EvaluateContentBodyH5>
+                <div className='item'>
+                    <div className='header'>
+                        <img src={require('../../assets/ido/avatar1.jpeg').default}/>
+                        <span>Leo</span>
+                    </div>
+                    <div className='content'>{t('380')}</div>
+                </div>
+                <div className='item'>
+                    <div className='header'>
+                        <img src={require('../../assets/ido/avatar2.jpeg').default}/>
+                        <span>Bruce</span>
+                    </div>
+                    <div className='content'>{t('381')}</div>
+                </div>
+                <div className='item'>
+                    <div className='header'>
+                        <img src={require('../../assets/ido/avatar3.jpeg').default}/>
+                        <span>Ron</span>
+                    </div>
+                    <div className='content'>{t('382')}</div>
+                </div>
+                <div className='item'>
+                    <div className='header'>
+                        <img src={require('../../assets/ido/avatar4.jpeg').default}/>
+                        <span>Gavin</span>
+                    </div>
+                    <div className='content'>{t('383')}</div>
+                </div>
+                <div className='slider'>
+                    {/* <span className='active'></span>
+                    <span></span>
+                    <span></span> */}
+                </div>
+            </EvaluateContentBodyH5>
+        </EvaluateH5>
         <FAQH5>
             <div className='t_title'>{t('172')}</div>
             <div className='t_desc'>{t('193')}...</div>
@@ -298,178 +371,57 @@ export default function Index() {
         </FAQH5>
         </>
     );
-    const renderAboutM = () =>(
-        <>
-            <MenuBody>
-                <LeftInvest>
-                    <div className='header'>
-                        <img src={require('../../assets/ido/invest.png').default}/>
-                        <span>{t('306')}</span>
-                    </div>
-                    <LeftInvestTableHeader>
-                        <span>{t('307')}</span>
-                        <span>{t('308')}</span>
-                        <span>TGE</span>
-                        <span>{t('309')}</span>
-                    </LeftInvestTableHeader>
-                    <LeftInvestTableContent>
-                        <LeftInvestTableRow status='-1'>
-                            <div>--</div>
-                            <div>--</div>
-                            <div>--</div>
-                            <div>--</div>
-                            {/* <div>{t('370')}</div> */}
-                        </LeftInvestTableRow>
-                        <LeftInvestTableRow status='0'>
-                            <div>--</div>
-                            <div>--</div>
-                            <div>--</div>
-                            <div>--</div>
-                            {/* <div>{t('371')}</div> */}
-                        </LeftInvestTableRow>
-                        <LeftInvestTableRow status='1'>
-                            <div>--</div>
-                            <div>--</div>
-                            <div>--</div>
-                            <div>--</div>
-                            {/* <div><span>{t('372')}</span></div> */}
-                        </LeftInvestTableRow>
-                    </LeftInvestTableContent>
-                </LeftInvest>
-                <LeftTip>
-                    <div className='title'>{t('310')}</div>
-                    <div className='desc'>{t('311')}</div>
-                    <div className='title'>{t('312')}</div>
-                    {/* <div className='tip'>
-                        <img src={require('../../assets/ido/star.png').default}/>
-                        <span>{t('313')}：</span>
-                    </div> */}
-                    <LeftTipContent>
-                        <LeftTipRow>{t('314')}</LeftTipRow>
-                        <LeftTipRow>{t('315')}</LeftTipRow>
-                        <LeftTipRow>{t('316')}</LeftTipRow>
-                        <LeftTipRow>{t('317')}</LeftTipRow>
-                        <LeftTipRow>{t('3171')}</LeftTipRow>
-                        <LeftTipRow>{t('3172')}</LeftTipRow>
-                        <LeftTipRow>{t('3173')}</LeftTipRow>
-                        <LeftTipRow>{t('3174')}</LeftTipRow>
-                    </LeftTipContent>
-                </LeftTip>
-            </MenuBody>
-            <EvaluateH5>
-                <img className='bg' src={require('../../assets/ido/h5/bottom_bg.png').default}/>
-                <div className='title'>{t('363')}</div>
-                <EvaluateContentBodyH5>
-                    <div className='item'>
-                        <div className='header'>
-                            <img src={require('../../assets/ido/avatar1.jpeg').default}/>
-                            <span>Leo</span>
-                        </div>
-                        <div className='content'>{t('380')}</div>
-                    </div>
-                    <div className='item'>
-                        <div className='header'>
-                            <img src={require('../../assets/ido/avatar2.jpeg').default}/>
-                            <span>Bruce</span>
-                        </div>
-                        <div className='content'>{t('381')}</div>
-                    </div>
-                    <div className='item'>
-                        <div className='header'>
-                            <img src={require('../../assets/ido/avatar3.jpeg').default}/>
-                            <span>Ron</span>
-                        </div>
-                        <div className='content'>{t('382')}</div>
-                    </div>
-                    <div className='item'>
-                        <div className='header'>
-                            <img src={require('../../assets/ido/avatar4.jpeg').default}/>
-                            <span>Gavin</span>
-                        </div>
-                        <div className='content'>{t('383')}</div>
-                    </div>
-                    <div className='slider'>
-                        {/* <span className='active'></span>
-                        <span></span>
-                        <span></span> */}
-                    </div>
-                </EvaluateContentBodyH5>
-            </EvaluateH5>
-        </>
+    const renderRecordM = () =>(
+        <LeftInvest>
+            <div className='header'>
+                <img src={require('../../assets/ido/invest.png').default}/>
+                <span>Transaction</span>
+            </div>
+            <LeftInvestTableHeader>
+                <span>Time</span>
+                <span>Type</span>
+                <span>Price</span>
+                <span>From</span>
+                <span>To</span>
+            </LeftInvestTableHeader>
+            <LeftInvestTableContent>
+                {renderNoData()}
+            </LeftInvestTableContent>
+        </LeftInvest>
     )
-    const renderTokenM = () => (
-        <MenuBody>
-            <RightAbout>
-                <div className='header'>
-                    <img src={require('../../assets/ido/info.png').default}/>
-                    <span>{t('340')}</span>
-                </div>
-                <RightAboutInfo>
-                    <div className='subTitle'>{t('341')}</div>
-                    <div className='content'>
-                        <div>
-                            <div className='value'>CHIP</div>
-                            <div className='value_desc'>{t('342')}</div>
-                        </div>
-                        <div>
-                            <div className='value'>1 billion</div>
-                            <div className='value_desc'>{t('343')}</div>
-                        </div>
-                        <div>
-                            <div className='value'><img src={require('../../assets/ido/solana.png').default}/> Solana</div>
-                            <div className='value_desc'>{t('344')}</div>
-                        </div>
-                        <div>
-                            <div className='value'>{InitialPrice}</div>
-                            <div className='value_desc'>{t('345')}</div>
-                        </div>
-                    </div>
-                </RightAboutInfo>
-                <RightAboutDistribute>
-                    <div className='subTitle'>{t('346')}</div>
-                    <div className='content'>
-                        <div className='row'>
-                            <div className='left'>{t('347')}</div>
-                            <div className='right'><span>64%</span></div>
-                        </div>
-                        <div className='row'>
-                            <div className='left'>{t('348')}</div>
-                            <div className='right'><span>10%</span></div>
-                        </div>
-                        <div className='row'>
-                            <div className='left'>IDO</div>
-                            <div className='right'><span>7%</span></div>
-                        </div>
-                        <div className='row'>
-                            <div className='left'>CHIPCHIPDAO</div>
-                            <div className='right'><span>3%</span></div>
-                        </div>
-                        <div className='row'>
-                            <div className='left'>{t('349')}</div>
-                            <div className='right'><span>1%</span></div>
-                        </div>
-                        <div className='row'>
-                            <div className='left'>{t('350')}</div>
-                            <div className='right'><span>15%</span></div>
-                        </div>
-                    </div>
-                </RightAboutDistribute>
-                <RightAboutUse>
-                    <div className='subTitle'>{t('351')}</div>
-                    <RightAboutUseTip>
-                        <RightAboutUseTipRow>{t('352')}</RightAboutUseTipRow>
-                        <RightAboutUseTipRow>{t('353')}</RightAboutUseTipRow>
-                        <RightAboutUseTipRow>{t('354')}</RightAboutUseTipRow>
-                        <RightAboutUseTipRow>{t('355')}</RightAboutUseTipRow>
-                        <RightAboutUseTipRow>{t('356')}</RightAboutUseTipRow>
-                    </RightAboutUseTip>
-                </RightAboutUse>
-                <div>
-                    <div className='subTitle'>{t('357')}</div>
-                    {/* <Chart ref={(node) => { ref(node); chartRef.current = node; }}></Chart> */}
-                </div>
-            </RightAbout>
-        </MenuBody>
+    const renderAboutM = () => (
+        <Right>
+            <div className='header'>
+                <img src={require('../../assets/ido/info.png').default}/>
+                <span>Info</span>
+            </div>
+            <RightContent>
+                <RightRow>
+                    <p>Market Cap：</p>
+                    <p>--</p>
+                </RightRow>
+                <RightRow>
+                    <p>Total Supply：</p>
+                    <p>10 B</p>
+                </RightRow>
+                <RightRow>
+                    <p>Issue Price：</p>
+                    <p>--</p>
+                </RightRow>
+                <RightRow>
+                    <p>Holder：</p>
+                    <p>--</p>
+                </RightRow>
+                <RightRow>
+                    <p>Chain：</p>
+                    <p>Solana</p>
+                </RightRow>
+            </RightContent>
+            <RightData>
+                <p className='subTitle'>Introduction</p>
+                <p className='subDesc'>$CHIP 代币价格直接代表了社区的共识高度，$CHIP 将采取公平发射的方式，所有人包括发起团队都没有免费的筹码。联合曲线是一个伟大的发明，所有人都可以在自己价值预期拿到筹码，让我们一起引领 Gamble Game、GambleFi、Gamble Chain 的到来。No Gamble No Future！拥有 $CHIP，成为一个 100 亿美金市值项目的掌门人。</p>
+            </RightData>
+        </Right>
     )
     const renderNoData = () => (
         <NoData>
@@ -579,112 +531,30 @@ position: relative;
 `
 
 const TopH5 = styled.div`
-padding: 56px 10px 45px;
-text-align: center;
-img {
-width: 100%;
-min-height:300px;
+padding: 86px 10px 10px;
+.row {
+display: flex;
+align-items: center;
+.row_tip {
+margin-left: 10px;
+font-size: 18px;
+.row_tip_t1 {
+font-size: 24px;
+font-weight: 600;
 }
-.title {
-margin-top: 10px;
-font-size: 32px;
-font-weight: 700;
+.row_tip_t2 {
+margin-left: 6px;
+opacity: 0.4;
 }
-.desc {
-margin-top: 30px;
-font-size: 16px;
-font-weight: 300;
 }
-.tip {
+}
+.row_tip_t3 {
 margin-top: 12px;
-font-size: 12px;
-line-height: 21px;
-}
-`
-const RuleH5 = styled.div`
-padding: 30px 20px 48px 30px;
-background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
-.icon {
-margin-top: 12px;
-padding-left: 10px;
-padding-right: 20px;
-img {
-width: 100%;
-min-height: 186px;
-}
-}
-.title {
-font-size: 21px;
-font-weight: 600;
-}
-.subTitle {
-text-align: center;
-margin-top: 20px;
-font-size: 16px;
-font-weight: 600;
-line-height: 45px;
-}
-`
-const OperateH5 = styled.div`
-padding: 20px 15px;
-border-radius: 18px;
-border: 2px solid #2B292E;
-.header {
-position: relative;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 16px;
-font-weight: 600;
-.left {
-position: relative;
-margin-right: -3px;
-flex: 1;
-height: 45px;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-span {
-position: relative;
-z-index: 1;
-}
-img {
-position: absolute;
-left: 0;
-top: 0;
-width: 100%;
-height: 100%;
-}
-}
-.right {
-&.disabled {
-cursor: no-drop;
-}
-position: relative;
-margin-left: -3px;
-flex: 1;
-height: 45px;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-span {
-position: relative;
-z-index: 1;
-}
-img {
-position: absolute;
-left: 0;
-top: 0;
-width: 100%;
-height: 100%;
-}
-}
+font-size: 14px;
+opacity: 0.6;
 }
 `
 const MenuH5 = styled.div`
-margin-top: 25px;
 margin-bottom: 12px;
 display: flex;
 gap: 26px;
@@ -710,11 +580,8 @@ position: relative;
 }
 }
 `
-const MenuBody = styled.div`
-padding: 0 10px;
-`
 const EvaluateH5 = styled.div`
-padding: 48px 10px 30px;
+padding: 40px 10px 30px;
 position: relative;
 .bg {
 width: 100%;
@@ -866,14 +733,15 @@ opacity: 0.6;
 `
 const TopChart = styled.div`
 position: relative;
-margin-top: 20px;
+margin-top: 25px;
+margin-bottom: 20px;
 border-radius: 18px;
-height: 480px;
+height: 308px;
 border: 1px solid ${({ theme }) => theme.colors.borderColor};
 overflow: hidden;
 .bg {
 position: absolute;
-top: 380px;
+top: 256px;
 left: 50%;
 transform: translateX(-50%);
 pointer-events: none;
@@ -884,20 +752,38 @@ border-radius: 1244px;
 background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
 }
 .start {
-margin-top: 84px;
+margin-top: 70px;
 display: flex;
 align-items: center;
 flex-direction: column;
-gap: 32px;
+gap: 26px;
+font-size: 18px;
+font-weight: 700;
 }
+${({ theme }) => theme.mediaQueries.sm}{
+margin-top: 20px;
+margin-bottom: 0;
+height: 480px;
+.bg {
+top: 380px;
+}
+.start {
+margin-top: 84px;
+gap: 32px;
+font-size: 24px;
+}
+};
 `
 const TopRight = styled.div`
 flex-shrink: 0;
-width: 475px;
-height: 550px;
 border-radius: 4px;
 background: #241F2D;
+padding: 20px 20px 35px;
+${({ theme }) => theme.mediaQueries.sm}{
+width: 475px;
+height: 550px;
 padding: 24px 30px 60px;
+};
 `
 const TopMenu = styled.div`
 margin-bottom: 32px;
@@ -928,7 +814,7 @@ padding-bottom: 15px;
 `
 const TopSwapBody = styled.div`
 position: relative;
-margin-bottom: 30px;
+margin-bottom: 0;
 .exchange {
 cursor: pointer;
 position: absolute;
@@ -936,15 +822,18 @@ top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
 }
+${({ theme }) => theme.mediaQueries.sm}{
+margin-bottom: 30px;
+};
 `
 const TopInput = styled.div`
 margin-bottom: 15px;
 border-radius: 4px;
 background: #121212;
 padding: 10px 20px;
-height: 136px;
+height: 105px;
 .tip {
-font-size: 14px;
+font-size: 12px;
 font-weight: 600;
 opacity: 0.4;
 }
@@ -959,7 +848,7 @@ opacity: 0.4;
         background: none;
         border: none;
         border-color: transparent;
-        font-size: 42px;
+        font-size: 21px;
         font-weight: 600;
     }
     .input_right {
@@ -983,33 +872,16 @@ opacity: 0.4;
         }
     }
 }
-`
-const RuleTip = styled.ul`
-margin-top: 22px;
-list-style-type: none;
-color: rgba(255,255,255,0.7);
 ${({ theme }) => theme.mediaQueries.sm}{
-margin-top: 30px;
-};
-`
-const RuleTipRow = styled.li`
+height: 136px;
+.tip {
 font-size: 14px;
-line-height: 21px;
-position: relative;
-padding-left: 20px;
-&:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 14px;
-    width: 4px;
-    height: 4px;
-    background-color: rgba(255,255,255,0.7);
-    border-radius: 50%;
 }
-${({ theme }) => theme.mediaQueries.sm}{
-font-size: 18px;
-line-height: 32px;
+.input_row {
+    input, input[disabled] {
+        font-size: 42px;
+    }
+}
 };
 `
 const Time = styled.div`
@@ -1045,9 +917,11 @@ font-weight: 700;
 `
 const Content = styled.div`
 position: relative;
-padding: 13px 10px 0;
+margin-top: 25px;
+padding: 0 10px;
 box-sizing: content-box;
 ${({ theme }) => theme.mediaQueries.sm}{
+margin-top: 0;
 padding: 55px 60px;
 display: flex;
 gap: 46px;
@@ -1058,42 +932,22 @@ const Introduce = styled.div`
 display: flex;
 flex-direction: column;
 align-items: stretch;
-gap: 44px;
-padding: 13px 10px 0;
-margin-bottom: 15px;
-${({ theme }) => theme.mediaQueries.sm}{
-padding: 0 60px;
-margin-bottom: 42px;
-};
-`
-const IntroduceContent = styled.div`
-border-radius: 18px;
 background: #1C1A22;
-display: flex;
-gap: 109px;
-padding: 74px 90px;
+border-radius: 8px;
+gap: 38px;
+padding: 28px 18px;
+margin-top: 14px;
+margin-bottom: 15px;
 .title {
 color: #CE67FF;
-font-size: 38px;
+font-size: 18px;
 font-weight: 500;
+margin-bottom: 26px;
 }
 .desc {
-margin-top: 36px;
-font-size: 21px;
+font-size: 14px;
 opacity: 0.6;
-line-height: 32px;
-}
-`
-const IntroduceStartContent = styled.div`
-border-radius: 18px;
-background: #1C1A22;
-display: flex;
-padding: 45px 40px 30px;
-.title {
-color: #CE67FF;
-font-size: 38px;
-font-weight: 500;
-margin-bottom: 36px;
+line-height: 18px;
 }
 .tip {
 padding-left: 0;
@@ -1114,6 +968,20 @@ height: 14px;
 }
 }
 ${({ theme }) => theme.mediaQueries.sm}{
+background: transparent;
+border-radius: 0;
+padding: 0 60px;
+margin-top: 0;
+margin-bottom: 42px;
+gap: 44px;
+.title {
+font-size: 38px;
+margin-bottom: 36px;
+}
+.desc {
+font-size: 21px;
+line-height: 32px;
+}
 .tip {
 padding-left: 20px;
 margin-bottom: 28px;
@@ -1124,7 +992,20 @@ width: 24px;
 height: 24px;
 }
 }
-}
+};
+`
+const IntroduceContent = styled.div`
+border-radius: 18px;
+background: #1C1A22;
+display: flex;
+gap: 109px;
+padding: 74px 90px;
+`
+const IntroduceStartContent = styled.div`
+border-radius: 18px;
+background: #1C1A22;
+display: flex;
+padding: 45px 40px 30px;
 `
 const IntroduceTipContent = styled.ul`
 list-style-type: none;
@@ -1140,7 +1021,7 @@ padding-left: 10px;
     content: '';
     position: absolute;
     left: -5px;
-    top: 5px;
+    top: 8px;
     width: 4px;
     height: 4px;
     background-color: rgba(255,255,255,0.6);
@@ -1156,10 +1037,10 @@ line-height: 30px;
 `
 const Right = styled.div`
 flex-shrink: 0;
-width: 475px;
+width: unset;
 border-radius: 8px;
 border: 2px solid #2B292E;
-padding: 35px 30px 0;
+padding: 18px;
 .header {
 display: flex;
 align-items: center;
@@ -1173,7 +1054,9 @@ height: 16px;
 }
 }
 ${({ theme }) => theme.mediaQueries.sm}{
+width: 475px;
 border-radius: 18px;
+padding: 35px 30px 0;
 .header {
 gap: 10px;
 font-size: 32px;
@@ -1186,11 +1069,16 @@ height: 30px;
 };
 `
 const RightContent = styled.div`
-margin-top: 35px;
-padding: 0 12px;
+margin-top: 20px;
+padding: 0 4px;
 display: flex;
 flex-direction: column;
+gap: 15px;
+${({ theme }) => theme.mediaQueries.sm}{
+margin-top: 35px;
+padding: 0 12px;
 gap: 20px;
+};
 `
 const RightRow = styled.div`
 display: flex;
@@ -1198,26 +1086,37 @@ align-items: center;
 justify-content: space-between;
 p {
     &:nth-child(1) {
-        font-size: 16px;
+        font-size: 13px;
         font-weight: 500;
         opacity: 0.5;
+    }
+    &:nth-child(2) {
+        font-size: 15px;
+        font-weight: 500;
+    }
+}
+${({ theme }) => theme.mediaQueries.sm}{
+p {
+    &:nth-child(1) {
+        font-size: 16px;
     }
     &:nth-child(2) {
         font-size: 21px;
         font-weight: 700;
     }
 }
+};
 `
 const RightData = styled.div`
 .subTitle {
 margin-top: 22px;
-font-size: 14px;
+font-size: 15px;
 font-weight: 600;
 line-height: 20px;
 }
 .subDesc {
-margin: 15px 8px 0;
-font-size: 16px;
+margin: 12px 0 0;
+font-size: 12px;
 font-weight: 500;
 opacity: 0.5;
 }
@@ -1228,11 +1127,15 @@ font-size: 24px;
 font-weight: 600;
 line-height: 32px;
 }
+.subDesc {
+margin: 15px 8px 0;
+font-size: 16px;
+}
 };
 `
 const LeftInvest = styled.div`
 flex: 1;
-padding: 15px 15px 5px;
+padding: 18px 18px 5px;
 border-radius: 8px;
 border: 2px solid #2B292E;
 .header {
@@ -1460,7 +1363,7 @@ line-height: 37px;
 };
 `
 const SureBtn = styled.button`
-margin-top: 20px;
+margin-top: 0;
 font-size: 15px;
 font-weight: 600;
 width: 100%;
