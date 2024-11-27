@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
+import ReactECharts from 'echarts-for-react';
 import styled from "styled-components";
 import { useTranslation } from 'react-i18next';
 import { DialogOverlay, DialogContent } from "@reach/dialog";
@@ -6,9 +7,172 @@ import { useHistory } from 'react-router-dom';
 import useBreakpointCheck from "@/hooks/useBreakpointCheck";
 import { knowledgePageListApi } from "@/api";
 import { useLanguage } from "@/LanguageContext";
-import { InitialPrice } from "@/constants";
 
 import { WalletType } from "@/wallet";
+
+const getChart = () => {
+    const chartRef = useRef(null);
+    const [data, setData] = useState([]);
+    useEffect(()=>{
+        const initData = [];
+        for (let index = 0; index < 100; index++) {
+            initData.push([(new Date().getTime()) - ((100-index-1) * 1000), Math.random() * 50 + 10]);
+        }
+        setData(initData);
+        const timer = setInterval(() => {
+            setData((prevData) => {
+                const newData = [...prevData];
+                newData.shift();
+                newData.push([(new Date().getTime()), Math.random() * 50 + 10]);
+                return newData;
+            });
+        }, 1000);
+        return () => {
+            clearInterval(timer);
+        }
+        // const ws = new WebSocket('wss://your-websocket-server-url');
+        // ws.onopen = () => {
+        //     console.log('WebSocket connection established');
+        // };
+        // ws.onmessage = (message) => {
+        //     console.log('message :>> ', message);
+        //     const newValue = JSON.parse(message.data);
+        //     setData((prevData) => {
+        //         const newData = [...prevData];
+        //         newData.shift();
+        //         newData.push([new Date().getTime(), newValue.value]);
+        //         return newData;
+        //     });
+        // };
+        // ws.onerror = (error) => {
+        //     console.error('WebSocket error:', error);
+        // };
+        // ws.onclose = () => {
+        //     console.log('WebSocket connection closed');
+        // };
+        // return () => {
+        //     ws.close();
+        // };
+    },[]);
+    useEffect(() => {
+        if (chartRef.current) {
+            const chart = chartRef.current.getEchartsInstance();
+            chart.setOption({
+                series: [
+                    {data: data},
+                ],
+            });
+        }
+    }, [data]);
+    const staticOptions = {
+        tooltip: {
+            trigger: 'axis',
+            formatter: function (params) {
+                // 确保params[0]存在并且有效
+                if (!params || !params[0]) return '';
+                const param = params[0];
+                const date = new Date(param.value[0]);
+                return (`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} : ${(param.value[1] * 100).toFixed(2)}%`);
+            },
+            axisPointer: {
+                animation: false,
+            },
+        },
+        xAxis: {
+            type: 'time',
+            axisLine: {
+                interval: "auto",
+                show: true,
+                lineStyle: {
+                    color: 'rgb(130,130,130,0.3)',
+                    width: 1,
+                },
+            },
+            splitLine: {
+                show: false
+            },
+            axisLabel: {
+                color: 'rgb(130,130,130,0.3)',
+                formatter: function (value) {
+                    var date = new Date(value);
+                    // return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+                    // return `${date.getMonth() + 1}/${date.getDate()}`;
+                    const hours = date.getHours().toString().padStart(2, '0');
+                    const minutes = date.getMinutes().toString().padStart(2, '0');
+                    const seconds = date.getSeconds().toString().padStart(2, '0');
+                    return `${hours}:${minutes}:${seconds}`;
+                },
+            },
+            axisTick: {
+                show: false,
+            },
+        },
+        yAxis: {
+            type: 'value',
+            position: 'right',
+            boundaryGap: [0, '100%'],
+            axisLine: {
+                show: false,
+            },
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    type: 'dashed',
+                    color: 'rgba(130,130,130,0.3)',
+                    width: 1,
+                    dashOffset: 0,
+                    lineDash: [2, 1],
+                },
+            },
+            axisLabel: {
+                color: 'rgb(130,130,130,0.3)',
+                formatter: function (value) {
+                    return (value * 100).toFixed(2) + '%';
+                },
+            },
+        },
+        series: [
+            {
+                name: 'Sample Data',
+                type: 'line',
+                showSymbol: false,
+                data: [],
+                lineStyle: {
+                    color: '#00E9BA',
+                    width: 2,
+                },
+                // markLine: {
+                //     symbol: 'none',
+                //     data: [
+                //         { type: 'average', name: '平均值' },
+                //     ],
+                //     lineStyle: {
+                //         color: '#FF5733',
+                //         type: 'dashed',
+                //         width: 1,
+                //         dashOffset: 0,
+                //         lineDash: [2, 1],
+                //     },
+                //     label: {
+                //         formatter: function (params) {
+                //             const avgValue = params.value.toFixed(2);
+                //             return `Avg: ${avgValue}%`;
+                //         },
+                //         position: 'end',
+                //         color: '#FF5733',
+                //     },
+                // },
+            }
+        ],
+        grid: {
+            left: '5%',
+            right: '80px',
+            top: '10%',
+            bottom: '50px'
+        }
+    }
+    return <ReactECharts option={staticOptions} style={{ height: '100%', width: '100%' }} ref={chartRef}/>;
+};
 
 export default function Index() {
     const { t } = useTranslation();
@@ -46,9 +210,45 @@ export default function Index() {
                             <span className='row_tip_t3'>投资属于玩家的poker 平台</span>
                         </div>
                     </div>
+                    <div className='info'>
+                        <TopLeftPrice>
+                            <p>$ 0.01</p>
+                            <p>+10.01%</p>
+                        </TopLeftPrice>
+                        <TopLeftInfo>
+                            <div>
+                                <p>Volume (24h)</p>
+                                <p>$--</p>
+                            </div>
+                            <div>
+                                <p>Market Cap</p>
+                                <p>$--</p>
+                            </div>
+                            <div>
+                                <p>Total Supply</p>
+                                <p>$--</p>
+                            </div>
+                            <div>
+                                <p>Holder</p>
+                                <p>$--</p>
+                            </div>
+                        </TopLeftInfo>
+                    </div>
                     <TopChart>
+                        <TopChartBtn>
+                            <button>1H</button>
+                            <button>6H</button>
+                            <button>1D</button>
+                            <button>1W</button>
+                            <button>1M</button>
+                            <button className='selected'>ALL</button>
+                        </TopChartBtn>
+                        <TopChartBody>{getChart()}</TopChartBody>
+                    </TopChart>
+                    {/* <TopChartNoData>
                         <div className='bg'></div>
                         <div className='start'>
+                            <p>距离交易开始剩余</p>
                             <p>即将开始倒计时</p>
                             <Time>
                                 <TimeItem>--</TimeItem>
@@ -59,8 +259,9 @@ export default function Index() {
                                 <span>:</span>
                                 <TimeItem>--</TimeItem>
                             </Time>
+                            <p>2024-11-29 20:00:00(GMT+8)</p>
                         </div>
-                    </TopChart>
+                    </TopChartNoData> */}
                 </TopLeft>
                 <TopRight>
                     <TopMenu>
@@ -111,7 +312,21 @@ export default function Index() {
                     <span>To</span>
                 </LeftInvestTableHeader>
                 <LeftInvestTableContent>
-                    {renderNoData()}
+                    <LeftInvestTableRow>
+                        <p>1 m ago</p>
+                        <p className='buy'>Buy</p>
+                        <p>$0.01</p>
+                        <p>10 SOL</p>
+                        <p>1,000 CHIP</p>
+                    </LeftInvestTableRow>
+                    <LeftInvestTableRow>
+                        <p>1 m ago</p>
+                        <p className='sell'>Sell</p>
+                        <p>$0.01</p>
+                        <p>10 SOL</p>
+                        <p>1,000 CHIP</p>
+                    </LeftInvestTableRow>
+                    {/* {renderNoData()} */}
                 </LeftInvestTableContent>
             </LeftInvest>
             <Right>
@@ -239,9 +454,25 @@ export default function Index() {
                 </div>
             </div>
             <p className='row_tip_t3'>投资属于玩家的poker 平台</p>
+            <TopLeftPrice>
+                <p>$ 0.01</p>
+                <p>+10.01%</p>
+            </TopLeftPrice>
             <TopChart>
+                <TopChartBtn>
+                    <button>1H</button>
+                    <button>6H</button>
+                    <button>1D</button>
+                    <button>1W</button>
+                    <button>1M</button>
+                    <button className='selected'>ALL</button>
+                </TopChartBtn>
+                <TopChartBody>{getChart()}</TopChartBody>
+            </TopChart>
+            {/* <TopChartNoData>
                 <div className='bg'></div>
                 <div className='start'>
+                    <p>距离交易开始剩余</p>
                     <p>即将开始倒计时</p>
                     <Time>
                         <TimeItem>--</TimeItem>
@@ -252,8 +483,27 @@ export default function Index() {
                         <span>:</span>
                         <TimeItem>--</TimeItem>
                     </Time>
+                    <p>2024-11-29 20:00:00(GMT+8)</p>
                 </div>
-            </TopChart>
+            </TopChartNoData> */}
+            <TopLeftInfo>
+                <div>
+                    <p>Volume (24h)</p>
+                    <p>$--</p>
+                </div>
+                <div>
+                    <p>Market Cap</p>
+                    <p>$--</p>
+                </div>
+                <div>
+                    <p>Total Supply</p>
+                    <p>$--</p>
+                </div>
+                <div>
+                    <p>Holder</p>
+                    <p>$--</p>
+                </div>
+            </TopLeftInfo>
             <TopRight>
                 <TopMenu>
                     <div onClick={()=>setExchange(false)} className={exchange==false?'active':''}>Buy</div>
@@ -378,14 +628,25 @@ export default function Index() {
                 <span>Transaction</span>
             </div>
             <LeftInvestTableHeader>
-                <span>Time</span>
-                <span>Type</span>
+                <span>Type/Time</span>
                 <span>Price</span>
                 <span>From</span>
                 <span>To</span>
             </LeftInvestTableHeader>
             <LeftInvestTableContent>
-                {renderNoData()}
+                <LeftInvestTableRow>
+                    <p className='buy'>Buy<br/><span>1 m ago</span></p>
+                    <p>$0.01</p>
+                    <p>10 SOL</p>
+                    <p>1,000 CHIP</p>
+                </LeftInvestTableRow>
+                <LeftInvestTableRow>
+                    <p className='sell'>Sell<br/><span>1 m ago</span></p>
+                    <p>$0.01</p>
+                    <p>10 SOL</p>
+                    <p>1,000 CHIP</p>
+                </LeftInvestTableRow>
+                {/* {renderNoData()} */}
             </LeftInvestTableContent>
         </LeftInvest>
     )
@@ -730,8 +991,106 @@ opacity: 0.6;
 }
 }
 }
+.info {
+margin-top: 30px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+`
+const TopLeftPrice = styled.div`
+display: flex;
+align-items: baseline;
+gap: 4px;
+font-size: 38px;
+font-weight: 700;
+flex-shrink: 0;
+> p {
+&:last-child {
+color: #10CB81;
+font-size: 14px;
+font-weight: 600;
+}
+}
+`
+const TopLeftInfo = styled.div`
+display: flex;
+align-items: center;
+flex-shrink: 0;
+padding: 0 16px;
+margin-bottom: 22px;
+> div {
+flex: 1 0 0;
+width: auto;
+> p {
+font-size: 12px;
+font-weight: 500;
+opacity: 0.8;
+&:first-child {
+font-size: 11px;
+opacity: 0.4;
+}
+}
+}
+${({ theme }) => theme.mediaQueries.sm}{
+padding: 0;
+margin-bottom: 0;
+> div {
+flex: 1 0 0;
+width: 130px;
+> p {
+font-size: 18px;
+&:first-child {
+font-size: 14px;
+}
+}
+}
+}
 `
 const TopChart = styled.div`
+display: flex;
+flex-direction: column;
+overflow: hidden;
+margin-top: 12px;
+margin-bottom: 20px;
+height: 308px;
+border-radius: 18px;
+border: 1px solid ${({ theme }) => theme.colors.borderColor};
+${({ theme }) => theme.mediaQueries.sm}{
+margin-top: 35px;
+margin-bottom: 0;
+height: 386px;
+}
+`
+const TopChartBtn = styled.div`
+margin-top: 12px;
+margin-left: 18px;
+display: flex;
+align-items: center;
+gap: 12px;
+> button {
+    background: transparent;
+    color: #828282;
+    font-size: 15px;
+    font-weight: 500;
+    &.selected {
+        color: #FFF;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 4px 10px;
+        border-radius: 100px;
+    }
+}
+${({ theme }) => theme.mediaQueries.sm}{
+margin-top: 22px;
+margin-left: 36px;
+gap: 26px;
+}
+`
+const TopChartBody = styled.div`
+width: 100%;
+flex: 1;
+`
+const TopChartNoData = styled.div`
 position: relative;
 margin-top: 25px;
 margin-bottom: 20px;
@@ -759,6 +1118,13 @@ flex-direction: column;
 gap: 26px;
 font-size: 18px;
 font-weight: 700;
+> p {
+&:last-child {
+opacity: 0.4;
+font-size: 12px;
+font-weight: 400;
+}
+}
 }
 ${({ theme }) => theme.mediaQueries.sm}{
 margin-top: 20px;
@@ -771,6 +1137,11 @@ top: 380px;
 margin-top: 84px;
 gap: 32px;
 font-size: 24px;
+> p {
+&:last-child {
+font-size: 18px;
+}
+}
 }
 };
 `
@@ -1170,8 +1541,7 @@ border-radius: 4px;
 background: rgba(255,255,255,0.1);
 display: flex;
 align-items: center;
-padding-left: 16px;
-padding-right: 24px;
+padding: 0 16px;
 span {
 text-align: left;
 flex: 1;
@@ -1179,25 +1549,16 @@ font-size: 12px;
 font-weight: 500;
 line-height: 18px;
 opacity: 0.6;
-&:nth-child(2) {
-flex: 2;
-}
 }
 ${({ theme }) => theme.mediaQueries.sm}{
 margin-top: 34px;
 height: 50px;
 border-radius: 8px;
-padding-left: 10px;
-padding-right: 40px;
+padding: 0 20px;
 span {
-text-align: center;
-flex: 2;
 font-size: 16px;
 font-weight: 600;
 line-height: 32px;
-&:first-child {
-flex: 1;
-}
 }
 };
 `
@@ -1213,152 +1574,32 @@ padding: 0;
 };
 `
 const LeftInvestTableRow = styled.div`
-height: 40px;
+margin-top: 2px;
 border-bottom: 1px solid rgba(255,255,255,0.2);
 display: flex;
 align-items: center;
+padding: 6px 16px;
+p {
+text-align: left;
+flex: 1;
 font-size: 12px;
 font-weight: 600;
-line-height: 18px;
-padding-left: 8px;
-padding-right: 16px;
-&:last-child {
-border-bottom: none;
+&.buy {
+color: #10CB81;
 }
-div {
-    text-align: left;
-    flex: 1;
-    &:nth-child(2) {
-        flex: 2;
-    }
-    &:nth-child(4) {
-        color: ${({status,theme})=>status=='-1'?theme.colors.textDisabled:(status=='1'?theme.colors.success:theme.colors.text)};
-        span {
-            position: relative;
-            padding-left: 8px;
-            &:before {
-                content: '';
-                position: absolute;
-                left: -5px;
-                top: 6px;
-                width: 6px;
-                height: 6px;
-                background-color: ${({theme})=>theme.colors.success};
-                border-radius: 50%;
-            }
-        }
-    }
-    &:last-child {
-        text-align: right;
-    }
+&.sell {
+color: #F6465D;
+}
+span {
+color: #FFF;
+opacity: 0.3;
+}
 }
 ${({ theme }) => theme.mediaQueries.sm}{
-height: 66px;
+margin-top: 4px;
+padding: 16px 20px;
+p {
 font-size: 16px;
-line-height: 32px;
-padding-left: 10px;
-padding-right: 40px;
-div {
-    flex: 2;
-    text-align: center;
-    &:first-child {
-        flex: 1;
-    }
-}
-};
-`
-const LeftTip = styled.div`
-margin-top: 14px;
-padding: 28px 18px;
-border-radius: 8px;
-background: #1C1A22;
-.title {
-margin-bottom: 26px;
-color: #CE67FF;
-font-size: 18px;
-font-weight: 500;
-}
-.tip {
-padding-left: 0;
-margin-bottom: 16px;
-display: flex;
-align-items: center;
-gap: 12px;
-font-size: 14px;
-font-weight: 700;
-line-height: 18px;
-background: linear-gradient(258deg, #75F6A3 5.58%, #FEAD1D 88.85%);
-background-clip: text;
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-img {
-width: 14px;
-height: 14px;
-}
-}
-.desc {
-margin-bottom: 26px;
-font-size: 14px;
-font-weight: 500;
-line-height: 18px;
-opacity: 0.6;
-}
-${({ theme }) => theme.mediaQueries.sm}{
-margin-top: 22px;
-padding: 50px 25px 68px 36px;
-border-radius: 18px;
-.title {
-margin-bottom: 36px;
-font-size: 38px;
-}
-.tip {
-padding-left: 20px;
-margin-bottom: 28px;
-font-size: 21px;
-line-height: 32px;
-img {
-width: 24px;
-height: 24px;
-}
-}
-.desc {
-margin-bottom: 80px;
-font-size: 21px;
-line-height: 37px;
-}
-};
-`
-const LeftTipContent = styled.ul`
-list-style-type: none;
-color: rgba(255,255,255,0.6);
-`
-const LeftTipRow = styled.li`
-margin-bottom: 20px;
-font-size: 14px;
-font-weight: 500;
-line-height: 21px;
-position: relative;
-padding-left: 10px;
-&:before {
-    content: '';
-    position: absolute;
-    left: -5px;
-    top: 10px;
-    width: 4px;
-    height: 4px;
-    background-color: rgba(255,255,255,0.6);
-    border-radius: 50%;
-}
-&:last-child {
-&:before {
-    content: none;
-}
-}
-${({ theme }) => theme.mediaQueries.sm}{
-font-size: 21px;
-line-height: 37px;
-&:before {
-    top: 16px;
 }
 };
 `

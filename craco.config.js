@@ -21,6 +21,19 @@ const Webpack = {
 };
 
 module.exports = {
+  babel: {
+    presets: [
+      '@babel/preset-env',
+    ],
+    plugins: [
+      '@babel/plugin-proposal-class-properties',
+      '@babel/plugin-proposal-private-methods',
+      '@babel/plugin-proposal-private-property-in-object',
+      '@babel/plugin-proposal-logical-assignment-operators',
+      '@babel/plugin-proposal-nullish-coalescing-operator',
+      '@babel/plugin-proposal-optional-chaining',
+    ],
+  },
   plugins: [
     {
       plugin: CracoLessPlugin,

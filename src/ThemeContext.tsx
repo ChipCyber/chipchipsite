@@ -27,6 +27,7 @@ const ThemeContextProvider: React.FC = ({ children }) => {
   return (
     // @ts-ignore
     <ThemeContext.Provider value={{ isDark, toggleTheme }}>
+      {/* @ts-ignore */}
       <SCThemeProvider theme={dark}>{children}</SCThemeProvider>
     </ThemeContext.Provider>
   )

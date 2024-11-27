@@ -11,9 +11,9 @@ export const refreshBalance = createAsyncThunk(
             if(!currentWalletAddress) {
                 return rejectWithValue('Invalid wallet address'); 
             }
-            return null;
             // const balance = await getBalance(currentWalletAddress);
             // return balance;
+            return null;
         } catch (error) {
             return rejectWithValue(error.message);
         }
