@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { setData, removeData, getData } from "../utils/user";
 import { removeLocalReConnect } from "@/wallet";
-// import { getBalance }  from "@/wallet/methods";
+import { getBalance }  from "@/wallet/methods";
 const data = getData() ?? {};
 
 export const refreshBalance = createAsyncThunk(
@@ -11,9 +11,8 @@ export const refreshBalance = createAsyncThunk(
             if(!currentWalletAddress) {
                 return rejectWithValue('Invalid wallet address'); 
             }
-            // const balance = await getBalance(currentWalletAddress);
-            // return balance;
-            return null;
+            const balance = await getBalance(currentWalletAddress);
+            return balance;
         } catch (error) {
             return rejectWithValue(error.message);
         }
@@ -37,7 +36,6 @@ export const userSlice = createSlice({
             state.currentWalletAddress = action.payload.address;
             state.walletType = action.payload.walletType;
             state.networkType = action.payload.networkType;
-            refreshBalance();
         },
         removeWalletData: (state, action) => {
             state.currentWalletAddress = null;
@@ -68,6 +66,7 @@ export const userSlice = createSlice({
             })
             .addCase(refreshBalance.rejected, (state, action) => {
                 console.error('refreshBalance failed:', action.payload);
+                state.currentWalletBalance = null;
             })
     }
 })

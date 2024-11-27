@@ -1,6 +1,6 @@
 import Store from "@/store";
 import { NetworkType } from "@/wallet";
-import { solana_getBalance } from "@/wallet/solana";
+import { solana_getBalance, solana_sendSOL } from "@/wallet/solana";
 
 export function getBalance(address) {
     const networktype = Store.getState().user.networkType;

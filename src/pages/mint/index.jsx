@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, useMemo } from 'react'
 import ReactECharts from 'echarts-for-react';
 import styled from "styled-components";
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { useHistory } from 'react-router-dom';
 import useBreakpointCheck from "@/hooks/useBreakpointCheck";
@@ -178,6 +179,7 @@ export default function Index() {
     const { t } = useTranslation();
     const { language } = useLanguage();
     const shouldRender = useBreakpointCheck();
+    const currentWalletBalance = useSelector((state) => state.user?.currentWalletBalance);
     const [exchange, setExchange] = useState(false);
     const [count, setCount] = useState('');
     const [openInvestRecord, setOpenInvestRecord] = useState(false);
@@ -193,9 +195,7 @@ export default function Index() {
     }, [language]);
     const handleChange = (event) => {
         const newValue = event.target.value;
-        if (newValue === '' || /^[1-9]\d*$/.test(newValue)) {
-            setCount(newValue);
-        }
+        setCount(newValue);
     };
     const renderW = () => (
         <>
@@ -274,10 +274,10 @@ export default function Index() {
                             <div className='input_row'>
                                 <input type='number' min={1} value={count} onChange={handleChange} placeholder='0.00'/>
                                 <div className='input_right'>
-                                    <button className='max'>MAX</button>
+                                    <button className='max' onClick={()=>setCount(currentWalletBalance)}>MAX</button>
                                     <img width={28} height={28} src={exchange?require("@/assets/mint/chip.png").default:require("@/assets/mint/sol.png").default} alt='icon'/>
                                     <span>{exchange?'CHIP':'SOL'}</span>
-                                    <p className='balance'>Balance：--</p>
+                                    <p className='balance'>Balance：{currentWalletBalance}</p>
                                 </div>
                             </div>
                         </TopInput>

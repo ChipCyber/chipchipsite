@@ -1,16 +1,17 @@
-import { Connection, clusterApiUrl, PublicKey } from '@solana/web3.js';
+import { Connection, clusterApiUrl, PublicKey, Transaction, SystemProgram } from '@solana/web3.js';
 // import { getOrCreateAssociatedTokenAccount, createTransferInstruction } from "@solana/spl-token";
 import { getWalletProvider } from "./walletProvider";
 
-const connection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
+// const connection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
+const connection = new Connection('https://solitary-autumn-paper.solana-mainnet.quiknode.pro/5ee4b125b700077bd646a0afb5e8dd0a09b752d2', 'confirmed');
 
 /**
  * @returns balance
  */
 export async function solana_getBalance(publicKey) {
     try {
-        const balance = await connection.getBalance(new PublicKey(publicKey));
-        const balanceInSol = balance / 1e9;
+        const balanceInfo = await connection.getBalance(new PublicKey(publicKey));
+        const balanceInSol = balanceInfo / 1e9;
         return balanceInSol;
     } catch (error) {
         console.log('sol >> ', error);
@@ -18,37 +19,46 @@ export async function solana_getBalance(publicKey) {
     }
 }
 
-async function sendSOL(fromAddress, toAddress, amount) {
+export async function solana_sendSOL(fromAddress, toAddress, amount) {
     try {
         const provider = getWalletProvider();
-        // 转账金额（以 lamports 为单位，1 SOL = 1e9 lamports）
         const lamports = amount * 1e9;
-        // 创建转账交易
         const transaction = new Transaction().add(
             SystemProgram.transfer({
-            fromPubkey: new PublicKey(fromAddress),
-            toPubkey: new PublicKey(toAddress),
-            lamports,
+                fromPubkey: new PublicKey(fromAddress),
+                toPubkey: new PublicKey(toAddress),
+                lamports,
             })
         );
-        // 获取最近区块的哈希值
-        const { blockhash } = await connection.getRecentBlockhash();
+        const { blockhash } = await connection.getLatestBlockhash();
         transaction.recentBlockhash = blockhash;
         transaction.feePayer = new PublicKey(fromAddress);
-        const signedTransaction = await provider.request({
-            method: "signTransaction",
-            params: {
-            message: transaction.serializeMessage().toString("base64"),
-            },
-        });
-        const signature = await connection.sendRawTransaction(
-            Buffer.from(signedTransaction, "base64")
-        );
-        await connection.confirmTransaction(signature);
-        console.log("交易成功，交易签名:", signature);
+        const signedTransaction = await provider.signTransaction(transaction);
+        const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+        const confirmationStrategy = {
+            commitment: 'confirmed',  // 确认级别
+            preflightCommitment: 'processed', // 预处理确认级别
+            maxRetries: 5,  // 最大重试次数
+            minContextSlot: 100,  // 最小插槽号
+            signature,
+        };
+        await connection.confirmTransaction(confirmationStrategy, 'confirmed');
         return signature;
     } catch (error) {
-        console.error("交易失败:", error);
+        console.error("sol >> ", error);
+        return Promise.reject(error.message);
+    }
+}
+export async function solana_getTokenBalance(publicKey, mintAddress) {
+    try {
+        const tokenAccount = await getAssociatedTokenAddress(
+            mintAddress,
+            publicKey
+        );
+        const accountInfo = await getAccount(connection, tokenAccount);
+        return accountInfo.amount.toString();
+    } catch (error) {
+        console.log('sol >> ', error);
         return Promise.reject(error.message);
     }
 }

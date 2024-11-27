@@ -7,7 +7,7 @@ import WOW from 'wowjs';
 import 'animate.css';
 
 import { useTranslation } from "react-i18next";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // import { injected, loadCache } from "./sotres/connectors.jsx";
 // import DocumentTitle from 'react-document-title'
 
@@ -35,16 +35,22 @@ import Roadmap from "./pages/roadmap";
 import IDO from "./pages/ido";
 import Mint from "./pages/mint";
 
-import { setWalletInfo } from '@/store/userSlice';
+import { setWalletInfo, refreshBalance } from '@/store/userSlice';
 import { recentConnector } from "@/wallet";
 
 function App() {
   const { changeLanguage } = useLanguage();
   const location = useLocation();
   const dispatch = useDispatch();
+  const currentWalletAddress = useSelector((state) => state.user?.currentWalletAddress);
   useEffect(() => {
     new WOW.WOW().init({offset: 200, mobile: true});
   }, [location.pathname]);
+  useEffect(() => {
+    if (currentWalletAddress) {
+      dispatch(refreshBalance(currentWalletAddress));
+    }
+  }, [currentWalletAddress, dispatch]);
   useEffect(() => {
     recentConnector().then(data=>{
       dispatch(setWalletInfo({
