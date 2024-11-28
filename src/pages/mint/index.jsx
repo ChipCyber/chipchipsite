@@ -55,17 +55,7 @@ const getChart = () => {
         //     ws.close();
         // };
     },[]);
-    useEffect(() => {
-        if (chartRef.current) {
-            const chart = chartRef.current.getEchartsInstance();
-            chart.setOption({
-                series: [
-                    {data: data},
-                ],
-            });
-        }
-    }, [data]);
-    const staticOptions = {
+    const staticOptions = useMemo(() => ({
         tooltip: {
             trigger: 'axis',
             formatter: function (params) {
@@ -137,11 +127,13 @@ const getChart = () => {
                 name: 'Sample Data',
                 type: 'line',
                 showSymbol: false,
-                data: [],
+                data: data,
                 lineStyle: {
                     color: '#00E9BA',
                     width: 2,
                 },
+                animationDurationUpdate: 0,
+                animationEasingUpdate: "linear",
                 // markLine: {
                 //     symbol: 'none',
                 //     data: [
@@ -171,7 +163,7 @@ const getChart = () => {
             top: '10%',
             bottom: '50px'
         }
-    }
+    }), [data]);
     return <ReactECharts option={staticOptions} style={{ height: '100%', width: '100%' }} ref={chartRef}/>;
 };
 
@@ -277,7 +269,7 @@ export default function Index() {
                                     <button className='max' onClick={()=>setCount(currentWalletBalance)}>MAX</button>
                                     <img width={28} height={28} src={exchange?require("@/assets/mint/chip.png").default:require("@/assets/mint/sol.png").default} alt='icon'/>
                                     <span>{exchange?'CHIP':'SOL'}</span>
-                                    <p className='balance'>Balance：{currentWalletBalance}</p>
+                                    <p className='balance'>Balance：{currentWalletBalance ?? '--'}</p>
                                 </div>
                             </div>
                         </TopInput>
@@ -1236,6 +1228,7 @@ opacity: 0.4;
         }
         .balance {
             position: absolute;
+            width: max-content;
             right: 0;
             top: 100%;
             opacity: 0.3;
