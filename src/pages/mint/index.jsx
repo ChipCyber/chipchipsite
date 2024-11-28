@@ -1,60 +1,27 @@
-import React, { useEffect, useState, useRef, useMemo } from 'react'
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react'
 import ReactECharts from 'echarts-for-react';
 import styled from "styled-components";
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { DialogOverlay, DialogContent } from "@reach/dialog";
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import useBreakpointCheck from "@/hooks/useBreakpointCheck";
 import { knowledgePageListApi } from "@/api";
 import { useLanguage } from "@/LanguageContext";
+import { getGlobalInfoApi, exchangelistApi, queryChipPriceApi, queryKlineApi } from "@/api/mint.js";
+import { setShowConnectWallet } from "@/store/userSlice.js";
+import { debounce, getDateDiff } from "@/utils";
+import { _saveToTwoWei } from "@/constants/constantsFunction";
 
-import { WalletType } from "@/wallet";
+const kLineTypeList = ["1H", "6H", "1D", "1W", "1M", "ALL"];
+const coinTypeList = {
+    1: "SOL",
+    2: "USDT",
+    3: "USDC",
+    4: "CHIP",
+};
 
-const getChart = () => {
+const getChart = (data=[]) => {
     const chartRef = useRef(null);
-    const [data, setData] = useState([]);
-    useEffect(()=>{
-        const initData = [];
-        for (let index = 0; index < 100; index++) {
-            initData.push([(new Date().getTime()) - ((100-index-1) * 1000), Math.random() * 50 + 10]);
-        }
-        setData(initData);
-        const timer = setInterval(() => {
-            setData((prevData) => {
-                const newData = [...prevData];
-                newData.shift();
-                newData.push([(new Date().getTime()), Math.random() * 50 + 10]);
-                return newData;
-            });
-        }, 1000);
-        return () => {
-            clearInterval(timer);
-        }
-        // const ws = new WebSocket('wss://your-websocket-server-url');
-        // ws.onopen = () => {
-        //     console.log('WebSocket connection established');
-        // };
-        // ws.onmessage = (message) => {
-        //     console.log('message :>> ', message);
-        //     const newValue = JSON.parse(message.data);
-        //     setData((prevData) => {
-        //         const newData = [...prevData];
-        //         newData.shift();
-        //         newData.push([new Date().getTime(), newValue.value]);
-        //         return newData;
-        //     });
-        // };
-        // ws.onerror = (error) => {
-        //     console.error('WebSocket error:', error);
-        // };
-        // ws.onclose = () => {
-        //     console.log('WebSocket connection closed');
-        // };
-        // return () => {
-        //     ws.close();
-        // };
-    },[]);
     const staticOptions = useMemo(() => ({
         tooltip: {
             trigger: 'axis',
@@ -63,7 +30,7 @@ const getChart = () => {
                 if (!params || !params[0]) return '';
                 const param = params[0];
                 const date = new Date(param.value[0]);
-                return (`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} : ${(param.value[1] * 100).toFixed(2)}%`);
+                return (`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} : ${(param.value[1] * 100).toFixed(2)}`);
             },
             axisPointer: {
                 animation: false,
@@ -118,7 +85,7 @@ const getChart = () => {
             axisLabel: {
                 color: 'rgb(130,130,130,0.3)',
                 formatter: function (value) {
-                    return (value * 100).toFixed(2) + '%';
+                    return (value * 100).toFixed(2);
                 },
             },
         },
@@ -159,7 +126,7 @@ const getChart = () => {
         ],
         grid: {
             left: '5%',
-            right: '80px',
+            right: '50px',
             top: '10%',
             bottom: '50px'
         }
@@ -170,13 +137,18 @@ const getChart = () => {
 export default function Index() {
     const { t } = useTranslation();
     const { language } = useLanguage();
+    const dispatch = useDispatch();
     const shouldRender = useBreakpointCheck();
+    const currentWalletAddress = useSelector((state) => state.user?.currentWalletAddress);
     const currentWalletBalance = useSelector((state) => state.user?.currentWalletBalance);
     const [exchange, setExchange] = useState(false);
     const [count, setCount] = useState('');
-    const [openInvestRecord, setOpenInvestRecord] = useState(false);
-    const [openReceiveRecord, setOpenReceiveRecord] = useState(false);
-    const [openWhitelistResult, setOpenWhitelistResult] = useState(false);
+    const [globalInfo, setGlobalInfo] = useState({});
+    const [priceInfo, setPriceInfo] = useState({});
+    const [exchangeList, setExchangeList] = useState([]);
+    const [klineList, setklineList] = useState([]);
+    const [kLineType, setkLineType] = useState(kLineTypeList[kLineTypeList.length-1]);
+    const [isPageVisible, setIsPageVisible] = useState(true);
     const [menuIndex, setMenuIndex] = useState(0);
     const [faqList, setFaqList] = useState([]);
     const history = useHistory();
@@ -185,10 +157,94 @@ export default function Index() {
             setFaqList(data);
         });
     }, [language]);
+    useEffect(() => {
+        getGlobalInfoApi().then(({data})=>{
+            setGlobalInfo(data);
+        });
+        exchangelistApi({solanaAddr:"",pageIndex:1,pageSize:8}).then(({data})=>{
+            setExchangeList(data.exchangeList ?? []);
+        });
+    }, []);
+    useEffect(() => {
+        queryKlineApi({kLineDuration:kLineType}).then(({data})=>{
+            const list = data.rows ?? [];
+            const newList = [];
+            list.forEach(item=>{
+                newList.push([item.openTime,item.kHigh]);
+            });
+            setklineList(newList);
+        });
+    }, []);
     const handleChange = (event) => {
         const newValue = event.target.value;
         setCount(newValue);
     };
+    const debouncedRequestApi = useCallback(debounce((count)=>{
+        queryChipPriceApi({
+            "srcType": exchange?"CHIP":"SOL",
+            "dstType": exchange?"SOL":"CHIP",
+            "srcAmount": count,
+        }).then(({data})=>{
+            setPriceInfo(data);
+        });
+    }), []);
+    useEffect(()=>{
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                setIsPageVisible(true);
+            } else {
+                setIsPageVisible(false);
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        }
+    },[]);
+    useEffect(() => {
+        if (count>0) {
+            debouncedRequestApi(count);
+        }else{
+            setPriceInfo({});
+        }
+    }, [count, debouncedRequestApi]);
+    const sureSwap = () => {
+        if(currentWalletAddress) {
+            
+        }else{
+            dispatch(setShowConnectWallet());
+        }
+    }
+    useEffect(() => {
+        let ws = null;
+        if (isPageVisible) {
+            ws = new WebSocket('wss://your-websocket-server-url');
+            ws.onopen = () => {
+                console.log('WebSocket connection established');
+            };
+            ws.onmessage = (message) => {
+                console.log('message :>> ', message);
+                const newValue = JSON.parse(message.data);
+                setklineList((prevData) => {
+                    const newData = [...prevData];
+                    newData.shift();
+                    newData.push([new Date().getTime(), newValue.value]);
+                    return newData;
+                });
+            };
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+            ws.onclose = () => {
+                console.log('WebSocket connection closed');
+            };
+        } else {
+            ws.close();
+        }
+        return () => {
+            ws.close();
+        };
+    }, [isPageVisible]);
     const renderW = () => (
         <>
         <Top>
@@ -228,14 +284,11 @@ export default function Index() {
                     </div>
                     <TopChart>
                         <TopChartBtn>
-                            <button>1H</button>
-                            <button>6H</button>
-                            <button>1D</button>
-                            <button>1W</button>
-                            <button>1M</button>
-                            <button className='selected'>ALL</button>
+                            {kLineTypeList.map(item=>(
+                                <button className={kLineType==item&&'selected'} onClick={()=>setkLineType(item)}>{item}</button>
+                            ))}
                         </TopChartBtn>
-                        <TopChartBody>{getChart()}</TopChartBody>
+                        <TopChartBody>{getChart(klineList)}</TopChartBody>
                     </TopChart>
                     {/* <TopChartNoData>
                         <div className='bg'></div>
@@ -277,7 +330,7 @@ export default function Index() {
                         <TopInput>
                             <p className='tip'>To</p>
                             <div className='input_row'>
-                                <input type='number' disabled placeholder='0.00'/>
+                                <input type='number' value={priceInfo.dstAmount ?? ''} disabled placeholder='0.00'/>
                                 <div className='input_right'>
                                     <img width={28} height={28} src={exchange?require("@/assets/mint/sol.png").default:require("@/assets/mint/chip.png").default} alt='icon'/>
                                     <span>{exchange?'SOL':'CHIP'}</span>
@@ -285,7 +338,7 @@ export default function Index() {
                             </div>
                         </TopInput>
                     </TopSwapBody>
-                    <SureBtn disabled>{exchange?'Sell':'Buy'}</SureBtn>
+                    <SureBtn onClick={()=>sureSwap()} disabled={count<=0}>{currentWalletAddress?(exchange?'Sell':'Buy'):'Connect Wallet'}</SureBtn>
                 </TopRight>
             </TopContent>
         </Top>
@@ -304,21 +357,16 @@ export default function Index() {
                     <span>To</span>
                 </LeftInvestTableHeader>
                 <LeftInvestTableContent>
-                    <LeftInvestTableRow>
-                        <p>1 m ago</p>
-                        <p className='buy'>Buy</p>
-                        <p>$0.01</p>
-                        <p>10 SOL</p>
-                        <p>1,000 CHIP</p>
-                    </LeftInvestTableRow>
-                    <LeftInvestTableRow>
-                        <p>1 m ago</p>
-                        <p className='sell'>Sell</p>
-                        <p>$0.01</p>
-                        <p>10 SOL</p>
-                        <p>1,000 CHIP</p>
-                    </LeftInvestTableRow>
-                    {/* {renderNoData()} */}
+                    {exchangeList&&exchangeList.length>0?exchangeList.map(item=><LeftInvestTableRow>
+                        <p>{getDateDiff(item.sendTime)}</p>
+                        <p className={item.flowType==1?'buy':'sell'}>{item.flowType==1?'Buy':'Sell'}</p>
+                        <p>${_saveToTwoWei(item.sendPrice,4)}</p>
+                        <p>{_saveToTwoWei(item.sendAmount)} {coinTypeList[item.sendCoinType]}</p>
+                        <p>{_saveToTwoWei(item.receiveAmount)} {coinTypeList[item.receiveCoinType]}</p>
+                    </LeftInvestTableRow>)
+                    :
+                    renderNoData()
+                    }
                 </LeftInvestTableContent>
             </LeftInvest>
             <Right>
@@ -452,14 +500,11 @@ export default function Index() {
             </TopLeftPrice>
             <TopChart>
                 <TopChartBtn>
-                    <button>1H</button>
-                    <button>6H</button>
-                    <button>1D</button>
-                    <button>1W</button>
-                    <button>1M</button>
-                    <button className='selected'>ALL</button>
+                    {kLineTypeList.map(item=>(
+                        <button className={kLineType==item&&'selected'} onClick={()=>setkLineType(item)}>{item}</button>
+                    ))}
                 </TopChartBtn>
-                <TopChartBody>{getChart()}</TopChartBody>
+                <TopChartBody>{getChart(klineList)}</TopChartBody>
             </TopChart>
             {/* <TopChartNoData>
                 <div className='bg'></div>
@@ -518,7 +563,7 @@ export default function Index() {
                     <TopInput>
                         <p className='tip'>To</p>
                         <div className='input_row'>
-                            <input type='number' disabled placeholder='0.00'/>
+                            <input type='number' value={priceInfo.dstAmount ?? ''} disabled placeholder='0.00'/>
                             <div className='input_right'>
                                 <img width={28} height={28} src={exchange?require("@/assets/mint/sol.png").default:require("@/assets/mint/chip.png").default} alt='icon'/>
                                 <span>{exchange?'SOL':'CHIP'}</span>
@@ -626,19 +671,15 @@ export default function Index() {
                 <span>To</span>
             </LeftInvestTableHeader>
             <LeftInvestTableContent>
-                <LeftInvestTableRow>
-                    <p className='buy'>Buy<br/><span>1 m ago</span></p>
-                    <p>$0.01</p>
-                    <p>10 SOL</p>
-                    <p>1,000 CHIP</p>
-                </LeftInvestTableRow>
-                <LeftInvestTableRow>
-                    <p className='sell'>Sell<br/><span>1 m ago</span></p>
-                    <p>$0.01</p>
-                    <p>10 SOL</p>
-                    <p>1,000 CHIP</p>
-                </LeftInvestTableRow>
-                {/* {renderNoData()} */}
+                {exchangeList&&exchangeList.length>0?exchangeList.map(item=><LeftInvestTableRow>
+                    <p className={item.flowType==1?'buy':'sell'}>{item.flowType==1?'Buy':'Sell'}<br/><span>{getDateDiff(item.sendTime)}</span></p>
+                    <p>${_saveToTwoWei(item.sendPrice,4)}</p>
+                    <p>{_saveToTwoWei(item.sendAmount)} {coinTypeList[item.sendCoinType]}</p>
+                    <p>{_saveToTwoWei(item.receiveAmount)} {coinTypeList[item.receiveCoinType]}</p>
+                </LeftInvestTableRow>)
+                :
+                renderNoData()
+                }
             </LeftInvestTableContent>
         </LeftInvest>
     )
@@ -684,84 +725,6 @@ export default function Index() {
     return (
         <Root>
             {shouldRender?renderW():renderM()}
-            <DialogOverlay
-                style={{ height: '100vh', zIndex: 99, background: 'hsla(0, 0%, 0%, 0.6)' }}
-                isOpen={openInvestRecord}
-                onDismiss={()=>setOpenInvestRecord(false)}
-            >
-                <DialogRecordContent aria-label='list'>
-                    <ModalHeader>
-                        <div className='title'>{t('322')}</div>
-                        <img className='close' onClick={()=>setOpenInvestRecord(false)} src={require('../../assets/nav/close.png').default}/>
-                    </ModalHeader>
-                    <ModalTableHeader>
-                        <span>{t('610')}</span>
-                        <span>{t('307')}</span>
-                        <span>{t('374')}</span>
-                    </ModalTableHeader>
-                    <ModalTableContent>
-                        {renderNoData()}
-                        {/* <ModalTableRow>
-                            <span>2024/05/01 12:12:12</span>
-                            <span>$0.01</span>
-                            <span>10,000 USDT</span>
-                        </ModalTableRow>
-                        <ModalTableRow>
-                            <span>2024/05/01 12:12:12</span>
-                            <span>$10,000</span>
-                            <span>10,000 USDC</span>
-                        </ModalTableRow> */}
-                    </ModalTableContent>
-                </DialogRecordContent>
-            </DialogOverlay>
-            <DialogOverlay
-                style={{ height: '100vh', zIndex: 99, background: 'hsla(0, 0%, 0%, 0.6)' }}
-                isOpen={openReceiveRecord}
-                onDismiss={()=>setOpenReceiveRecord(false)}
-            >
-                <DialogRecordContent>
-                    <ModalHeader>
-                        <div className='title'>{t('327')}</div>
-                        <img className='close' onClick={()=>setOpenReceiveRecord(false)} src={require('../../assets/nav/close.png').default}/>
-                    </ModalHeader>
-                    <ModalTableHeader>
-                        <span>{t('610')}</span>
-                        <span>{t('605')}</span>
-                    </ModalTableHeader>
-                    <ModalTableContent>
-                        {renderNoData()}
-                        {/* <ModalTableRow>
-                            <span>2024/05/01 12:12:12</span>
-                            <span>100,000 CHIP</span>
-                        </ModalTableRow>
-                        <ModalTableRow>
-                            <span>2024/05/01 12:12:12</span>
-                            <span>100,000 CHIP</span>
-                        </ModalTableRow> */}
-                    </ModalTableContent>
-                </DialogRecordContent>
-            </DialogOverlay>
-            <DialogOverlay
-                style={{ height: '100vh', zIndex: 99, background: 'hsla(0, 0%, 0%, 0.6)' }}
-                isOpen={openWhitelistResult}
-                onDismiss={()=>setOpenWhitelistResult(false)}
-            >
-                <DialogRecordContent>
-                    <ModalHeader>
-                        <div className='title'>{t('335')}</div>
-                        <img className='close' onClick={()=>setOpenWhitelistResult(false)} src={require('../../assets/nav/close.png').default}/>
-                    </ModalHeader>
-                    <WhitelistContent>
-                        <img src={true?require('../../assets/ido/whitelist.png').default:require('../../assets/ido/whitelist_no.png').default}/>
-                        <div className='title'>{true?t('337'):t('338')}</div>
-                        <div className='card'>
-                            <span>{t('336')}</span>
-                            <span>0xdrgpejg03480je0gjr0egj0jg0gjhj0hjh</span>
-                        </div>
-                        <button className='close' type='button' onClick={()=>setOpenWhitelistResult(false)}>{t('339')}</button>
-                    </WhitelistContent>
-                </DialogRecordContent>
-            </DialogOverlay>
         </Root>
     )
 }
@@ -1537,11 +1500,14 @@ align-items: center;
 padding: 0 16px;
 span {
 text-align: left;
-flex: 1;
+flex: 2 0 0;
 font-size: 12px;
 font-weight: 500;
 line-height: 18px;
 opacity: 0.6;
+&:nth-child(2), &:nth-child(3){
+flex: 2 0 0;
+}
 }
 ${({ theme }) => theme.mediaQueries.sm}{
 margin-top: 34px;
@@ -1552,6 +1518,9 @@ span {
 font-size: 16px;
 font-weight: 600;
 line-height: 32px;
+&:nth-child(2), &:nth-child(3){
+flex: 1 0 0;
+}
 }
 };
 `
@@ -1560,10 +1529,8 @@ height: 425px;
 margin-top: 4px;
 max-height: 80vh;
 overflow-y: auto;
-padding-left: 8px;
-padding-right: 8px;
 ${({ theme }) => theme.mediaQueries.sm}{
-padding: 0;
+height: 488px;
 };
 `
 const LeftInvestTableRow = styled.div`
@@ -1574,9 +1541,12 @@ align-items: center;
 padding: 6px 16px;
 p {
 text-align: left;
-flex: 1;
+flex: 2 0 0;
 font-size: 12px;
 font-weight: 600;
+&:nth-child(2), &:nth-child(3){
+flex: 2 0 0;
+}
 &.buy {
 color: #10CB81;
 }
@@ -1593,6 +1563,9 @@ margin-top: 4px;
 padding: 16px 20px;
 p {
 font-size: 16px;
+&:nth-child(2), &:nth-child(3){
+flex: 1 0 0;
+}
 }
 };
 `
@@ -1610,340 +1583,6 @@ font-size: 18px;
 height: 53px;
 border-radius: 32px;
 };
-`
-const RightAbout = styled.div`
-padding: 17px 24px 0;
-margin-top: 0;
-border-radius: 8px;
-border: 2px solid #2B292E;
-.header {
-display: flex;
-align-items: center;
-gap: 5px;
-font-size: 16px;
-font-weight: 600;
-line-height: 18px;
-img {
-width: 16px;
-height: 16px;
-}
-}
-.subTitle {
-margin-top: 22px;
-font-size: 14px;
-font-weight: 600;
-line-height: 20px;
-}
-${({ theme }) => theme.mediaQueries.sm}{
-padding: 44px 36px 0;
-margin-top: 32px;
-border-radius: 18px;
-.header {
-gap: 10px;
-font-size: 32px;
-line-height: 32px;
-img {
-width: 30px;
-height: 30px;
-}
-}
-.subTitle {
-margin-top: 62px;
-margin-left: 24px;
-font-size: 24px;
-font-weight: 600;
-line-height: 32px;
-}
-};
-`
-const RightAboutInfo = styled.div`
-.content {
-padding-left: 3px;
-margin-top: 25px;
-display: flex;
-justify-content: space-between;
-flex-wrap: wrap;
-row-gap: 20px;
-> div {
-width: 50%;
-}
-.value {
-color: #A289FA;
-font-size: 18px;
-font-weight: 500;
-dispaly: flex;
-align-items: center;
-img {
-width: 20px;
-height: 20px;
-}
-}
-.value_desc {
-margin-top: 8px;
-font-size: 13px;
-font-weight: 500;
-opacity: 0.6;
-}
-}
-${({ theme }) => theme.mediaQueries.sm}{
-margin-top: 30px;
-flex-wrap: unset;
-.content {
-padding-left: 24px;
-}
-> div {
-width: unset;
-}
-.value {
-font-size: 24px;
-img {
-width: 30px;
-height: 30px;
-}
-}
-.value_desc {
-font-size: 16px;
-}
-};
-`
-const RightAboutDistribute = styled.div`
-.content {
-margin-top: 20px;
-.row {
-display: flex;
-align-items: stretch;
-padding: 0 20px 0 14px;
-border-bottom: 1px solid #3A373F;
-&:first-child {
-border-top: 2px solid #3A373F;
-border-bottom: 1px solid #3A373F;
-}
-.left {
-flex: 1;
-font-size: 12px;
-font-weight: 500;
-padding: 10px 0;
-}
-.right {
-width: 58px;
-border-left: 1px solid #3A373F;
-text-align: right;
-font-size: 14px;
-font-weight: 700;
-display: flex;
-align-items: center;
-justify-content: flex-end;
-}
-}
-}
-${({ theme }) => theme.mediaQueries.sm}{
-.content {
-margin-top: 36px;
-.row {
-padding: 0 44px;
-.left {
-font-size: 16px;
-padding: 16px 0;
-}
-.right {
-width: 106px;
-font-size: 24px;
-}
-}
-}
-};
-`
-const RightAboutUse = styled.div`
-
-`
-const RightAboutUseTip = styled.ul`
-margin-top: 22px;
-list-style-type: none;
-color: rgba(255,255,255,0.6);
-padding-left: 44px;
-${({ theme }) => theme.mediaQueries.sm}{
-padding-left: 24px;
-};
-`
-const RightAboutUseTipRow = styled.li`
-margin-top: 10px;
-font-size: 14px;
-font-weight: 500;
-line-height: 25px;
-position: relative;
-padding-left: 25px;
-&:before {
-    content: '';
-    position: absolute;
-    left: 8px;
-    top: 10px;
-    width: 5px;
-    height: 5px;
-    background-color: rgba(255,255,255,0.6);
-    border-radius: 50%;
-}
-${({ theme }) => theme.mediaQueries.sm}{
-font-size: 18px;
-line-height: 32px;
-&:before {
-    top: 14px;
-}
-};
-`
-const Chart = styled.div`
-width: 100%;
-aspect-ratio: 1;
-`
-const DialogRecordContent = styled(DialogContent)`
-width: calc(100% - 50px);
-margin: 15vh auto 0;
-padding: 16px 25px 56px;
-border-radius: 12px;
-background: #362F42;
-${({ theme }) => theme.mediaQueries.sm}{
-    width: 600px;
-    padding: 26px 40px 46px;
-};
-`
-const ModalHeader = styled.div`
-display: flex;
-justify-content: space-between;
-align-items: center;
-margin-bottom: 30px;
-.title {
-font-size: 21px;
-font-weight: 600;
-line-height: 32px;
-}
-.close {
-cursor: pointer;
-width: 17.5px;
-height: 17.5px;
-}
-${({ theme }) => theme.mediaQueries.sm}{
-.title {
-font-size: 24px;
-}
-};
-`
-const ModalTableHeader = styled.div`
-border-radius: 8px;
-background: rgba(255, 255, 255, 0.1);
-padding-left: 32px;
-padding-right: 35px;
-height: 50px;
-display: flex;
-align-items: center;
-font-size: 16px;
-font-weight: 600;
-span {
-flex: 1;
-opacity: 0.6;
-&:first-child {
-flex: 2;
-}
-&:last-child {
-text-align: right;
-}
-}
-${({ theme }) => theme.mediaQueries.sm}{
-padding-left: 32px;
-padding-right: 35px;
-height: 50px;
-font-size: 16px;
-font-weight: 600;
-line-height: 32px;
-};
-`
-const ModalTableContent = styled.div`
-margin-top: 4px;
-max-height: 50vh;
-min-height: 132px;
-overflow-y: auto;
-`
-const ModalTableRow = styled.div`
-display: flex;
-align-items: center;
-border-bottom: 1px solid #514664;
-padding-left: 32px;
-padding-right: 35px;
-height: 66px;
-font-size: 16px;
-font-weight: 600;
-span {
-flex: 1;
-word-break: break-all;
-&:first-child {
-flex: 2;
-}
-&:last-child {
-text-align: right;
-color: ${({theme})=>theme.colors.success};
-}
-}
-`
-const WhitelistContent = styled.div`
-display: flex;
-flex-direction: column;
-align-items: center;
-padding: 0;
-img {
-width: 60px;
-height: 60px;
-}
-.title {
-margin-top: 25px;
-font-size: 21px;
-font-weight: 600;
-line-height: 32px;
-}
-.card {
-width: 100%;
-margin-top: 14px;
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-align-items: center;
-gap: 6px;
-font-size: 14px;
-span {
-&:first-child {
-opacity: 0.4;
-}
-}
-}
-.close {
-margin-top: 35px;
-width: 100%;
-font-size: 16px;
-font-weight: 600;
-height: 40px;
-border-radius: 32px;
-background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
-}
-${({ theme }) => theme.mediaQueries.sm}{
-padding: 0 32px;
-img {
-width: 92px;
-height: 92px;
-}
-.title {
-margin-top: 10px;
-}
-.card {
-flex-direction: row;
-padding: 0 15px;
-margin-top: 40px;
-height: 55px;
-border-radius: 4px;
-background: rgba(18, 18, 18, 0.2);
-}
-.close {
-margin-top: 40px;
-height: 53px;
-font-size: 18px;
-}
-}:
 `
 const Evaluate = styled.div`
 padding: 35px 62px 80px 157px;

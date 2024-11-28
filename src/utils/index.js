@@ -19,6 +19,16 @@ export function scrollToAnchor(anchorName) {
       if(anchorElement) { anchorElement.scrollIntoView({block: 'start', behavior: 'smooth'}); }
   }
 }
+export function debounce(fn, delay=300) {
+  let timer; // 定时器变量
+  return function (...args) {
+    clearTimeout(timer); // 如果定时器存在，清除定时器
+    timer = setTimeout(() => {
+      fn.apply(this, args); // 延迟执行传入的函数
+    }, delay);
+  };
+}
+
 export const toDateStr = (timestamp) => {
   const date = new Date(timestamp);
   return date.toLocaleString();

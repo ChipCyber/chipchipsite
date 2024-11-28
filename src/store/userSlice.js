@@ -30,6 +30,7 @@ export const userSlice = createSlice({
         currentWalletBalance: null,
         walletType: null,
         networkType: null,
+        showConnectWallet: false,
     },
     reducers: {
         setWalletInfo: (state, action) => {
@@ -51,6 +52,12 @@ export const userSlice = createSlice({
             state.userInfo = {};
             removeData();
         },
+        setShowConnectWallet: (state) => {
+            state.showConnectWallet = true;
+        },
+        setCloseConnectWallet: (state) => {
+            state.showConnectWallet = false;
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -71,6 +78,6 @@ export const userSlice = createSlice({
     }
 })
 
-export const { setUserInfo, removeUserInfo, setWalletInfo } = userSlice.actions
+export const { setUserInfo, removeUserInfo, setWalletInfo, removeWalletData, setShowConnectWallet, setCloseConnectWallet } = userSlice.actions
 
 export default userSlice.reducer

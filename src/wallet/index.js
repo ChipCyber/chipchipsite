@@ -8,6 +8,9 @@ export const WalletType = {
 export const NetworkType = {
     Solana: 'Solana',
 }
+export const NetworkSupprtWallet = {
+    Solana: [WalletType.Phantom,WalletType.OKX],
+}
 export const AllNetworkType = [NetworkType.Solana];
 
 const saveLocalKey = "recentConnectorId";

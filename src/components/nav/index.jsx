@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux';
-import { setUserInfo, removeUserInfo, setWalletInfo, removeWalletInfo, refreshBalance } from '@/store/userSlice';
+import { setUserInfo, removeUserInfo, setWalletInfo, removeWalletInfo, refreshBalance, setShowConnectWallet, setCloseConnectWallet } from '@/store/userSlice';
 import { setShowLogin, setCloseLogin } from '@/store/configSlice';
 import { withTranslation } from 'react-i18next'
 import { DialogOverlay, DialogContent } from "@reach/dialog";
@@ -22,7 +22,7 @@ import {
     PrivacyPolicyUrl,
     BlogUrl,
 } from "@/constants";
-import { WalletType, NetworkType, runConnectWallet } from "@/wallet";
+import { WalletType, NetworkType, NetworkSupprtWallet, runConnectWallet } from "@/wallet";
 
 class Nav extends Component {
     state = {
@@ -175,13 +175,14 @@ class Nav extends Component {
             this.setState({showPModal:true});
         }, 200);
     }
-    connectWallet = () => {
-        runConnectWallet(WalletType.OKX, NetworkType.Solana).then(data=>{
+    connectChooseWallet = (type) => {
+        runConnectWallet(type, NetworkType.Solana).then(data=>{
             this.props.setWalletInfo({
                 address: data.address,
-                walletType: WalletType.OKX,
+                walletType: type,
                 networkType: NetworkType.Solana,
             });
+            this.props.setCloseConnectWallet();
         });
     }
     disconnect = () => {
@@ -199,7 +200,7 @@ class Nav extends Component {
         )
     }
     renderNav() {
-        const {t,i18n,history,location:{pathname},userInfo,showLogin,setShowLogin,currentWalletAddress} = this.props;
+        const {t,i18n,history,location:{pathname},userInfo,showLogin,setShowLogin,currentWalletAddress,showConnectWallet,setShowConnectWallet,setCloseConnectWallet} = this.props;
         const {showMenu,showMore,showPModal,countdown} = this.state;
         // console.log('pathname :>> ', pathname);
         return (
@@ -226,7 +227,7 @@ class Nav extends Component {
                 </NavCenter>
                 <NavRight>
                     {isEmpty(currentWalletAddress)?
-                    <LoginBtn className='custom' onClick={()=>this.connectWallet()}>{t('602')}</LoginBtn>
+                    <LoginBtn className='custom' onClick={()=>setShowConnectWallet()}>{t('602')}</LoginBtn>
                     :
                     <LoginBtn className='custom'>
                         <img src={require("@/assets/nav/wallet.png").default} alt='icon'/>
@@ -330,6 +331,34 @@ class Nav extends Component {
                             <Item><NavLink to='/download' onClick={this.closeMenu}>{t('112')}</NavLink></Item>
                         </Group>
                     </DialogM>
+                </DialogOverlay>
+                <DialogOverlay
+                    style={{ height: '100vh', zIndex: 99, background: 'hsla(0, 0%, 0%, 0.3)', '--animate-duration': '0.3s' }}
+                    isOpen={showConnectWallet}
+                    onDismiss={()=>setCloseConnectWallet()}
+                    className='wow animate__animated animate__fadeIn'
+                >
+                    <DialogC aria-label='connect'>
+                        <DialogCHeader>
+                            <p>Connect Wallet</p>
+                            <img onClick={()=>setCloseConnectWallet()} width={24} height={24} src={require("@/assets/nav/close.png").default} alt='close'/>
+                        </DialogCHeader>
+                        <DialogCTip>POPULAR</DialogCTip>
+                        <DialogCContent>
+                            {
+                                (NetworkSupprtWallet[NetworkType.Solana] ?? []).map((item,idx)=>(
+                                    <DialogCContentRow key={`${item}_${idx}`} onClick={()=>this.connectChooseWallet(item)}>
+                                        <div className='icon'>
+                                            <img src={require(`@/assets/wallet/${`${item}`.toLowerCase()}.png`).default} alt='metamask'/>
+                                        </div>
+                                        <div className='name'>
+                                            <p>{item}</p>
+                                        </div>
+                                    </DialogCContentRow>
+                                ))
+                            }
+                        </DialogCContent>
+                    </DialogC>
                 </DialogOverlay>
             </NavBody>
         )
@@ -617,6 +646,75 @@ ${({ theme }) => theme.mediaQueries.sm}{
     padding: 25px 38px;
 };
 `
+const DialogCHeader = styled.div`
+font-size: 24px;
+font-weight: 500;
+display: flex;
+align-items: center;
+justify-content: space-between;
+img {
+cursor: pointer;
+}
+`
+const DialogCTip = styled.p`
+margin-top: 10px;
+margin-bottom: 8px;
+font-size: 12px;
+font-weight: 500;
+line-height: 24px;
+color: ${({ theme }) => theme.colors.textDisabled};
+`
+const DialogCContent = styled.div`
+width: 100%;
+display: flex;
+flex-direction: column;
+gap: 0;
+${({ theme }) => theme.mediaQueries.sm}{
+gap: 12px;
+};
+`
+const DialogCContentRow = styled.div`
+cursor: pointer;
+display: flex;
+align-items: center;
+gap: 14px;
+padding: 12px 0;
+border-bottom: 1px solid rgba(72, 72, 72, 0.20);
+.icon {
+display: flex;
+align-items: center;
+justify-content: center;
+border-radius: 10px;
+background: rgba(240, 242, 240, 0.10);
+width: 42px;
+height: 42px;
+img {
+width: 100%;
+height: 100%;
+}
+}
+.name {
+display: flex;
+flex-direction: column;
+font-size: 16px;
+font-weight: 500;
+span {
+font-size: 12px;
+font-weight: 600;
+color: ${({ theme }) => theme.colors.primary};
+}
+}
+${({ theme }) => theme.mediaQueries.sm}{
+padding: 0;
+border-bottom: none;
+.icon {
+img {
+width: 26px;
+height: 26px;
+}
+}
+}
+`
 const LoginHeader = styled.div`
 display: flex;
 justify-content: space-between;
@@ -847,6 +945,7 @@ const mapStateToProps = (state) => ({
     userInfo: state.user.userInfo,
     currentWalletAddress: state.user.currentWalletAddress,
     showLogin: state.config.showLogin,
+    showConnectWallet: state.user.showConnectWallet,
 });
 
 const mapDispatchToProps = {
@@ -857,6 +956,8 @@ const mapDispatchToProps = {
     removeWalletInfo,
     setShowLogin,
     setCloseLogin,
+    setShowConnectWallet,
+    setCloseConnectWallet,
 };
 
 export default withTranslation()(withRouter(connect(mapStateToProps, mapDispatchToProps)(Nav)));
