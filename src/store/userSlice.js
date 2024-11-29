@@ -4,8 +4,8 @@ import { removeLocalReConnect } from "@/wallet";
 import { getBalance }  from "@/wallet/methods";
 const data = getData() ?? {};
 
-export const refreshBalance = createAsyncThunk(
-    'user/refreshBalance',
+export const refreshWalletBalance = createAsyncThunk(
+    'user/refreshWalletBalance',
     async (currentWalletAddress, { rejectWithValue }) => {
         try {
             if(!currentWalletAddress) {
@@ -20,7 +20,6 @@ export const refreshBalance = createAsyncThunk(
 );
 export const removeWalletInfo = () => async (dispatch) => {
     dispatch(removeWalletData());
-    dispatch(refreshBalance());
 };
 export const userSlice = createSlice({
     name: 'user',
@@ -40,6 +39,7 @@ export const userSlice = createSlice({
         },
         removeWalletData: (state, action) => {
             state.currentWalletAddress = null;
+            state.currentWalletBalance = null;
             state.walletType = null;
             state.networkType = null;
             removeLocalReConnect();
@@ -61,18 +61,18 @@ export const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(refreshBalance.pending, (state) => {
+            .addCase(refreshWalletBalance.pending, (state) => {
                 state.currentWalletBalance = null;
             })
-            .addCase(refreshBalance.fulfilled, (state, action) => {
+            .addCase(refreshWalletBalance.fulfilled, (state, action) => {
                 if(state.currentWalletAddress) {
                     state.currentWalletBalance = action.payload;
                 }else{
                     state.currentWalletBalance = null;
                 }
             })
-            .addCase(refreshBalance.rejected, (state, action) => {
-                console.error('refreshBalance failed:', action.payload);
+            .addCase(refreshWalletBalance.rejected, (state, action) => {
+                console.error('refreshWalletBalance failed:', action.payload);
                 state.currentWalletBalance = null;
             })
     }

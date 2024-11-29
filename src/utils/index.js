@@ -19,7 +19,7 @@ export function scrollToAnchor(anchorName) {
       if(anchorElement) { anchorElement.scrollIntoView({block: 'start', behavior: 'smooth'}); }
   }
 }
-export function debounce(fn, delay=300) {
+export function debounce(fn, delay=500) {
   let timer; // 定时器变量
   return function (...args) {
     clearTimeout(timer); // 如果定时器存在，清除定时器
@@ -32,6 +32,36 @@ export function debounce(fn, delay=300) {
 export const toDateStr = (timestamp) => {
   const date = new Date(timestamp);
   return date.toLocaleString();
+}
+export function formatTimeDiff(targetTimestamp, currentTimestamp=(Date.now())) {
+  if(isEmpty(targetTimestamp)) {
+    return {};
+  }
+  if ((typeof targetTimestamp === 'string') && (/^[0-9]+$/.test(targetTimestamp))) {
+    targetTimestamp = parseInt(targetTimestamp)
+  } else if (typeof time === 'string') {
+    targetTimestamp = targetTimestamp.replace(new RegExp(/-/gm), '/').replace('T', ' ').replace(new RegExp(/\.[\d]{3}/gm), '');
+  }
+  if ((typeof targetTimestamp === 'number') && (targetTimestamp.toString().length === 10)) {
+    targetTimestamp = targetTimestamp * 1000
+  }
+  if ((typeof currentTimestamp === 'string') && (/^[0-9]+$/.test(currentTimestamp))) {
+    currentTimestamp = parseInt(currentTimestamp)
+  } else if (typeof currentTimestamp === 'string') {
+    currentTimestamp = currentTimestamp.replace(new RegExp(/-/gm), '/').replace('T', ' ').replace(new RegExp(/\.[\d]{3}/gm), '');
+  }
+  if ((typeof currentTimestamp === 'number') && (currentTimestamp.toString().length === 10)) {
+    currentTimestamp = currentTimestamp * 1000
+  }
+  let diff = Math.max(targetTimestamp - currentTimestamp, 0); // 时间差，确保为正数
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24)); // 计算天数
+  diff %= 1000 * 60 * 60 * 24;
+  const hours = Math.floor(diff / (1000 * 60 * 60)); // 计算小时
+  diff %= 1000 * 60 * 60;
+  const minutes = Math.floor(diff / (1000 * 60)); // 计算分钟
+  diff %= 1000 * 60;
+  const seconds = Math.floor(diff / 1000); // 计算秒
+  return {d: `${days}`, h: hours.toString().padStart(2, '0'), m: minutes.toString().padStart(2, '0'), s: seconds.toString().padStart(2, '0')};
 }
 export function parseTime(time, pattern, zone = 8) {
   if (arguments.length === 0 || !time) {

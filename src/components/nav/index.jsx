@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux';
-import { setUserInfo, removeUserInfo, setWalletInfo, removeWalletInfo, refreshBalance, setShowConnectWallet, setCloseConnectWallet } from '@/store/userSlice';
+import { setUserInfo, removeUserInfo, setWalletInfo, removeWalletInfo, refreshWalletBalance, setShowConnectWallet, setCloseConnectWallet } from '@/store/userSlice';
 import { setShowLogin, setCloseLogin } from '@/store/configSlice';
 import { withTranslation } from 'react-i18next'
 import { DialogOverlay, DialogContent } from "@reach/dialog";
@@ -952,7 +952,7 @@ const mapDispatchToProps = {
     setUserInfo,
     removeUserInfo,
     setWalletInfo,
-    refreshBalance,
+    refreshWalletBalance,
     removeWalletInfo,
     setShowLogin,
     setCloseLogin,

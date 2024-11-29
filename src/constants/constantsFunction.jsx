@@ -65,31 +65,45 @@ export const _saveToWei = (number,scale=2) => {
 }
 //次方
 export const _getValuePow = (value, pow, scale=2) => {
+    if(isEmpty(value)||isEmpty(value2)) {
+        return null;
+    }
     let bg1 = new BigNumber(value)
     let amount = bg1.pow(pow).toFixed(scale, 1);
     return amount;
 }
 //除法
 export const _getValueDivided = (value,value2,scale=2)=> {
+    if(isEmpty(value)||isEmpty(value2)) {
+        return null;
+    }
     let bg1 = new BigNumber(value)
     let bg2 = new BigNumber(value2)
     let amount = bg1.dividedBy(bg2).toFixed(scale, 1);
     return amount;
 }
 export const _getValueMultipZero = (value,value2) => {
+    if(isEmpty(value)||isEmpty(value2)) {
+        return null;
+    }
     let params1 = new BigNumber(value)
     let valueDecimals = params1.multipliedBy(value2).toFixed(0, 1)
     return valueDecimals
 }
 //乘法
 export const _getValueMultip = (value,value2,scale=2) => {
-    //BigNumber
+    if(isEmpty(value)||isEmpty(value2)) {
+        return null;
+    }
     let params1 = new BigNumber(value)
     let valueDecimals = params1.multipliedBy(value2).toFixed(scale, 1)
     return valueDecimals
 } 
 // 减法
 export const _getValueMinus = (value,value2,scale=2)=> {
+    if(isEmpty(value)||isEmpty(value2)) {
+        return null;
+    }
     let bg1 = new BigNumber(value)
     let bg2 = new BigNumber(value2)
     let amount = bg1.minus(bg2).toFixed(scale, 1)

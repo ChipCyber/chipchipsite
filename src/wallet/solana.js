@@ -1,10 +1,11 @@
 import { Connection, clusterApiUrl, PublicKey, Transaction, SystemProgram } from '@solana/web3.js';
 // import { getOrCreateAssociatedTokenAccount, createTransferInstruction, getMint } from "@solana/spl-token";
-import { createTransferInstruction, TOKEN_PROGRAM_ID, Token } from "@solana/spl-token";
+import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, Token } from "@solana/spl-token";
 import { getWalletProvider } from "./walletProvider";
 
 // const connection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
-const connection = new Connection('https://solitary-autumn-paper.solana-mainnet.quiknode.pro/5ee4b125b700077bd646a0afb5e8dd0a09b752d2', 'confirmed');
+// const connection = new Connection('https://solitary-autumn-paper.solana-mainnet.quiknode.pro/5ee4b125b700077bd646a0afb5e8dd0a09b752d2', 'confirmed');
+const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
 
 /**
  * @returns balance
@@ -14,7 +15,7 @@ export async function solana_getBalance(publicKey) {
         // const accountInfo = await getAccount(connection, new PublicKey(publicKey));
         // console.log("Account Information:", accountInfo);
         const balanceInfo = await connection.getBalance(new PublicKey(publicKey));
-        const balanceInSol = balanceInfo / 1e9;
+        const balanceInSol = balanceInfo / 10**9;
         return balanceInSol;
     } catch (error) {
         console.log('sol >> ', error);
@@ -65,12 +66,15 @@ export async function solana_getSPLTokenBalance(address, mintAddress) {
         const token = new Token(connection, mintPublicKey, TOKEN_PROGRAM_ID, null);
         const mintInfo = await token.getMintInfo();
         const decimals = mintInfo.decimals;
-        const account = await token.getOrCreateAssociatedAccountInfo(publicKey);
-        console.log('account :>> ', account);
-        // const account = await token.getAccountInfo(account.address);
+        const associatedTokenAddress = await Token.getAssociatedTokenAddress(
+            ASSOCIATED_TOKEN_PROGRAM_ID,
+            TOKEN_PROGRAM_ID,
+            mintPublicKey,
+            publicKey
+        );
+        const account = await token.getAccountInfo(associatedTokenAddress);
         const rawBalance = account.amount;
         const readableBalance = rawBalance / 10**decimals;
-        console.log(`Token balance: ${readableBalance}`);
         return readableBalance;
     } catch (error) {
         console.log('sol >> ', error);

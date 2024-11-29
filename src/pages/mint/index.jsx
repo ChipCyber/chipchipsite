@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react'
 import ReactECharts from 'echarts-for-react';
+import { message } from 'antd';
 import styled from "styled-components";
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,10 +9,11 @@ import useBreakpointCheck from "@/hooks/useBreakpointCheck";
 import { knowledgePageListApi } from "@/api";
 import { useLanguage } from "@/LanguageContext";
 import { getGlobalInfoApi, exchangelistApi, queryChipPriceApi, queryKlineApi } from "@/api/mint.js";
-import { setShowConnectWallet } from "@/store/userSlice.js";
-import { debounce, getDateDiff } from "@/utils";
-import { _saveToTwoWei } from "@/constants/constantsFunction";
+import { setShowConnectWallet, refreshWalletBalance } from "@/store/userSlice.js";
+import { debounce, getDateDiff, parseTime, formatTimeDiff } from "@/utils";
+import { _getValueMultip, _saveToTwoWei, isEmpty, isNoEmpty } from "@/constants/constantsFunction";
 import { InitialPrice } from "@/constants";
+import { solana_sendSOL, solana_sendSPLToken } from "@/wallet/solana.js";
 import { getTokenBalance } from "@/wallet/methods.js";
 
 const kLineTypeList = ["1H", "6H", "1D", "1W", "1M", "ALL"];
@@ -22,26 +24,31 @@ const coinTypeList = {
     4: "CHIP",
 };
 
-const getChart = (data=[]) => {
+const getChart = (data=[],kLineType) => {
     const chartRef = useRef(null);
     const staticOptions = useMemo(() => ({
         tooltip: {
             trigger: 'axis',
             formatter: function (params) {
-                // 确保params[0]存在并且有效
                 if (!params || !params[0]) return '';
                 const param = params[0];
-                const date = new Date(param.value[0]);
-                return (`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()} : ${(param.value[1] * 100).toFixed(2)}`);
+                const date = new Date(param.value[0] * 1000);
+                const year = date.getFullYear();
+                const month = date.getMonth() + 1;
+                const day = date.getDate().toString().padStart(2, '0');
+                const hours = date.getHours().toString().padStart(2, '0');
+                const minutes = date.getMinutes().toString().padStart(2, '0');
+                const seconds = date.getSeconds().toString().padStart(2, '0');
+                return (`${year}/${month}/${day} ${hours}:${minutes}:${seconds} ${(param.value[1] * 100).toFixed(2)}`);
             },
             axisPointer: {
                 animation: false,
             },
         },
         xAxis: {
-            type: 'time',
+            type: 'category',
             axisLine: {
-                interval: "auto",
+                interval: 'auto',
                 show: true,
                 lineStyle: {
                     color: 'rgb(130,130,130,0.3)',
@@ -52,15 +59,20 @@ const getChart = (data=[]) => {
                 show: false
             },
             axisLabel: {
+                fontSize: 10,
                 color: 'rgb(130,130,130,0.3)',
+                // formatter: '{yyyy}-{MM}-{dd}\n{HH}:{mm}:{ss}',
                 formatter: function (value) {
-                    var date = new Date(value);
+                    var date = new Date(value * 1000);
                     // return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
                     // return `${date.getMonth() + 1}/${date.getDate()}`;
+                    const year = date.getFullYear();
+                    const month = date.getMonth() + 1;
+                    const day = date.getDate().toString().padStart(2, '0');
                     const hours = date.getHours().toString().padStart(2, '0');
                     const minutes = date.getMinutes().toString().padStart(2, '0');
                     const seconds = date.getSeconds().toString().padStart(2, '0');
-                    return `${hours}:${minutes}:${seconds}`;
+                    return `${year}/${month}/${day}\n${hours}:${minutes}:${seconds}`;
                 },
             },
             axisTick: {
@@ -155,13 +167,54 @@ export default function Index() {
     const [menuIndex, setMenuIndex] = useState(0);
     const [faqList, setFaqList] = useState([]);
     const history = useHistory();
-    useEffect(() => {
-        if(currentWalletAddress&&globalInfo.chipContractAddr) {
-            // globalInfo.chipContractAddr
-            getTokenBalance(currentWalletAddress, 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB').then(balance=>{
-                setChipBalance(balance);
-            });
+    const [timeDiff, setTimeDiff] = useState({});
+    const refreshBalance = () => {
+        if(currentWalletAddress) {
+            if(globalInfo.chipContractAddr){
+                getTokenBalance(currentWalletAddress, globalInfo.chipContractAddr).then(balance=>{
+                    setChipBalance(balance);
+                });
+            }
+            dispatch(refreshWalletBalance(currentWalletAddress));
         }
+    }
+    let timer = useRef(null);
+    useEffect(() => {
+        if(timer.current) {
+            clearInterval(timer.current);
+        }
+        timer.current = setInterval(() => {
+            if(isNoEmpty(globalInfo)&&isNoEmpty(globalInfo.tradeStartTime)) {
+                setTimeDiff(formatTimeDiff(globalInfo.tradeStartTime));
+            }
+        }, 1000);
+        return () => clearInterval(timer.current);;
+    }, [globalInfo]);
+    const tradeBeginType = useMemo(() => {//-1 0 1
+        return 1;
+        if(isEmpty(globalInfo)||isEmpty(globalInfo.tradeStartTime)) {
+            return -1;
+        }
+        if(globalInfo.tradeStartTime==0) {
+            return -1;
+        }else if(globalInfo.tradeStartTime>=Date.now()/1000) {
+            return 1;
+        }else{
+            return 0;
+        }
+    }, [globalInfo, timeDiff]);
+    useEffect(() => {
+        // let timer = null;
+        // if(tradeBeginType==0) {
+        //     timer = setInterval(() => {
+                
+        //     }, 1000);
+        // }else{
+        //     clearInterval(timer);
+        // }
+    }, [tradeBeginType]);
+    useEffect(() => {
+        refreshBalance();
     }, [currentWalletAddress, globalInfo]);
     useEffect(() => {
         knowledgePageListApi({pageIndex:1,pageSize:5,knowledgeType:3}).then(({data})=>{
@@ -182,16 +235,17 @@ export default function Index() {
             const list = data.rows ?? [];
             const newList = [];
             list.forEach(item=>{
-                newList.push([item.openTime,item.kHigh]);
+                newList.push([item.closeTime, _saveToTwoWei(item.kClose)]);
             });
             setklineList(newList);
+            createWs();
         });
     }, [kLineType]);
     const handleChange = (event) => {
         const newValue = event.target.value;
         setCount(newValue);
     };
-    const debouncedRequestApi = useCallback(debounce((count)=>{
+    const debouncedRequestApi = debounce((count)=>{
         queryChipPriceApi({
             "srcType": exchange?"CHIP":"SOL",
             "dstType": exchange?"SOL":"CHIP",
@@ -199,17 +253,32 @@ export default function Index() {
         }).then(({data})=>{
             setPriceInfo(data);
         });
-    }), []);
+    });
     useEffect(() => {
+        setPriceInfo({});
         if (count>0) {
             debouncedRequestApi(count);
-        }else{
-            setPriceInfo({});
         }
-    }, [count, debouncedRequestApi]);
+    }, [count]);
+    useEffect(() => {
+        setCount('');
+        setPriceInfo({});
+    }, [exchange]);
     const sureSwap = () => {
         if(currentWalletAddress) {
-            
+            if(exchange) {
+                solana_sendSPLToken(currentWalletAddress,priceInfo.receiptAddress,count).then(data=>{
+                    refreshBalance();
+                }).catch(err=>{
+                    message.error(err);
+                });
+            }else{
+                solana_sendSOL(currentWalletAddress,priceInfo.receiptAddress,count,globalInfo.chipContractAddr).then(data=>{
+                    refreshBalance();
+                }).catch(err=>{
+                    message.error(err);
+                });
+            }
         }else{
             dispatch(setShowConnectWallet());
         }
@@ -225,37 +294,57 @@ export default function Index() {
         document.addEventListener('visibilitychange', handleVisibilityChange);
         return () => {
             document.removeEventListener('visibilitychange', handleVisibilityChange);
+            if(wsRef.current) {
+                wsRef.current.close();
+            }
         }
     },[]);
-    useEffect(() => {
-        let ws = null;
-        if (isPageVisible) {
-            ws = new WebSocket('wss://your-websocket-server-url');
-            ws.onopen = () => {
-                console.log('WebSocket connection established');
-            };
-            ws.onmessage = (message) => {
-                console.log('message :>> ', message);
-                const newValue = JSON.parse(message.data);
+    const wsRef = useRef(null);
+    const createWs = () => {
+        if(wsRef.current&&(wsRef.current.readyState==WebSocket.CONNECTING||wsRef.current.readyState==WebSocket.OPEN)) {
+            return;
+        }
+        if(wsRef.current) {
+            wsRef.current.close();
+        }
+        wsRef.current = new WebSocket('wss://cyberwss.privatex.io/subscribekline');
+        console.log('wsRef.current :>> ', wsRef.current);
+        wsRef.current.onopen = () => {
+            console.log('WebSocket connection established');
+            const message = JSON.stringify({ msgType: 'kline', type: kLineType });
+            wsRef.current.send(message);
+        };
+        wsRef.current.onmessage = (message) => {
+            console.log('message :>> ', message);
+            const dataObj = JSON.parse(message.data);
+            const msgType = dataObj.msgType;
+            const msgData = dataObj.data;
+            if(msgType=='kline_resp') {
                 setklineList((prevData) => {
                     const newData = [...prevData];
                     newData.shift();
-                    newData.push([new Date().getTime(), newValue.value]);
+                    newData.push([msgData.closeTime, _saveToTwoWei(msgData.kClose)]);
                     return newData;
                 });
-            };
-            ws.onerror = (error) => {
-                console.error('WebSocket error:', error);
-            };
-            ws.onclose = () => {
-                console.log('WebSocket connection closed');
-            };
-        } else {
-            ws.close();
-        }
-        return () => {
-            ws.close();
+            }else if(msgType=='chip_price_resp'){
+                setGlobalInfo((prevData)=>({...prevData,...msgData}))
+            }
         };
+        wsRef.current.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+        wsRef.current.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+    }
+    useEffect(() => {
+        if (isPageVisible) {
+            createWs();
+        } else if(!isPageVisible) {
+            if(wsRef.current) {
+                wsRef.current.close();
+            }
+        }
     }, [isPageVisible]);
     const renderW = () => (
         <>
@@ -270,10 +359,11 @@ export default function Index() {
                             <span className='row_tip_t3'>{t('8000')}</span>
                         </div>
                     </div>
-                    <div className='info'>
+                    {tradeBeginType>0?
+                    <><div className='info'>
                         <TopLeftPrice>
-                            <p>$ {globalInfo.price ?? '--'}</p>
-                            <p>{globalInfo.offsetRate ?? '--'}%</p>
+                            <p>$ {_saveToTwoWei(globalInfo.price,4) ?? '--'}</p>
+                            <p>{_getValueMultip(globalInfo.offsetRate,100) ?? '--'}%</p>
                         </TopLeftPrice>
                         <TopLeftInfo>
                             <div>
@@ -300,13 +390,24 @@ export default function Index() {
                                 <button key={item} className={kLineType==item?'selected':''} onClick={()=>setkLineType(item)}>{item}</button>
                             ))}
                         </TopChartBtn>
-                        <TopChartBody>{getChart(klineList)}</TopChartBody>
+                        <TopChartBody>{getChart(klineList,kLineType)}</TopChartBody>
                     </TopChart>
-                    {/* <TopChartNoData>
+                    </>
+                    :
+                    <TopChartNoData>
                         <div className='bg'></div>
                         <div className='start'>
-                            <p>{t('8021')}</p>
-                            <p>{t('8022')}</p>
+                            {tradeBeginType==0?<p>{t('8021')}</p>:<p>{t('8022')}</p>}
+                            {tradeBeginType==0?<Time>
+                                <TimeItem>{timeDiff.d?`${timeDiff.d}D`:'--'}</TimeItem>
+                                <span>:</span>
+                                <TimeItem>{timeDiff.h ?? '--'}</TimeItem>
+                                <span>:</span>
+                                <TimeItem>{timeDiff.m ?? '--'}</TimeItem>
+                                <span>:</span>
+                                <TimeItem>{timeDiff.s ?? '--'}</TimeItem>
+                            </Time>
+                            :
                             <Time>
                                 <TimeItem>--</TimeItem>
                                 <span>:</span>
@@ -315,10 +416,10 @@ export default function Index() {
                                 <TimeItem>--</TimeItem>
                                 <span>:</span>
                                 <TimeItem>--</TimeItem>
-                            </Time>
-                            <p>2024-11-29 20:00:00(GMT+8)</p>
+                            </Time>}
+                            {tradeBeginType==0&&<p>{parseTime(globalInfo.tradeStartTime) ?? '--'}(GMT+8)</p>}
                         </div>
-                    </TopChartNoData> */}
+                    </TopChartNoData>}
                 </TopLeft>
                 <TopRight>
                     <TopMenu>
@@ -350,7 +451,7 @@ export default function Index() {
                             </div>
                         </TopInput>
                     </TopSwapBody>
-                    <SureBtn onClick={()=>sureSwap()} disabled={count<=0}>{currentWalletAddress?(exchange?t('8006'):t('8005')):t('602')}</SureBtn>
+                    <SureBtn onClick={()=>sureSwap()} disabled={count<=0||!priceInfo.receiptAddress}>{currentWalletAddress?(exchange?t('8006'):t('8005')):t('602')}</SureBtn>
                 </TopRight>
             </TopContent>
         </Top>
@@ -372,9 +473,9 @@ export default function Index() {
                     {exchangeList&&exchangeList.length>0?exchangeList.map((item,idx)=><LeftInvestTableRow key={idx}>
                         <p>{getDateDiff(item.sendTime)}</p>
                         <p className={item.flowType==1?'buy':'sell'}>{item.flowType==1?'Buy':'Sell'}</p>
-                        <p>${_saveToTwoWei(item.sendPrice,4)}</p>
-                        <p>{_saveToTwoWei(item.sendAmount)} {coinTypeList[item.sendCoinType]}</p>
+                        <p>${_getValueMultip(item.sendValue,item.solanaPrice,4)}</p>
                         <p>{_saveToTwoWei(item.receiveAmount)} {coinTypeList[item.receiveCoinType]}</p>
+                        <p>{_saveToTwoWei(item.sendAmount)} {coinTypeList[item.sendCoinType]}</p>
                     </LeftInvestTableRow>)
                     :
                     renderNoData()
@@ -510,9 +611,9 @@ export default function Index() {
                 </div>
             </div>
             <p className='row_tip_t3'>[t('8000')]</p>
-            <TopLeftPrice>
-                <p>$ {globalInfo.price ?? '--'}</p>
-                <p>{globalInfo.offsetRate ?? '--'}%</p>
+            {tradeBeginType>0?<><TopLeftPrice>
+                <p>$ {_saveToTwoWei(globalInfo.price,4) ?? '--'}</p>
+                <p>{_getValueMultip(globalInfo.offsetRate,100) ?? '--'}%</p>
             </TopLeftPrice>
             <TopChart>
                 <TopChartBtn>
@@ -520,13 +621,23 @@ export default function Index() {
                         <button key={item} className={kLineType==item?'selected':''} onClick={()=>setkLineType(item)}>{item}</button>
                     ))}
                 </TopChartBtn>
-                <TopChartBody>{getChart(klineList)}</TopChartBody>
+                <TopChartBody>{getChart(klineList,kLineType)}</TopChartBody>
             </TopChart>
-            {/* <TopChartNoData>
+            </>:
+            <TopChartNoData>
                 <div className='bg'></div>
                 <div className='start'>
-                    <p>{t('8021')}</p>
-                    <p>{t('8022')}</p>
+                    {tradeBeginType==0?<p>{t('8021')}</p>:<p>{t('8022')}</p>}
+                    {tradeBeginType==0?<Time>
+                        <TimeItem>{timeDiff.d?`${timeDiff.d}D`:'--'}</TimeItem>
+                        <span>:</span>
+                        <TimeItem>{timeDiff.h ?? '--'}</TimeItem>
+                        <span>:</span>
+                        <TimeItem>{timeDiff.m ?? '--'}</TimeItem>
+                        <span>:</span>
+                        <TimeItem>{timeDiff.s ?? '--'}</TimeItem>
+                    </Time>
+                    :
                     <Time>
                         <TimeItem>--</TimeItem>
                         <span>:</span>
@@ -535,10 +646,10 @@ export default function Index() {
                         <TimeItem>--</TimeItem>
                         <span>:</span>
                         <TimeItem>--</TimeItem>
-                    </Time>
-                    <p>2024-11-29 20:00:00(GMT+8)</p>
+                    </Time>}
+                    {tradeBeginType==0&&<p>{parseTime(globalInfo.tradeStartTime) ?? '--'}(GMT+8)</p>}
                 </div>
-            </TopChartNoData> */}
+            </TopChartNoData>}
             <TopLeftInfo>
                 <div>
                     <p>{t('8001')}</p>
@@ -587,7 +698,7 @@ export default function Index() {
                         </div>
                     </TopInput>
                 </TopSwapBody>
-                <SureBtn onClick={()=>sureSwap()} disabled={count<=0}>{currentWalletAddress?(exchange?t('8006'):t('8005')):t('602')}</SureBtn>
+                <SureBtn onClick={()=>sureSwap()} disabled={count<=0||!priceInfo.receiptAddress}>{currentWalletAddress?(exchange?t('8006'):t('8005')):t('602')}</SureBtn>
             </TopRight>
         </TopH5>
         <Content>
@@ -693,9 +804,9 @@ export default function Index() {
             <LeftInvestTableContent>
                 {exchangeList&&exchangeList.length>0?exchangeList.map((item,idx)=><LeftInvestTableRow key={idx}>
                     <p className={item.flowType==1?'buy':'sell'}>{item.flowType==1?'Buy':'Sell'}<br/><span>{getDateDiff(item.sendTime)}</span></p>
-                    <p>${_saveToTwoWei(item.sendPrice,4)}</p>
-                    <p>{_saveToTwoWei(item.sendAmount)} {coinTypeList[item.sendCoinType]}</p>
+                    <p>${_getValueMultip(item.sendValue,item.solanaPrice,4)}</p>
                     <p>{_saveToTwoWei(item.receiveAmount)} {coinTypeList[item.receiveCoinType]}</p>
+                    <p>{_saveToTwoWei(item.sendAmount)} {coinTypeList[item.sendCoinType]}</p>
                 </LeftInvestTableRow>)
                 :
                 renderNoData()
@@ -750,7 +861,7 @@ export default function Index() {
 }
 
 const NoData = styled.div`
-height: 100%;
+height: 300px;
 display: flex;
 flex-direction: column;
 align-items: center;
@@ -1530,7 +1641,7 @@ font-size: 12px;
 font-weight: 500;
 line-height: 18px;
 opacity: 0.6;
-&:nth-child(2), &:nth-child(3){
+&:nth-child(2) {
 flex: 2 0 0;
 }
 }
@@ -1543,19 +1654,20 @@ span {
 font-size: 16px;
 font-weight: 600;
 line-height: 32px;
-&:nth-child(2), &:nth-child(3){
+&:nth-child(2) {
 flex: 1 0 0;
 }
 }
 };
 `
 const LeftInvestTableContent = styled.div`
-height: 425px;
+min-height: 425px;
+height: auto;
 margin-top: 4px;
 max-height: 80vh;
 overflow-y: auto;
 ${({ theme }) => theme.mediaQueries.sm}{
-height: 488px;
+min-height: 488px;
 };
 `
 const LeftInvestTableRow = styled.div`
@@ -1566,10 +1678,11 @@ align-items: center;
 padding: 6px 16px;
 p {
 text-align: left;
+word-break: break-all;
 flex: 2 0 0;
 font-size: 12px;
 font-weight: 600;
-&:nth-child(2), &:nth-child(3){
+&:nth-child(2) {
 flex: 2 0 0;
 }
 &.buy {
@@ -1588,7 +1701,7 @@ margin-top: 4px;
 padding: 16px 20px;
 p {
 font-size: 16px;
-&:nth-child(2), &:nth-child(3){
+&:nth-child(2) {
 flex: 1 0 0;
 }
 }

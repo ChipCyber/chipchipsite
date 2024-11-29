@@ -32,10 +32,10 @@ import NewsDetail from "./pages/news/detail";
 import Download from "./pages/download";
 import Displacement from "./pages/displacement";
 import Roadmap from "./pages/roadmap";
-import IDO from "./pages/ido";
+// import IDO from "./pages/ido";
 import Mint from "./pages/mint";
 
-import { setWalletInfo, refreshBalance } from '@/store/userSlice';
+import { setWalletInfo, refreshWalletBalance } from '@/store/userSlice';
 import { recentConnector } from "@/wallet";
 
 function App() {
@@ -48,7 +48,7 @@ function App() {
   }, [location.pathname]);
   useEffect(() => {
     if (currentWalletAddress) {
-      dispatch(refreshBalance(currentWalletAddress));
+      dispatch(refreshWalletBalance(currentWalletAddress));
     }
   }, [currentWalletAddress, dispatch]);
   useEffect(() => {
@@ -130,11 +130,11 @@ function App() {
                 <Roadmap/>
                 <Footer/>
               </Route>
-              <Route path="/ido" exact>
+              {/* <Route path="/ido" exact>
                 <Nav/>
                 <IDO/>
                 <Footer/>
-              </Route>
+              </Route> */}
               <Route path="/mint" exact>
                 <Nav/>
                 <Mint/>
