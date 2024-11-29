@@ -62,10 +62,16 @@ export async function solana_getSPLTokenBalance(address, mintAddress) {
         // return accountInfo.amount.toString();
         const publicKey = new PublicKey(address);
         const mintPublicKey = new PublicKey(mintAddress);
-        const token = new Token(connection, mintPublicKey, TOKEN_PROGRAM_ID, publicKey);
+        const token = new Token(connection, mintPublicKey, TOKEN_PROGRAM_ID, null);
+        const mintInfo = await token.getMintInfo();
+        const decimals = mintInfo.decimals;
         const account = await token.getOrCreateAssociatedAccountInfo(publicKey);
-        const balance = await token.getAccountBalance(account.address);
-        console.log(`Token balance: ${balance.amount}`);
+        console.log('account :>> ', account);
+        // const account = await token.getAccountInfo(account.address);
+        const rawBalance = account.amount;
+        const readableBalance = rawBalance / 10**decimals;
+        console.log(`Token balance: ${readableBalance}`);
+        return readableBalance;
     } catch (error) {
         console.log('sol >> ', error);
         return Promise.reject(error.message);

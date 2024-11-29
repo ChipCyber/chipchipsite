@@ -42,6 +42,9 @@ export const isEmpty = (val) => {
 export const _saveToTwoWei = (number,scale=2) => {
     // var scaleP = Math.pow(10,scale);
     // var result = Math.floor(number * scaleP) /scaleP;
+    if(isEmpty(number)) {
+        return null;
+    }
     let result = _toPrecision(number, scale);
     return String(result);
 }

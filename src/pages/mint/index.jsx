@@ -11,6 +11,8 @@ import { getGlobalInfoApi, exchangelistApi, queryChipPriceApi, queryKlineApi } f
 import { setShowConnectWallet } from "@/store/userSlice.js";
 import { debounce, getDateDiff } from "@/utils";
 import { _saveToTwoWei } from "@/constants/constantsFunction";
+import { InitialPrice } from "@/constants";
+import { getTokenBalance } from "@/wallet/methods.js";
 
 const kLineTypeList = ["1H", "6H", "1D", "1W", "1M", "ALL"];
 const coinTypeList = {
@@ -141,6 +143,7 @@ export default function Index() {
     const shouldRender = useBreakpointCheck();
     const currentWalletAddress = useSelector((state) => state.user?.currentWalletAddress);
     const currentWalletBalance = useSelector((state) => state.user?.currentWalletBalance);
+    const [chipBalance, setChipBalance] = useState(null);
     const [exchange, setExchange] = useState(false);
     const [count, setCount] = useState('');
     const [globalInfo, setGlobalInfo] = useState({});
@@ -152,6 +155,14 @@ export default function Index() {
     const [menuIndex, setMenuIndex] = useState(0);
     const [faqList, setFaqList] = useState([]);
     const history = useHistory();
+    useEffect(() => {
+        if(currentWalletAddress&&globalInfo.chipContractAddr) {
+            // globalInfo.chipContractAddr
+            getTokenBalance(currentWalletAddress, 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB').then(balance=>{
+                setChipBalance(balance);
+            });
+        }
+    }, [currentWalletAddress, globalInfo]);
     useEffect(() => {
         knowledgePageListApi({pageIndex:1,pageSize:5,knowledgeType:3}).then(({data})=>{
             setFaqList(data);
@@ -166,6 +177,7 @@ export default function Index() {
         });
     }, []);
     useEffect(() => {
+        setklineList([]);
         queryKlineApi({kLineDuration:kLineType}).then(({data})=>{
             const list = data.rows ?? [];
             const newList = [];
@@ -174,7 +186,7 @@ export default function Index() {
             });
             setklineList(newList);
         });
-    }, []);
+    }, [kLineType]);
     const handleChange = (event) => {
         const newValue = event.target.value;
         setCount(newValue);
@@ -188,19 +200,6 @@ export default function Index() {
             setPriceInfo(data);
         });
     }), []);
-    useEffect(()=>{
-        const handleVisibilityChange = () => {
-            if (document.visibilityState === 'visible') {
-                setIsPageVisible(true);
-            } else {
-                setIsPageVisible(false);
-            }
-        };
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        return () => {
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-        }
-    },[]);
     useEffect(() => {
         if (count>0) {
             debouncedRequestApi(count);
@@ -215,6 +214,19 @@ export default function Index() {
             dispatch(setShowConnectWallet());
         }
     }
+    useEffect(()=>{
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                setIsPageVisible(true);
+            } else {
+                setIsPageVisible(false);
+            }
+        };
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        }
+    },[]);
     useEffect(() => {
         let ws = null;
         if (isPageVisible) {
@@ -253,39 +265,39 @@ export default function Index() {
                     <div className='row'>
                         <img width={50} height={50} src={require("@/assets/mint/chip.png").default} alt='icon'/>
                         <div className='row_tip'>
-                            <span className='row_tip_t1'>CHIP</span>
+                            <span className='row_tip_t1'>{globalInfo.chipSymbol ?? '--'}</span>
                             <span className='row_tip_t2'>CHIPCHIP</span>
-                            <span className='row_tip_t3'>投资属于玩家的poker 平台</span>
+                            <span className='row_tip_t3'>{t('8000')}</span>
                         </div>
                     </div>
                     <div className='info'>
                         <TopLeftPrice>
-                            <p>$ 0.01</p>
-                            <p>+10.01%</p>
+                            <p>$ {globalInfo.price ?? '--'}</p>
+                            <p>{globalInfo.offsetRate ?? '--'}%</p>
                         </TopLeftPrice>
                         <TopLeftInfo>
                             <div>
-                                <p>Volume (24h)</p>
-                                <p>$--</p>
+                                <p>{t('8001')}</p>
+                                <p>${_saveToTwoWei(globalInfo.volume24H) ?? '--'}</p>
                             </div>
                             <div>
-                                <p>Market Cap</p>
-                                <p>$--</p>
+                                <p>{t('8002')}</p>
+                                <p>${_saveToTwoWei(globalInfo.marketCap) ?? '--'}</p>
                             </div>
                             <div>
-                                <p>Total Supply</p>
-                                <p>$--</p>
+                                <p>{t('8003')}</p>
+                                <p>${_saveToTwoWei(globalInfo.totalSupply) ?? '--'}</p>
                             </div>
                             <div>
-                                <p>Holder</p>
-                                <p>$--</p>
+                                <p>{t('8004')}</p>
+                                <p>${globalInfo.holder ?? '--'}</p>
                             </div>
                         </TopLeftInfo>
                     </div>
                     <TopChart>
                         <TopChartBtn>
                             {kLineTypeList.map(item=>(
-                                <button className={kLineType==item&&'selected'} onClick={()=>setkLineType(item)}>{item}</button>
+                                <button key={item} className={kLineType==item?'selected':''} onClick={()=>setkLineType(item)}>{item}</button>
                             ))}
                         </TopChartBtn>
                         <TopChartBody>{getChart(klineList)}</TopChartBody>
@@ -293,8 +305,8 @@ export default function Index() {
                     {/* <TopChartNoData>
                         <div className='bg'></div>
                         <div className='start'>
-                            <p>距离交易开始剩余</p>
-                            <p>即将开始倒计时</p>
+                            <p>{t('8021')}</p>
+                            <p>{t('8022')}</p>
                             <Time>
                                 <TimeItem>--</TimeItem>
                                 <span>:</span>
@@ -310,25 +322,25 @@ export default function Index() {
                 </TopLeft>
                 <TopRight>
                     <TopMenu>
-                        <div onClick={()=>setExchange(false)} className={exchange==false?'active':''}>Buy</div>
-                        <div onClick={()=>setExchange(true)} className={exchange?'active':''}>Sell</div>
+                        <div onClick={()=>setExchange(false)} className={exchange==false?'active':''}>{t('8005')}</div>
+                        <div onClick={()=>setExchange(true)} className={exchange?'active':''}>{t('8006')}</div>
                     </TopMenu>
                     <TopSwapBody>
                         <TopInput>
-                            <p className='tip'>From</p>
+                            <p className='tip'>{t('8007')}</p>
                             <div className='input_row'>
                                 <input type='number' min={1} value={count} onChange={handleChange} placeholder='0.00'/>
                                 <div className='input_right'>
-                                    <button className='max' onClick={()=>setCount(currentWalletBalance)}>MAX</button>
+                                    <button className='max' onClick={()=>setCount(exchange?chipBalance:currentWalletBalance)}>MAX</button>
                                     <img width={28} height={28} src={exchange?require("@/assets/mint/chip.png").default:require("@/assets/mint/sol.png").default} alt='icon'/>
                                     <span>{exchange?'CHIP':'SOL'}</span>
-                                    <p className='balance'>Balance：{currentWalletBalance ?? '--'}</p>
+                                    <p className='balance'>{t('8008')}：{(exchange?chipBalance:currentWalletBalance) ?? '--'}</p>
                                 </div>
                             </div>
                         </TopInput>
                         <img onClick={()=>setExchange(!exchange)} className='exchange' width={52} height={52} src={require("@/assets/mint/exchange.png").default} alt='exchange'/>
                         <TopInput>
-                            <p className='tip'>To</p>
+                            <p className='tip'>{t('8009')}</p>
                             <div className='input_row'>
                                 <input type='number' value={priceInfo.dstAmount ?? ''} disabled placeholder='0.00'/>
                                 <div className='input_right'>
@@ -338,7 +350,7 @@ export default function Index() {
                             </div>
                         </TopInput>
                     </TopSwapBody>
-                    <SureBtn onClick={()=>sureSwap()} disabled={count<=0}>{currentWalletAddress?(exchange?'Sell':'Buy'):'Connect Wallet'}</SureBtn>
+                    <SureBtn onClick={()=>sureSwap()} disabled={count<=0}>{currentWalletAddress?(exchange?t('8006'):t('8005')):t('602')}</SureBtn>
                 </TopRight>
             </TopContent>
         </Top>
@@ -347,17 +359,17 @@ export default function Index() {
             <LeftInvest>
                 <div className='header'>
                     <img src={require('../../assets/ido/invest.png').default}/>
-                    <span>Transaction</span>
+                    <span>{t('8010')}</span>
                 </div>
                 <LeftInvestTableHeader>
-                    <span>Time</span>
-                    <span>Type</span>
-                    <span>Price</span>
-                    <span>From</span>
-                    <span>To</span>
+                    <span>{t('8011')}</span>
+                    <span>{t('8012')}</span>
+                    <span>{t('8013')}</span>
+                    <span>{t('8007')}</span>
+                    <span>{t('8009')}</span>
                 </LeftInvestTableHeader>
                 <LeftInvestTableContent>
-                    {exchangeList&&exchangeList.length>0?exchangeList.map(item=><LeftInvestTableRow>
+                    {exchangeList&&exchangeList.length>0?exchangeList.map((item,idx)=><LeftInvestTableRow key={idx}>
                         <p>{getDateDiff(item.sendTime)}</p>
                         <p className={item.flowType==1?'buy':'sell'}>{item.flowType==1?'Buy':'Sell'}</p>
                         <p>${_saveToTwoWei(item.sendPrice,4)}</p>
@@ -372,58 +384,62 @@ export default function Index() {
             <Right>
                 <div className='header'>
                     <img src={require('../../assets/ido/info.png').default}/>
-                    <span>Info</span>
+                    <span>{t('8014')}</span>
                 </div>
                 <RightContent>
                     <RightRow>
-                        <p>Market Cap：</p>
-                        <p>--</p>
+                        <p>{t('8002')}：</p>
+                        <p>{_saveToTwoWei(globalInfo.marketCap) ?? '--'}</p>
                     </RightRow>
                     <RightRow>
-                        <p>Total Supply：</p>
-                        <p>10 B</p>
+                        <p>{t('8003')}：</p>
+                        <p>{_saveToTwoWei(globalInfo.totalSupply) ?? '--'}</p>
                     </RightRow>
                     <RightRow>
-                        <p>Issue Price：</p>
-                        <p>--</p>
+                        <p>{t('8015')}：</p>
+                        <p>{InitialPrice}</p>
                     </RightRow>
                     <RightRow>
-                        <p>Holder：</p>
-                        <p>--</p>
+                        <p>{t('8004')}：</p>
+                        <p>{globalInfo.holder ?? '--'}</p>
                     </RightRow>
                     <RightRow>
-                        <p>Chain：</p>
+                        <p>{t('8016')}：</p>
                         <p>Solana</p>
                     </RightRow>
                 </RightContent>
                 <RightData>
-                    <p className='subTitle'>Introduction</p>
-                    <p className='subDesc'>$CHIP 代币价格直接代表了社区的共识高度，$CHIP 将采取公平发射的方式，所有人包括发起团队都没有免费的筹码。联合曲线是一个伟大的发明，所有人都可以在自己价值预期拿到筹码，让我们一起引领 Gamble Game、GambleFi、Gamble Chain 的到来。No Gamble No Future！拥有 $CHIP，成为一个 100 亿美金市值项目的掌门人。</p>
+                    <p className='subTitle'>{t('8017')}</p>
+                    <p className='subDesc'>{t('8018').split('\n').map((line, index) => (<React.Fragment key={index}>{line}<br /></React.Fragment>))}</p>
                 </RightData>
             </Right>
         </Content>
         <Introduce>
             <IntroduceContent>
                 <div>
-                    <p className='title'>CHIPCHIP 为什么要做公平发射？</p>
-                    <p className='desc'>作为CHIPCHIP的发起团队，我们需要建立一个基础的社区金库来保证早期项目开发工作的进展，伴随CHIP代币的发行，我们将会朝着去中心化治理的方向持续努力，完全去中心化的随机数方案、通用的游戏发行激励方案、去中心化资金托管合约、去中心化的分红方案、去中心化的发展治理，需要有一个相对中心化的团队进行发起再逐步去中心化，我们将会建立一个全球化且受社区监管的开发团队，来实现玩家们的伟大愿景。我们发起团队耗费了 18 个月时间，花费了数百万资金，这根本不重要，有了社区，我们就可以做一切的事！</p>
+                    <p className='title'>{t('8019')}</p>
+                    <p className='desc'>{t('8020').split('\n').map((line, index) => (<React.Fragment key={index}>{line}<br /></React.Fragment>))}</p>
                 </div>
                 <img width={396} height={392} src={require("@/assets/mint/icon1.png").default} alt='icon'/>
             </IntroduceContent>
             <IntroduceStartContent>
                 <img width={517} height={387} src={require("@/assets/mint/icon2.png").default} alt='icon'/>
                 <div>
-                    <p className='title'>为什么要投资CHIPCHIP？</p>
+                    <p className='title'>{t('312')}</p>
                     <div className='tip'>
                         <img src={require('../../assets/ido/star.png').default}/>
                         <span>{t('313')}：</span>
                     </div>
                     <p className='desc'></p>
                     <IntroduceTipContent>
-                        <IntroduceTipRow>多链链游，web2、web3用户均可使用，具备百万级用户体量的潜力。</IntroduceTipRow>
-                        <IntroduceTipRow>棋牌赛道，天花板高，教育门槛低，打牌组局自带裂变属性，用户获取成本低，但盈利能力巨大。</IntroduceTipRow>
-                        <IntroduceTipRow>堪比Web2级别的丝滑体验，娱乐竞技属性兼顾，出圈效应拉满。</IntroduceTipRow>
-                        <IntroduceTipRow>团队在Poker领域和Web3领域有成功创业经历。</IntroduceTipRow>
+                        <IntroduceTipRow>{t('314')}</IntroduceTipRow>
+                        <IntroduceTipRow>{t('315')}</IntroduceTipRow>
+                        <IntroduceTipRow>{t('316')}</IntroduceTipRow>
+                        <IntroduceTipRow>{t('317')}</IntroduceTipRow>
+                        <IntroduceTipRow>{t('3171')}</IntroduceTipRow>
+                        <IntroduceTipRow>{t('3172')}</IntroduceTipRow>
+                        <IntroduceTipRow>{t('3173')}</IntroduceTipRow>
+                        <IntroduceTipRow>{t('3174')}</IntroduceTipRow>
                     </IntroduceTipContent>
                 </div>
             </IntroduceStartContent>
@@ -489,19 +505,19 @@ export default function Index() {
             <div className='row'>
                 <img width={35} height={35} src={require("@/assets/mint/chip.png").default} alt='icon'/>
                 <div className='row_tip'>
-                    <span className='row_tip_t1'>CHIP</span>
+                    <span className='row_tip_t1'>{globalInfo.chipSymbol ?? '--'}</span>
                     <span className='row_tip_t2'>CHIPCHIP</span>
                 </div>
             </div>
-            <p className='row_tip_t3'>投资属于玩家的poker 平台</p>
+            <p className='row_tip_t3'>[t('8000')]</p>
             <TopLeftPrice>
-                <p>$ 0.01</p>
-                <p>+10.01%</p>
+                <p>$ {globalInfo.price ?? '--'}</p>
+                <p>{globalInfo.offsetRate ?? '--'}%</p>
             </TopLeftPrice>
             <TopChart>
                 <TopChartBtn>
                     {kLineTypeList.map(item=>(
-                        <button className={kLineType==item&&'selected'} onClick={()=>setkLineType(item)}>{item}</button>
+                        <button key={item} className={kLineType==item?'selected':''} onClick={()=>setkLineType(item)}>{item}</button>
                     ))}
                 </TopChartBtn>
                 <TopChartBody>{getChart(klineList)}</TopChartBody>
@@ -509,8 +525,8 @@ export default function Index() {
             {/* <TopChartNoData>
                 <div className='bg'></div>
                 <div className='start'>
-                    <p>距离交易开始剩余</p>
-                    <p>即将开始倒计时</p>
+                    <p>{t('8021')}</p>
+                    <p>{t('8022')}</p>
                     <Time>
                         <TimeItem>--</TimeItem>
                         <span>:</span>
@@ -525,43 +541,43 @@ export default function Index() {
             </TopChartNoData> */}
             <TopLeftInfo>
                 <div>
-                    <p>Volume (24h)</p>
-                    <p>$--</p>
+                    <p>{t('8001')}</p>
+                    <p>${_saveToTwoWei(globalInfo.volume24H) ?? '--'}</p>
                 </div>
                 <div>
-                    <p>Market Cap</p>
-                    <p>$--</p>
+                    <p>{t('8002')}</p>
+                    <p>${_saveToTwoWei(globalInfo.marketCap) ?? '--'}</p>
                 </div>
                 <div>
-                    <p>Total Supply</p>
-                    <p>$--</p>
+                    <p>{t('8003')}</p>
+                    <p>${_saveToTwoWei(globalInfo.totalSupply) ?? '--'}</p>
                 </div>
                 <div>
-                    <p>Holder</p>
-                    <p>$--</p>
+                    <p>{t('8004')}</p>
+                    <p>${globalInfo.holder}</p>
                 </div>
             </TopLeftInfo>
             <TopRight>
                 <TopMenu>
-                    <div onClick={()=>setExchange(false)} className={exchange==false?'active':''}>Buy</div>
-                    <div onClick={()=>setExchange(true)} className={exchange?'active':''}>Sell</div>
+                    <div onClick={()=>setExchange(false)} className={exchange==false?'active':''}>{t('8005')}</div>
+                    <div onClick={()=>setExchange(true)} className={exchange?'active':''}>{t('8006')}</div>
                 </TopMenu>
                 <TopSwapBody>
                     <TopInput>
-                        <p className='tip'>From</p>
+                        <p className='tip'>{t('8007')}</p>
                         <div className='input_row'>
                             <input type='number' min={1} value={count} onChange={handleChange} placeholder='0.00'/>
                             <div className='input_right'>
-                                <button className='max'>MAX</button>
+                                <button className='max' onClick={()=>setCount(exchange?chipBalance:currentWalletBalance)}>MAX</button>
                                 <img width={28} height={28} src={exchange?require("@/assets/mint/chip.png").default:require("@/assets/mint/sol.png").default} alt='icon'/>
                                 <span>{exchange?'CHIP':'SOL'}</span>
-                                <p className='balance'>Balance：--</p>
+                                <p className='balance'>{t('8008')}：{(exchange?chipBalance:currentWalletBalance) ?? '--'}</p>
                             </div>
                         </div>
                     </TopInput>
                     <img onClick={()=>setExchange(!exchange)} className='exchange' width={45} height={45} src={require("@/assets/mint/exchange.png").default} alt='exchange'/>
                     <TopInput>
-                        <p className='tip'>To</p>
+                        <p className='tip'>{t('8009')}</p>
                         <div className='input_row'>
                             <input type='number' value={priceInfo.dstAmount ?? ''} disabled placeholder='0.00'/>
                             <div className='input_right'>
@@ -571,33 +587,37 @@ export default function Index() {
                         </div>
                     </TopInput>
                 </TopSwapBody>
-                <SureBtn disabled>{exchange?'Sell':'Buy'}</SureBtn>
+                <SureBtn onClick={()=>sureSwap()} disabled={count<=0}>{currentWalletAddress?(exchange?t('8006'):t('8005')):t('602')}</SureBtn>
             </TopRight>
         </TopH5>
         <Content>
             <MenuH5>
                 <div onClick={()=>setMenuIndex(0)} className={menuIndex==0?'active':''}>{t('181')}</div>
-                <div onClick={()=>setMenuIndex(1)} className={menuIndex==1?'active':''}>交易记录</div>
+                <div onClick={()=>setMenuIndex(1)} className={menuIndex==1?'active':''}>{t('8010')}</div>
             </MenuH5>
             {menuIndex==0&&renderAboutM()}
             {menuIndex==1&&renderRecordM()}
             <Introduce>
                 <div>
-                    <p className='title'>CHIPCHIP 为什么要做公平发射？</p>
-                    <p className='desc'>作为CHIPCHIP的发起团队，我们需要建立一个基础的社区金库来保证早期项目开发工作的进展，伴随CHIP代币的发行，我们将会朝着去中心化治理的方向持续努力，完全去中心化的随机数方案、通用的游戏发行激励方案、去中心化资金托管合约、去中心化的分红方案、去中心化的发展治理，需要有一个相对中心化的团队进行发起再逐步去中心化，我们将会建立一个全球化且受社区监管的开发团队，来实现玩家们的伟大愿景。我们发起团队耗费了 18 个月时间，花费了数百万资金，这根本不重要，有了社区，我们就可以做一切的事！</p>
+                    <p className='title'>{t('8019')}</p>
+                    <p className='desc'>{t('8020').split('\n').map((line, index) => (<React.Fragment key={index}>{line}<br /></React.Fragment>))}</p>
                 </div>
                 <div>
-                    <p className='title'>为什么要投资CHIPCHIP？</p>
+                    <p className='title'>{t('312')}</p>
                     <div className='tip'>
                         <img src={require('../../assets/ido/star.png').default}/>
                         <span>{t('313')}：</span>
                     </div>
                     <p className='desc'></p>
                     <IntroduceTipContent>
-                        <IntroduceTipRow>多链链游，web2、web3用户均可使用，具备百万级用户体量的潜力。</IntroduceTipRow>
-                        <IntroduceTipRow>棋牌赛道，天花板高，教育门槛低，打牌组局自带裂变属性，用户获取成本低，但盈利能力巨大。</IntroduceTipRow>
-                        <IntroduceTipRow>堪比Web2级别的丝滑体验，娱乐竞技属性兼顾，出圈效应拉满。</IntroduceTipRow>
-                        <IntroduceTipRow>团队在Poker领域和Web3领域有成功创业经历。</IntroduceTipRow>
+                        <IntroduceTipRow>{t('314')}</IntroduceTipRow>
+                        <IntroduceTipRow>{t('315')}</IntroduceTipRow>
+                        <IntroduceTipRow>{t('316')}</IntroduceTipRow>
+                        <IntroduceTipRow>{t('317')}</IntroduceTipRow>
+                        <IntroduceTipRow>{t('3171')}</IntroduceTipRow>
+                        <IntroduceTipRow>{t('3172')}</IntroduceTipRow>
+                        <IntroduceTipRow>{t('3173')}</IntroduceTipRow>
+                        <IntroduceTipRow>{t('3174')}</IntroduceTipRow>
                     </IntroduceTipContent>
                 </div>
             </Introduce>
@@ -662,16 +682,16 @@ export default function Index() {
         <LeftInvest>
             <div className='header'>
                 <img src={require('../../assets/ido/invest.png').default}/>
-                <span>Transaction</span>
+                <span>{t('8010')}</span>
             </div>
             <LeftInvestTableHeader>
-                <span>Type/Time</span>
-                <span>Price</span>
-                <span>From</span>
-                <span>To</span>
+                <span>{t('8012')}/{t('8011')}</span>
+                <span>{t('8013')}</span>
+                <span>{t('8007')}</span>
+                <span>{t('8009')}</span>
             </LeftInvestTableHeader>
             <LeftInvestTableContent>
-                {exchangeList&&exchangeList.length>0?exchangeList.map(item=><LeftInvestTableRow>
+                {exchangeList&&exchangeList.length>0?exchangeList.map((item,idx)=><LeftInvestTableRow key={idx}>
                     <p className={item.flowType==1?'buy':'sell'}>{item.flowType==1?'Buy':'Sell'}<br/><span>{getDateDiff(item.sendTime)}</span></p>
                     <p>${_saveToTwoWei(item.sendPrice,4)}</p>
                     <p>{_saveToTwoWei(item.sendAmount)} {coinTypeList[item.sendCoinType]}</p>
@@ -687,33 +707,33 @@ export default function Index() {
         <Right>
             <div className='header'>
                 <img src={require('../../assets/ido/info.png').default}/>
-                <span>Info</span>
+                <span>{t('8014')}</span>
             </div>
             <RightContent>
                 <RightRow>
-                    <p>Market Cap：</p>
-                    <p>--</p>
+                    <p>{t('8002')}：</p>
+                    <p>{_saveToTwoWei(globalInfo.marketCap) ?? '--'}</p>
                 </RightRow>
                 <RightRow>
-                    <p>Total Supply：</p>
-                    <p>10 B</p>
+                    <p>{t('8003')}：</p>
+                    <p>{_saveToTwoWei(globalInfo.totalSupply) ?? '--'}</p>
                 </RightRow>
                 <RightRow>
-                    <p>Issue Price：</p>
-                    <p>--</p>
+                    <p>{t('8015')}：</p>
+                    <p>{InitialPrice}</p>
                 </RightRow>
                 <RightRow>
-                    <p>Holder：</p>
-                    <p>--</p>
+                    <p>{t('8004')}：</p>
+                    <p>{globalInfo.holder}</p>
                 </RightRow>
                 <RightRow>
-                    <p>Chain：</p>
+                    <p>{t('8016')}：</p>
                     <p>Solana</p>
                 </RightRow>
             </RightContent>
             <RightData>
-                <p className='subTitle'>Introduction</p>
-                <p className='subDesc'>$CHIP 代币价格直接代表了社区的共识高度，$CHIP 将采取公平发射的方式，所有人包括发起团队都没有免费的筹码。联合曲线是一个伟大的发明，所有人都可以在自己价值预期拿到筹码，让我们一起引领 Gamble Game、GambleFi、Gamble Chain 的到来。No Gamble No Future！拥有 $CHIP，成为一个 100 亿美金市值项目的掌门人。</p>
+                <p className='subTitle'>{t('8017')}</p>
+                <p className='subDesc'>{t('8018').split('\n').map((line, index) => (<React.Fragment key={index}>{line}<br /></React.Fragment>))}</p>
             </RightData>
         </Right>
     )
@@ -1252,7 +1272,7 @@ margin-top: 0;
 padding: 55px 60px;
 display: flex;
 gap: 46px;
-height: 706px;
+min-height: 706px;
 };
 `
 const Introduce = styled.div`
@@ -1354,6 +1374,11 @@ padding-left: 10px;
     background-color: rgba(255,255,255,0.6);
     border-radius: 50%;
 }
+&:last-child {
+&:before {
+    content: none;
+}
+}
 ${({ theme }) => theme.mediaQueries.sm}{
 font-size: 21px;
 line-height: 30px;
@@ -1383,7 +1408,7 @@ height: 16px;
 ${({ theme }) => theme.mediaQueries.sm}{
 width: 475px;
 border-radius: 18px;
-padding: 35px 30px 0;
+padding: 35px 30px;
 .header {
 gap: 10px;
 font-size: 32px;

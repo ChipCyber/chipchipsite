@@ -260,5 +260,29 @@
 
     "7011":"No records yet",
 
+    "8000":"Poker platform owned by players",
+    "8001":"Volume (24h)",
+    "8002":"Market Cap",
+    "8003":"Total Supply",
+    "8004":"Holder",
+    "8005":"Buy",
+    "8006":"Sell",
+    "8007":"From",
+    "8008":"Balance",
+    "8009":"To",
+    "8010":"Transaction",
+    "8011":"Time",
+    "8012":"Type",
+    "8013":"Price",
+    "8014":"Info",
+    "8015":"Issue Price",
+    "8016":"Chain",
+    "8017":"Introduction",
+    "8018":"The price of the $CHIP token directly reflects the level of consensus within the community. $CHIP will adopt a fair launch model, where no one, including the founding team, receives free tokens. The bonding curve is a remarkable invention, allowing everyone to acquire tokens based on their own value expectations. Let us join together to usher in the era of Gamble Game, GambleFi, and Gamble Chain.\n\nNo Gamble No Future！\n\nOwn $CHIP and become the leader of a $10 billion market cap project.",
+    "8019":"Why does CHIPCHIP choose a fair launch?",
+    "8020":"The year is 2024, and the Web3 industry is undergoing significant changes. No one is willing to pay for the sky-high valuations set by VCs anymore. People don't even care whether a project’s token gets listed on exchanges. They are tired of free token handouts and refuse to be exit liquidity. Instead, they want to join projects at more reasonable valuations and at earlier stages.\n\nPeople buy into consensus, and they go crazy for MEME. $CHIP is the core of our community, and our goal is simple: to rally behind $CHIP. No one gets free tokens. If you like this project, if you’re a true supporter, then hold $CHIP. Here, you’ll find the purest joy and the people who truly understand you!\n\nOur founding team spent 18 months and millions of dollars, but none of that really matters. With the community, we can achieve anything!",
+    "8021":"Time remaining until trading starts",
+    "8022":"The countdown is about to start",
+
     "":""
 }
