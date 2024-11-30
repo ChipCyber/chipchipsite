@@ -34,7 +34,7 @@ export const toDateStr = (timestamp) => {
   return date.toLocaleString();
 }
 export function formatTimeDiff(targetTimestamp, currentTimestamp=(Date.now())) {
-  if(isEmpty(targetTimestamp)) {
+  if(isEmpty(targetTimestamp)||targetTimestamp==0) {
     return {};
   }
   if ((typeof targetTimestamp === 'string') && (/^[0-9]+$/.test(targetTimestamp))) {
@@ -53,7 +53,8 @@ export function formatTimeDiff(targetTimestamp, currentTimestamp=(Date.now())) {
   if ((typeof currentTimestamp === 'number') && (currentTimestamp.toString().length === 10)) {
     currentTimestamp = currentTimestamp * 1000
   }
-  let diff = Math.max(targetTimestamp - currentTimestamp, 0); // 时间差，确保为正数
+  const diffValue = Math.max(targetTimestamp - currentTimestamp, 0); // 时间差，确保为正数
+  let diff = diffValue;
   const days = Math.floor(diff / (1000 * 60 * 60 * 24)); // 计算天数
   diff %= 1000 * 60 * 60 * 24;
   const hours = Math.floor(diff / (1000 * 60 * 60)); // 计算小时
@@ -61,7 +62,7 @@ export function formatTimeDiff(targetTimestamp, currentTimestamp=(Date.now())) {
   const minutes = Math.floor(diff / (1000 * 60)); // 计算分钟
   diff %= 1000 * 60;
   const seconds = Math.floor(diff / 1000); // 计算秒
-  return {d: `${days}`, h: hours.toString().padStart(2, '0'), m: minutes.toString().padStart(2, '0'), s: seconds.toString().padStart(2, '0')};
+  return {diff: diffValue, d: `${days}`, h: hours.toString().padStart(2, '0'), m: minutes.toString().padStart(2, '0'), s: seconds.toString().padStart(2, '0')};
 }
 export function parseTime(time, pattern, zone = 8) {
   if (arguments.length === 0 || !time) {

@@ -84,64 +84,48 @@ export async function solana_getSPLTokenBalance(address, mintAddress) {
 export async function solana_sendSPLToken(fromAddress, toAddress, amount, mintAddress) {
     try {
         const provider = getWalletProvider();
-        const mintPublicKey = new PublicKey(mintAddress); // 代币的 Mint 地址
-        const fromPublicKey = new PublicKey(fromAddress); // 发送方地址
-        const toPublicKey = new PublicKey(toAddress); // 接收方地址
-        // const mintInfo = await getMint(connection, mintPublicKey);
+        const mintPublicKey = new PublicKey(mintAddress);
+        const fromPublicKey = new PublicKey(fromAddress);
+        const toPublicKey = new PublicKey(toAddress);
         const token = new Token(connection, mintPublicKey, TOKEN_PROGRAM_ID, null);
         const mintInfo = await token.getMintInfo();
         const decimals = mintInfo.decimals;
         const lamports = amount * 10**decimals;
-        // const toTokenAccount = await getOrCreateAssociatedTokenAccount(
-        //     connection,
-        //     fromPublicKey, // 费用支付方
-        //     mintPublicKey,
-        //     toPublicKey
-        // );
-        // const fromTokenAccount =await getOrCreateAssociatedTokenAccount(
-        //     connection,
-        //     fromPublicKey,
-        //     mintPublicKey,
-        //     fromPublicKey
-        // );
-        // const transaction = new Transaction().add(
-        //     createTransferInstruction(
-        //         fromTokenAccount,
-        //         toTokenAccount.address, // 接收账户
-        //         fromPublicKey, // 代币持有者
-        //         lamports // 转账数量，需根据代币精度调整
-        //     )
-        // );
-        const fromTokenAccount = new Token(connection, mintPublicKey, TOKEN_PROGRAM_ID, fromPublicKey);
-        const toTokenAccount = new Token(connection, mintPublicKey, TOKEN_PROGRAM_ID, toPublicKey);
+        const fromATA = await Token.getAssociatedTokenAddress(
+            ASSOCIATED_TOKEN_PROGRAM_ID,
+            TOKEN_PROGRAM_ID,
+            mintPublicKey,
+            fromPublicKey
+        );
+        const toATA = await Token.getAssociatedTokenAddress(
+            ASSOCIATED_TOKEN_PROGRAM_ID,
+            TOKEN_PROGRAM_ID,
+            mintPublicKey,
+            toPublicKey
+        );
         const transaction = new Transaction().add(
             Token.createTransferInstruction(
                 TOKEN_PROGRAM_ID,
-                fromTokenAccount.address,    // 发送者代币账户
-                toTokenAccount.address,  // 接收者代币账户
-                fromPublicKey,          // 发送者
-                [],                       // 签名者
-                lamports                    // 转账数量
+                fromATA,
+                toATA,
+                fromPublicKey,
+                [],
+                lamports
             )
         );
-        // 获取最近区块的哈希
-        const { blockhash } = await connection.getRecentBlockhash();
+        const { blockhash } = await connection.getLatestBlockhash();
         transaction.recentBlockhash = blockhash;
         transaction.feePayer = fromPublicKey;
-        // 请求用户签名交易
         const signedTransaction = await provider.signTransaction(transaction);
-        // 将签名的交易发送到 Solana 网络
         const signature = await connection.sendRawTransaction(signedTransaction.serialize());
         const confirmationStrategy = {
-            commitment: 'confirmed',  // 确认级别
-            preflightCommitment: 'processed', // 预处理确认级别
-            maxRetries: 5,  // 最大重试次数
-            minContextSlot: 100,  // 最小插槽号
+            commitment: 'confirmed',
+            preflightCommitment: 'processed',
+            maxRetries: 5,
+            minContextSlot: 100,
             signature,
         };
-        // 等待交易确认
         await connection.confirmTransaction(confirmationStrategy);
-        console.log("交易成功，交易签名:", signature);
         return signature;
     } catch (error) {
         console.log('sol >> ', error);

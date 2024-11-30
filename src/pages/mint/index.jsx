@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react'
 import ReactECharts from 'echarts-for-react';
 import { message } from 'antd';
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -39,7 +39,7 @@ const getChart = (data=[],kLineType) => {
                 const hours = date.getHours().toString().padStart(2, '0');
                 const minutes = date.getMinutes().toString().padStart(2, '0');
                 const seconds = date.getSeconds().toString().padStart(2, '0');
-                return (`${year}/${month}/${day} ${hours}:${minutes}:${seconds} ${(param.value[1] * 100).toFixed(2)}`);
+                return (`${year}/${month}/${day} ${hours}:${minutes}:${seconds} ${(param.value[1] * 100).toFixed(4)}`);
             },
             axisPointer: {
                 animation: false,
@@ -59,7 +59,7 @@ const getChart = (data=[],kLineType) => {
                 show: false
             },
             axisLabel: {
-                fontSize: 10,
+                fontSize: 12,
                 color: 'rgb(130,130,130,0.3)',
                 // formatter: '{yyyy}-{MM}-{dd}\n{HH}:{mm}:{ss}',
                 formatter: function (value) {
@@ -99,7 +99,7 @@ const getChart = (data=[],kLineType) => {
             axisLabel: {
                 color: 'rgb(130,130,130,0.3)',
                 formatter: function (value) {
-                    return (value * 100).toFixed(2);
+                    return (value * 100).toFixed(4);
                 },
             },
         },
@@ -164,6 +164,7 @@ export default function Index() {
     const [klineList, setklineList] = useState([]);
     const [kLineType, setkLineType] = useState(kLineTypeList[kLineTypeList.length-1]);
     const [isPageVisible, setIsPageVisible] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [menuIndex, setMenuIndex] = useState(0);
     const [faqList, setFaqList] = useState([]);
     const history = useHistory();
@@ -186,33 +187,20 @@ export default function Index() {
         timer.current = setInterval(() => {
             if(isNoEmpty(globalInfo)&&isNoEmpty(globalInfo.tradeStartTime)) {
                 setTimeDiff(formatTimeDiff(globalInfo.tradeStartTime));
+                // setTimeDiff({diff: 0, d: '00', h: '00', m: '00', s: '00'});
             }
         }, 1000);
-        return () => clearInterval(timer.current);;
+        return () => {
+            clearInterval(timer.current);
+        }
     }, [globalInfo]);
-    const tradeBeginType = useMemo(() => {//-1 0 1
+    const tradeBeginType = useMemo(() => {
         return 1;
-        if(isEmpty(globalInfo)||isEmpty(globalInfo.tradeStartTime)) {
+        if (!timeDiff || isEmpty(timeDiff.diff)) {
             return -1;
         }
-        if(globalInfo.tradeStartTime==0) {
-            return -1;
-        }else if(globalInfo.tradeStartTime>=Date.now()/1000) {
-            return 1;
-        }else{
-            return 0;
-        }
-    }, [globalInfo, timeDiff]);
-    useEffect(() => {
-        // let timer = null;
-        // if(tradeBeginType==0) {
-        //     timer = setInterval(() => {
-                
-        //     }, 1000);
-        // }else{
-        //     clearInterval(timer);
-        // }
-    }, [tradeBeginType]);
+        return timeDiff.diff <= 0 ? 1 : 0;
+    }, [timeDiff]);
     useEffect(() => {
         refreshBalance();
     }, [currentWalletAddress, globalInfo]);
@@ -235,7 +223,7 @@ export default function Index() {
             const list = data.rows ?? [];
             const newList = [];
             list.forEach(item=>{
-                newList.push([item.closeTime, _saveToTwoWei(item.kClose)]);
+                newList.push([item.closeTime, _saveToTwoWei(item.kClose,4)]);
             });
             setklineList(newList);
             createWs();
@@ -249,7 +237,7 @@ export default function Index() {
         queryChipPriceApi({
             "srcType": exchange?"CHIP":"SOL",
             "dstType": exchange?"SOL":"CHIP",
-            "srcAmount": count,
+            "srcAmount": `${count}`,
         }).then(({data})=>{
             setPriceInfo(data);
         });
@@ -266,16 +254,27 @@ export default function Index() {
     }, [exchange]);
     const sureSwap = () => {
         if(currentWalletAddress) {
+            setLoading(true);
             if(exchange) {
-                solana_sendSPLToken(currentWalletAddress,priceInfo.receiptAddress,count).then(data=>{
+                solana_sendSPLToken(currentWalletAddress,priceInfo.receiptAddress,count,globalInfo.chipContractAddr).then(data=>{
+                    setCount('');
+                    setPriceInfo({});
+                    setLoading(false);
                     refreshBalance();
+                    message.success(t('616'));
                 }).catch(err=>{
+                    setLoading(false);
                     message.error(err);
                 });
             }else{
-                solana_sendSOL(currentWalletAddress,priceInfo.receiptAddress,count,globalInfo.chipContractAddr).then(data=>{
+                solana_sendSOL(currentWalletAddress,priceInfo.receiptAddress,count).then(data=>{
+                    setCount('');
+                    setPriceInfo({});
+                    setLoading(false);
                     refreshBalance();
+                    message.success(t('616'));
                 }).catch(err=>{
+                    setLoading(false);
                     message.error(err);
                 });
             }
@@ -323,7 +322,7 @@ export default function Index() {
                 setklineList((prevData) => {
                     const newData = [...prevData];
                     newData.shift();
-                    newData.push([msgData.closeTime, _saveToTwoWei(msgData.kClose)]);
+                    newData.push([msgData.closeTime, _saveToTwoWei(msgData.kClose,4)]);
                     return newData;
                 });
             }else if(msgType=='chip_price_resp'){
@@ -451,7 +450,10 @@ export default function Index() {
                             </div>
                         </TopInput>
                     </TopSwapBody>
-                    <SureBtn onClick={()=>sureSwap()} disabled={count<=0||!priceInfo.receiptAddress}>{currentWalletAddress?(exchange?t('8006'):t('8005')):t('602')}</SureBtn>
+                    <SureBtn onClick={()=>sureSwap()} disabled={currentWalletAddress&&(loading||count<=0||!priceInfo.receiptAddress)}>
+                        {loading===true?<LoadImg src={require("@/assets/load.png").default} alt='load'/>
+                        :(currentWalletAddress?(exchange?t('8006'):t('8005')):t('602'))}
+                    </SureBtn>
                 </TopRight>
             </TopContent>
         </Top>
@@ -474,8 +476,8 @@ export default function Index() {
                         <p>{getDateDiff(item.sendTime)}</p>
                         <p className={item.flowType==1?'buy':'sell'}>{item.flowType==1?'Buy':'Sell'}</p>
                         <p>${_getValueMultip(item.sendValue,item.solanaPrice,4)}</p>
-                        <p>{_saveToTwoWei(item.receiveAmount)} {coinTypeList[item.receiveCoinType]}</p>
-                        <p>{_saveToTwoWei(item.sendAmount)} {coinTypeList[item.sendCoinType]}</p>
+                        <p>{_saveToTwoWei(item.receiveAmount,4)} {coinTypeList[item.receiveCoinType]}</p>
+                        <p>{_saveToTwoWei(item.sendAmount,4)} {coinTypeList[item.sendCoinType]}</p>
                     </LeftInvestTableRow>)
                     :
                     renderNoData()
@@ -665,7 +667,7 @@ export default function Index() {
                 </div>
                 <div>
                     <p>{t('8004')}</p>
-                    <p>${globalInfo.holder}</p>
+                    <p>${globalInfo.holder ?? '--'}</p>
                 </div>
             </TopLeftInfo>
             <TopRight>
@@ -698,7 +700,10 @@ export default function Index() {
                         </div>
                     </TopInput>
                 </TopSwapBody>
-                <SureBtn onClick={()=>sureSwap()} disabled={count<=0||!priceInfo.receiptAddress}>{currentWalletAddress?(exchange?t('8006'):t('8005')):t('602')}</SureBtn>
+                <SureBtn onClick={()=>sureSwap()} disabled={currentWalletAddress&&(loading||count<=0||!priceInfo.receiptAddress)}>
+                    {loading===true?<LoadImg src={require("@/assets/load.png").default} alt='load'/>
+                    :currentWalletAddress?(exchange?t('8006'):t('8005')):t('602')}
+                </SureBtn>
             </TopRight>
         </TopH5>
         <Content>
@@ -805,8 +810,8 @@ export default function Index() {
                 {exchangeList&&exchangeList.length>0?exchangeList.map((item,idx)=><LeftInvestTableRow key={idx}>
                     <p className={item.flowType==1?'buy':'sell'}>{item.flowType==1?'Buy':'Sell'}<br/><span>{getDateDiff(item.sendTime)}</span></p>
                     <p>${_getValueMultip(item.sendValue,item.solanaPrice,4)}</p>
-                    <p>{_saveToTwoWei(item.receiveAmount)} {coinTypeList[item.receiveCoinType]}</p>
-                    <p>{_saveToTwoWei(item.sendAmount)} {coinTypeList[item.sendCoinType]}</p>
+                    <p>{_saveToTwoWei(item.receiveAmount,4)} {coinTypeList[item.receiveCoinType]}</p>
+                    <p>{_saveToTwoWei(item.sendAmount,4)} {coinTypeList[item.sendCoinType]}</p>
                 </LeftInvestTableRow>)
                 :
                 renderNoData()
@@ -1721,6 +1726,23 @@ font-size: 18px;
 height: 53px;
 border-radius: 32px;
 };
+`
+const rotate = keyframes`
+from {
+transform: rotate(0deg);
+}
+to {
+transform: rotate(360deg);
+}
+`;
+const LoadImg = styled.img`
+width: 20px;
+height: 20px;
+animation: ${rotate} 2s linear infinite;
+${({ theme }) => theme.mediaQueries.sm}{
+width: 30px;
+height: 30px;
+}
 `
 const Evaluate = styled.div`
 padding: 35px 62px 80px 157px;
