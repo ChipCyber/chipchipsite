@@ -66,13 +66,15 @@ export async function solana_getSPLTokenBalance(address, mintAddress) {
         const token = new Token(connection, mintPublicKey, TOKEN_PROGRAM_ID, null);
         const mintInfo = await token.getMintInfo();
         const decimals = mintInfo.decimals;
-        const associatedTokenAddress = await Token.getAssociatedTokenAddress(
-            ASSOCIATED_TOKEN_PROGRAM_ID,
-            TOKEN_PROGRAM_ID,
-            mintPublicKey,
-            publicKey
-        );
-        const account = await token.getAccountInfo(associatedTokenAddress);
+        const publicInfo = await token.getOrCreateAssociatedAccountInfo(publicKey);
+        const account = await token.getAccountInfo(publicInfo.address);
+        // const associatedTokenAddress = await Token.getAssociatedTokenAddress(
+        //     ASSOCIATED_TOKEN_PROGRAM_ID,
+        //     TOKEN_PROGRAM_ID,
+        //     mintPublicKey,
+        //     publicKey
+        // );
+        // const account = await token.getAccountInfo(associatedTokenAddress);
         const rawBalance = account.amount;
         const readableBalance = rawBalance / 10**decimals;
         return readableBalance;
@@ -91,23 +93,25 @@ export async function solana_sendSPLToken(fromAddress, toAddress, amount, mintAd
         const mintInfo = await token.getMintInfo();
         const decimals = mintInfo.decimals;
         const lamports = amount * 10**decimals;
-        const fromATA = await Token.getAssociatedTokenAddress(
-            ASSOCIATED_TOKEN_PROGRAM_ID,
-            TOKEN_PROGRAM_ID,
-            mintPublicKey,
-            fromPublicKey
-        );
-        const toATA = await Token.getAssociatedTokenAddress(
-            ASSOCIATED_TOKEN_PROGRAM_ID,
-            TOKEN_PROGRAM_ID,
-            mintPublicKey,
-            toPublicKey
-        );
+        const fromInfo = await token.getOrCreateAssociatedAccountInfo(fromPublicKey);
+        const toInfo = await token.getOrCreateAssociatedAccountInfo(toPublicKey);
+        // const fromATA = await Token.getAssociatedTokenAddress(
+        //     ASSOCIATED_TOKEN_PROGRAM_ID,
+        //     TOKEN_PROGRAM_ID,
+        //     mintPublicKey,
+        //     fromPublicKey
+        // );
+        // const toATA = await Token.getAssociatedTokenAddress(
+        //     ASSOCIATED_TOKEN_PROGRAM_ID,
+        //     TOKEN_PROGRAM_ID,
+        //     mintPublicKey,
+        //     toPublicKey
+        // );
         const transaction = new Transaction().add(
             Token.createTransferInstruction(
                 TOKEN_PROGRAM_ID,
-                fromATA,
-                toATA,
+                fromInfo.address,
+                toInfo.address,
                 fromPublicKey,
                 [],
                 lamports

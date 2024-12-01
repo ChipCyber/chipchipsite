@@ -25,8 +25,7 @@ const coinTypeList = {
 };
 
 const getChart = (data=[],kLineType) => {
-    const chartRef = useRef(null);
-    const staticOptions = useMemo(() => ({
+    const staticOptions = {
         tooltip: {
             trigger: 'axis',
             formatter: function (params) {
@@ -39,7 +38,7 @@ const getChart = (data=[],kLineType) => {
                 const hours = date.getHours().toString().padStart(2, '0');
                 const minutes = date.getMinutes().toString().padStart(2, '0');
                 const seconds = date.getSeconds().toString().padStart(2, '0');
-                return (`${year}/${month}/${day} ${hours}:${minutes}:${seconds} ${(param.value[1] * 100).toFixed(4)}`);
+                return (`${year}/${month}/${day} ${hours}:${minutes}:${seconds} ${param.value[1]}`);
             },
             axisPointer: {
                 animation: false,
@@ -98,9 +97,6 @@ const getChart = (data=[],kLineType) => {
             },
             axisLabel: {
                 color: 'rgb(130,130,130,0.3)',
-                formatter: function (value) {
-                    return (value * 100).toFixed(4);
-                },
             },
         },
         series: [
@@ -140,12 +136,12 @@ const getChart = (data=[],kLineType) => {
         ],
         grid: {
             left: '5%',
-            right: '50px',
+            right: '60px',
             top: '10%',
             bottom: '50px'
         }
-    }), [data]);
-    return <ReactECharts option={staticOptions} style={{ height: '100%', width: '100%' }} ref={chartRef}/>;
+    };
+    return <ReactECharts option={staticOptions} style={{ height: '100%', width: '100%' }}/>;
 };
 
 export default function Index() {
@@ -172,6 +168,7 @@ export default function Index() {
     const refreshBalance = () => {
         if(currentWalletAddress) {
             if(globalInfo.chipContractAddr){
+                setChipBalance(null);
                 getTokenBalance(currentWalletAddress, globalInfo.chipContractAddr).then(balance=>{
                     setChipBalance(balance);
                 });
@@ -187,7 +184,6 @@ export default function Index() {
         timer.current = setInterval(() => {
             if(isNoEmpty(globalInfo)&&isNoEmpty(globalInfo.tradeStartTime)) {
                 setTimeDiff(formatTimeDiff(globalInfo.tradeStartTime));
-                // setTimeDiff({diff: 0, d: '00', h: '00', m: '00', s: '00'});
             }
         }, 1000);
         return () => {
@@ -195,7 +191,6 @@ export default function Index() {
         }
     }, [globalInfo]);
     const tradeBeginType = useMemo(() => {
-        return 1;
         if (!timeDiff || isEmpty(timeDiff.diff)) {
             return -1;
         }
@@ -475,7 +470,7 @@ export default function Index() {
                     {exchangeList&&exchangeList.length>0?exchangeList.map((item,idx)=><LeftInvestTableRow key={idx}>
                         <p>{getDateDiff(item.sendTime)}</p>
                         <p className={item.flowType==1?'buy':'sell'}>{item.flowType==1?'Buy':'Sell'}</p>
-                        <p>${_getValueMultip(item.sendValue,item.solanaPrice,4)}</p>
+                        <p>${_getValueMultip(item.sendPrice,item.solanaPrice,4)}</p>
                         <p>{_saveToTwoWei(item.receiveAmount,4)} {coinTypeList[item.receiveCoinType]}</p>
                         <p>{_saveToTwoWei(item.sendAmount,4)} {coinTypeList[item.sendCoinType]}</p>
                     </LeftInvestTableRow>)
@@ -809,7 +804,7 @@ export default function Index() {
             <LeftInvestTableContent>
                 {exchangeList&&exchangeList.length>0?exchangeList.map((item,idx)=><LeftInvestTableRow key={idx}>
                     <p className={item.flowType==1?'buy':'sell'}>{item.flowType==1?'Buy':'Sell'}<br/><span>{getDateDiff(item.sendTime)}</span></p>
-                    <p>${_getValueMultip(item.sendValue,item.solanaPrice,4)}</p>
+                    <p>${_getValueMultip(item.sendPrice,item.solanaPrice,4)}</p>
                     <p>{_saveToTwoWei(item.receiveAmount,4)} {coinTypeList[item.receiveCoinType]}</p>
                     <p>{_saveToTwoWei(item.sendAmount,4)} {coinTypeList[item.sendCoinType]}</p>
                 </LeftInvestTableRow>)
