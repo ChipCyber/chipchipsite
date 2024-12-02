@@ -1,5 +1,4 @@
 import { Connection, clusterApiUrl, PublicKey, Transaction, SystemProgram } from '@solana/web3.js';
-// import { getOrCreateAssociatedTokenAccount, createTransferInstruction, getMint } from "@solana/spl-token";
 import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, Token } from "@solana/spl-token";
 import { getWalletProvider } from "./walletProvider";
 
@@ -67,11 +66,6 @@ export async function solana_getSPLTokenBalance(address, mintAddress) {
             console.log('error >> ', error);
             return 0;
         }
-        // try {
-        //     associatedTokenAddress = (await token.getOrCreateAssociatedAccountInfo(publicKey)).address;
-        // } catch (error) {
-        //     associatedTokenAddress = await createATA(connection, publicKey, publicKey, mintPublicKey);
-        // }
         const account = await token.getAccountInfo(associatedTokenAddress);
         // const associatedTokenAddress = await Token.getAssociatedTokenAddress(
         //     ASSOCIATED_TOKEN_PROGRAM_ID,
@@ -99,7 +93,26 @@ export async function solana_sendSPLToken(fromAddress, toAddress, amount, mintAd
         const decimals = mintInfo.decimals;
         const lamports = amount * 10**decimals;
         const fromATA = (await token.getOrCreateAssociatedAccountInfo(fromPublicKey)).address;
-        const toATA = (await token.getOrCreateAssociatedAccountInfo(toPublicKey)).address;
+        let toATA = null;
+        const transaction = new Transaction();
+        try {
+            toATA = (await token.getOrCreateAssociatedAccountInfo(toPublicKey)).address;
+        } catch (error) {
+            console.log('error >> ', error);
+            if(error.message == 'Failed to find account') {
+                toATA = await Token.getAssociatedTokenAddress(
+                    ASSOCIATED_TOKEN_PROGRAM_ID,
+                    TOKEN_PROGRAM_ID,
+                    mintPublicKey,
+                    toPublicKey
+                );
+                transaction.add(
+                    Token.createAssociatedTokenAccountInstruction(ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, mintPublicKey, toATA, toPublicKey, fromPublicKey)
+                );
+            }else{
+                return Promise.reject(error.message);
+            }
+        }
         // const fromATA = await Token.getAssociatedTokenAddress(
         //     ASSOCIATED_TOKEN_PROGRAM_ID,
         //     TOKEN_PROGRAM_ID,
@@ -112,14 +125,16 @@ export async function solana_sendSPLToken(fromAddress, toAddress, amount, mintAd
         //     mintPublicKey,
         //     toPublicKey
         // );
-        const transaction = new Transaction().add(
-            Token.createTransferInstruction(
+        transaction.add(
+            Token.createTransferCheckedInstruction(
                 TOKEN_PROGRAM_ID,
                 fromATA,
+                mintPublicKey,
                 toATA,
                 fromPublicKey,
                 [],
-                lamports
+                lamports,
+                decimals,
             )
         );
         const { blockhash } = await connection.getLatestBlockhash();
