@@ -208,22 +208,29 @@ export default function Index() {
         getGlobalInfoApi().then(({data})=>{
             setGlobalInfo(data);
         });
-        exchangelistApi({solanaAddr:"",pageIndex:1,pageSize:8}).then(({data})=>{
-            setExchangeList(data.exchangeList ?? []);
-        });
     }, []);
     useEffect(() => {
-        setklineList([]);
-        queryKlineApi({kLineDuration:kLineType}).then(({data})=>{
-            const list = data.rows ?? [];
-            const newList = [];
-            list.forEach(item=>{
-                newList.push([item.closeTime, _saveToTwoWei(item.kClose,4)]);
+        if(tradeBeginType>0) {
+            setExchangeList([]);
+            exchangelistApi({solanaAddr:"",pageIndex:1,pageSize:8}).then(({data})=>{
+                setExchangeList(data.exchangeList ?? []);
             });
-            setklineList(newList);
-            createWs();
-        });
-    }, [kLineType]);
+        }
+    }, [tradeBeginType]);
+    useEffect(() => {
+        if(tradeBeginType>0) {
+            setklineList([]);
+            queryKlineApi({kLineDuration:kLineType}).then(({data})=>{
+                const list = data.rows ?? [];
+                const newList = [];
+                list.forEach(item=>{
+                    newList.push([item.closeTime, _saveToTwoWei(item.kClose,4)]);
+                });
+                setklineList(newList);
+                createWs();
+            });
+        }
+    }, [kLineType, tradeBeginType]);
     const handleChange = (event) => {
         const newValue = event.target.value;
         setCount(newValue);
@@ -332,14 +339,14 @@ export default function Index() {
         };
     }
     useEffect(() => {
-        if (isPageVisible) {
+        if (isPageVisible && tradeBeginType>0) {
             createWs();
         } else if(!isPageVisible) {
             if(wsRef.current) {
                 wsRef.current.close();
             }
         }
-    }, [isPageVisible]);
+    }, [isPageVisible, tradeBeginType]);
     const renderW = () => (
         <>
         <Top>
@@ -1358,19 +1365,19 @@ font-size: 24px;
 `
 const TimeItem = styled.div`
 position: relative;
-width: 44px;
-height: 44px;
+width: 52px;
+height: 52px;
+border-radius: 4px;
 text-align: center;
-line-height: 44px;
+line-height: 52px;
 background: #252525;
-font-size: 28px;
-font-weight: 600;
-${({ theme }) => theme.mediaQueries.sm}{
-width: 57px;
-height: 57px;
-line-height: 57px;
-font-size: 24px;
+font-size: 16px;
 font-weight: 700;
+${({ theme }) => theme.mediaQueries.sm}{
+width: 78px;
+height: 78px;
+line-height: 78px;
+font-size: 24px;
 };
 `
 const Content = styled.div`

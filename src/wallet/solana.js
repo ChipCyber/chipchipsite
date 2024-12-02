@@ -55,19 +55,24 @@ export async function solana_sendSOL(fromAddress, toAddress, amount) {
 }
 export async function solana_getSPLTokenBalance(address, mintAddress) {
     try {
-        // const tokenAccount = await getAssociatedTokenAddress(
-        //     mintAddress,
-        //     publicKey
-        // );
-        // const accountInfo = await getAccount(connection, tokenAccount);
-        // return accountInfo.amount.toString();
         const publicKey = new PublicKey(address);
         const mintPublicKey = new PublicKey(mintAddress);
         const token = new Token(connection, mintPublicKey, TOKEN_PROGRAM_ID, null);
         const mintInfo = await token.getMintInfo();
         const decimals = mintInfo.decimals;
-        const publicInfo = await token.getOrCreateAssociatedAccountInfo(publicKey);
-        const account = await token.getAccountInfo(publicInfo.address);
+        let associatedTokenAddress = null;
+        try {
+            associatedTokenAddress = (await token.getOrCreateAssociatedAccountInfo(publicKey)).address;
+        } catch (error) {
+            console.log('error >> ', error);
+            return 0;
+        }
+        // try {
+        //     associatedTokenAddress = (await token.getOrCreateAssociatedAccountInfo(publicKey)).address;
+        // } catch (error) {
+        //     associatedTokenAddress = await createATA(connection, publicKey, publicKey, mintPublicKey);
+        // }
+        const account = await token.getAccountInfo(associatedTokenAddress);
         // const associatedTokenAddress = await Token.getAssociatedTokenAddress(
         //     ASSOCIATED_TOKEN_PROGRAM_ID,
         //     TOKEN_PROGRAM_ID,
@@ -93,8 +98,8 @@ export async function solana_sendSPLToken(fromAddress, toAddress, amount, mintAd
         const mintInfo = await token.getMintInfo();
         const decimals = mintInfo.decimals;
         const lamports = amount * 10**decimals;
-        const fromInfo = await token.getOrCreateAssociatedAccountInfo(fromPublicKey);
-        const toInfo = await token.getOrCreateAssociatedAccountInfo(toPublicKey);
+        const fromATA = (await token.getOrCreateAssociatedAccountInfo(fromPublicKey)).address;
+        const toATA = (await token.getOrCreateAssociatedAccountInfo(toPublicKey)).address;
         // const fromATA = await Token.getAssociatedTokenAddress(
         //     ASSOCIATED_TOKEN_PROGRAM_ID,
         //     TOKEN_PROGRAM_ID,
@@ -110,8 +115,8 @@ export async function solana_sendSPLToken(fromAddress, toAddress, amount, mintAd
         const transaction = new Transaction().add(
             Token.createTransferInstruction(
                 TOKEN_PROGRAM_ID,
-                fromInfo.address,
-                toInfo.address,
+                fromATA,
+                toATA,
                 fromPublicKey,
                 [],
                 lamports
@@ -133,6 +138,32 @@ export async function solana_sendSPLToken(fromAddress, toAddress, amount, mintAd
         return signature;
     } catch (error) {
         console.log('sol >> ', error);
+        return Promise.reject(error.message);
+    }
+}
+async function createATA(connection, publicKey, targetPublicKey, mintPublicKey) {
+    try {
+        const provider = getWalletProvider();
+        const associatedTokenAddress = await Token.getAssociatedTokenAddress(
+            ASSOCIATED_TOKEN_PROGRAM_ID,
+            TOKEN_PROGRAM_ID,
+            mintPublicKey,
+            targetPublicKey
+        );
+        const transaction = new Transaction().add(
+            Token.createAssociatedTokenAccountInstruction(ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, mintPublicKey, associatedTokenAddress, targetPublicKey, publicKey)
+        );
+        const { blockhash } = await connection.getLatestBlockhash();
+        transaction.recentBlockhash = blockhash;
+        transaction.feePayer = publicKey;
+        // 发送交易
+        const signedTransaction = await provider.signTransaction(transaction);
+        const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+        await connection.confirmTransaction(signature);
+        console.log('ATA created successfully:', associatedTokenAddress.toBase58());
+        return associatedTokenAddress;
+    } catch (error) {
+        console.error('Failed to get or create ATA:', error);
         return Promise.reject(error.message);
     }
 }

@@ -29,7 +29,7 @@ export function recentConnector() {
             }
         }
     }
-    return Promise.reject('Invalid wallet');
+    return Promise.resolve(null);
 }
 export function runConnectWallet(wallet, network) {
     return new Promise((resolve, reject) => {

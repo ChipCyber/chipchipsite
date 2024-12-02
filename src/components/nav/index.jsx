@@ -211,7 +211,8 @@ class Nav extends Component {
                     <NavCenterLink to='/displacement' onClick={this.closeMenu} isActive={()=>pathname==='/displacement'}>{t('207')}</NavCenterLink>
                     <NavCenterLink to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLink>
                     {/* <NavCenterLink to='/ido' onClick={this.closeMenu} isActive={()=>pathname==='/ido'}>IDO</NavCenterLink> */}
-                    <NavCenterLinkDisabled>Fair Launch</NavCenterLinkDisabled>
+                    {/* <NavCenterLinkDisabled>Fair Launch</NavCenterLinkDisabled> */}
+                    <NavCenterLink to='/mint' onClick={this.closeMenu} isActive={()=>pathname==='/mint'}>Fair Launch</NavCenterLink>
                     <NavCenterLink to='/roadmap' onClick={this.closeMenu} isActive={()=>pathname==='/roadmap'}>{t('102')}</NavCenterLink>
                     <NavCenterLink to='/news' onClick={this.closeMenu} isActive={()=>pathname==='/news'}>{t('103')}</NavCenterLink>
                     {/* <NavCenterNoLink className='custom'>

@@ -53,11 +53,13 @@ function App() {
   }, [currentWalletAddress, dispatch]);
   useEffect(() => {
     recentConnector().then(data=>{
-      dispatch(setWalletInfo({
-        address: data.address,
-        walletType: data.wallet,
-        networkType: data.network,
-      }));
+      if(data) {
+        dispatch(setWalletInfo({
+          address: data.address,
+          walletType: data.wallet,
+          networkType: data.network,
+        }));
+      }
     });
   }, []);
   const { i18n } = useTranslation();
