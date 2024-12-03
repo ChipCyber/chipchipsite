@@ -23,6 +23,7 @@ const coinTypeList = {
     3: "USDC",
     4: "CHIP",
 };
+const ExchangeMaxCount = 8;
 
 const getChart = (data=[],kLineType) => {
     const staticOptions = {
@@ -157,7 +158,7 @@ export default function Index() {
     const [globalInfo, setGlobalInfo] = useState({});
     const [priceInfo, setPriceInfo] = useState({});
     const [exchangeList, setExchangeList] = useState([]);
-    const [klineList, setklineList] = useState([]);
+    const [klineList, setkLineList] = useState([]);
     const [kLineType, setkLineType] = useState(kLineTypeList[kLineTypeList.length-1]);
     const [isPageVisible, setIsPageVisible] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -181,11 +182,12 @@ export default function Index() {
         if(timer.current) {
             clearInterval(timer.current);
         }
-        timer.current = setInterval(() => {
-            if(isNoEmpty(globalInfo)&&isNoEmpty(globalInfo.tradeStartTime)) {
-                setTimeDiff(formatTimeDiff(globalInfo.tradeStartTime));
-            }
-        }, 1000);
+        // timer.current = setInterval(() => {
+        //     if(isNoEmpty(globalInfo)&&isNoEmpty(globalInfo.tradeStartTime)) {
+        //         setTimeDiff(formatTimeDiff(globalInfo.tradeStartTime));
+        //     }
+        // }, 1000);
+        setTimeDiff({diff:0});
         return () => {
             clearInterval(timer.current);
         }
@@ -212,21 +214,21 @@ export default function Index() {
     useEffect(() => {
         if(tradeBeginType>0) {
             setExchangeList([]);
-            exchangelistApi({solanaAddr:"",pageIndex:1,pageSize:8}).then(({data})=>{
+            exchangelistApi({solanaAddr:"",pageIndex:1,pageSize:ExchangeMaxCount}).then(({data})=>{
                 setExchangeList(data.exchangeList ?? []);
             });
         }
     }, [tradeBeginType]);
     useEffect(() => {
         if(tradeBeginType>0) {
-            setklineList([]);
+            setkLineList([]);
             queryKlineApi({kLineDuration:kLineType}).then(({data})=>{
                 const list = data.rows ?? [];
                 const newList = [];
                 list.forEach(item=>{
                     newList.push([item.closeTime, _saveToTwoWei(item.kClose,4)]);
                 });
-                setklineList(newList);
+                setkLineList(newList);
                 createWs();
             });
         }
@@ -305,30 +307,32 @@ export default function Index() {
         if(wsRef.current&&(wsRef.current.readyState==WebSocket.CONNECTING||wsRef.current.readyState==WebSocket.OPEN)) {
             return;
         }
-        if(wsRef.current) {
-            wsRef.current.close();
-        }
         wsRef.current = new WebSocket('wss://cyberwss.privatex.io/subscribekline');
-        console.log('wsRef.current :>> ', wsRef.current);
         wsRef.current.onopen = () => {
             console.log('WebSocket connection established');
             const message = JSON.stringify({ msgType: 'kline', type: kLineType });
             wsRef.current.send(message);
         };
         wsRef.current.onmessage = (message) => {
-            console.log('message :>> ', message);
             const dataObj = JSON.parse(message.data);
             const msgType = dataObj.msgType;
             const msgData = dataObj.data;
+            console.log('msgType :>> ', msgType);
+            console.log('msgData :>> ', msgData);
             if(msgType=='kline_resp') {
-                setklineList((prevData) => {
-                    const newData = [...prevData];
-                    newData.shift();
-                    newData.push([msgData.closeTime, _saveToTwoWei(msgData.kClose,4)]);
-                    return newData;
-                });
-            }else if(msgType=='chip_price_resp'){
+                setkLineList((prevData) => [
+                    ...prevData.slice(1),
+                    [msgData.closeTime, _saveToTwoWei(msgData.kClose,4)],
+                ]);
+            }else if(msgType=='chip_price_resp') {
                 setGlobalInfo((prevData)=>({...prevData,...msgData}))
+            }else if(msgType=='new_ex_flow_resp') {
+                const {exDataList} = msgData;
+                setExchangeList((prevData) => {
+                    return Array.from(new Map([...exDataList, ...prevData].map(item => [item.id, item])).values())
+                        .sort((a, b) => b.id - a.id)
+                        .slice(0, ExchangeMaxCount);
+                });
             }
         };
         wsRef.current.onerror = (error) => {
@@ -336,6 +340,9 @@ export default function Index() {
         };
         wsRef.current.onclose = () => {
             console.log('WebSocket connection closed');
+            setTimeout(() => {
+                createWs();
+            }, 10000);
         };
     }
     useEffect(() => {
@@ -868,7 +875,7 @@ export default function Index() {
 }
 
 const NoData = styled.div`
-height: 300px;
+height: 350px;
 display: flex;
 flex-direction: column;
 align-items: center;
@@ -877,6 +884,7 @@ font-size: 16px;
 color #7C7676;
 ${({ theme }) => theme.mediaQueries.sm}{
 font-size: 18px;
+height: 450px;
 };
 `
 
