@@ -638,13 +638,13 @@ display: none;
 };
 ` 
 const DialogC = styled(DialogContent)`
-width: calc(100% - 50px);
-padding: 16px 25px;
+width: calc(100% - 50px) !important;
+padding: 16px 25px !important;
 border-radius: 12px;
-background: #362F42;
+background: #362F42 !important;
 ${({ theme }) => theme.mediaQueries.sm}{
-    width: 475px;
-    padding: 25px 38px;
+    width: 475px !important;
+    padding: 25px 38px !important;
 };
 `
 const DialogCHeader = styled.div`
@@ -655,6 +655,9 @@ align-items: center;
 justify-content: space-between;
 img {
 cursor: pointer;
+}
+p {
+margin: 0;
 }
 `
 const DialogCTip = styled.p`
