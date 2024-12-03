@@ -182,12 +182,11 @@ export default function Index() {
         if(timer.current) {
             clearInterval(timer.current);
         }
-        // timer.current = setInterval(() => {
-        //     if(isNoEmpty(globalInfo)&&isNoEmpty(globalInfo.tradeStartTime)) {
-        //         setTimeDiff(formatTimeDiff(globalInfo.tradeStartTime));
-        //     }
-        // }, 1000);
-        setTimeDiff({diff:0});
+        timer.current = setInterval(() => {
+            if(isNoEmpty(globalInfo)&&isNoEmpty(globalInfo.tradeStartTime)) {
+                setTimeDiff(formatTimeDiff(globalInfo.tradeStartTime));
+            }
+        }, 1000);
         return () => {
             clearInterval(timer.current);
         }
