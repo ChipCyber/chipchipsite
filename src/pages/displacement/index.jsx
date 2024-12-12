@@ -198,7 +198,7 @@ export default function Index() {
             setInputAddress('');
             setCount('');
             message.success("Success");
-        }).catch(({res})=>{
+        }).catch((res)=>{
             if(res.code==-1) {
                 Modal.confirm({
                     title: `${t('613')} ${res.msg}`,
