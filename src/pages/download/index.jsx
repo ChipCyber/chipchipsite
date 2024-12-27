@@ -30,49 +30,49 @@ export default function Index() {
                     <div className='title'>{t('500')}</div>
                     <div className='desc'>{t('501')}</div>
                     <List>
-                        <RowLink href={TelegramMiniAppUrl} target='__blank'>
+                        <RowLinkDisabled>
                             <div className='content'>
                                 <img src={require('../../assets/download/telegram.png').default}/>
-                                <span>Telegram Mini-app</span>
+                                <span>Telegram Mini-app({t('10')})</span>
                             </div>
                             <img className='arrow' src={require('../../assets/arrow.png').default}/>
-                        </RowLink>
-                        <RowLink href={WebUrl} target='__blank'>
+                        </RowLinkDisabled>
+                        <RowLinkDisabled>
                             <div className='content'>
                                 <img src={require('../../assets/download/web.png').default}/>
-                                <span>Web</span>
+                                <span>Web({t('10')})</span>
                             </div>
                             <img className='arrow' src={require('../../assets/arrow.png').default}/>
-                        </RowLink>
+                        </RowLinkDisabled>
                         <Row>
                             <div className='content'>
                                 <img src={require('../../assets/download/ios.png').default}/>
-                                <span>iOS</span>
+                                <span>iOS({t('10')})</span>
                             </div>
                             <img className='qr' src={require('../../assets/download/qr.png').default}/>
-                            <div className='download_qr'>
+                            {/* <div className='download_qr'>
                                 <div>{t('505')}</div>
                                 <QRCode
                                     value={iOSUrl}
                                     size={130}
                                     includeMargin={true}
                                 />
-                            </div>
+                            </div> */}
                         </Row>
                         <Row>
                             <div className='content'>
                                 <img src={require('../../assets/download/android.png').default}/>
-                                <span>Android</span>
+                                <span>Android({t('10')})</span>
                             </div>
                             <img className='qr' src={require('../../assets/download/qr.png').default}/>
-                            <div className='download_qr'>
+                            {/* <div className='download_qr'>
                                 <div>{t('505')}</div>
                                 <QRCode
                                     value={AndroidUrl}
                                     size={130}
                                     includeMargin={true}
                                 />
-                            </div>
+                            </div> */}
                         </Row>
                     </List>
                 </Left>
@@ -104,34 +104,34 @@ export default function Index() {
                 <BottomH5>
                     <div className='subTitle'>{t('501')}</div>
                     <List>
-                        <RowLink href={TelegramMiniAppUrl} target='__blank'>
+                        <RowLinkDisabled>
                             <div className='content'>
                                 <img src={require('../../assets/download/telegram.png').default}/>
-                                <span>Telegram Mini-app</span>
+                                <span>Telegram Mini-app({t('10')})</span>
                             </div>
                             <img className='arrow' src={require('../../assets/arrow.png').default}/>
-                        </RowLink>
-                        <RowLink href={WebUrl} target='__blank'>
+                        </RowLinkDisabled>
+                        <RowLinkDisabled>
                             <div className='content'>
                                 <img src={require('../../assets/download/web.png').default}/>
-                                <span>Web</span>
+                                <span>Web({t('10')})</span>
                             </div>
                             <img className='arrow' src={require('../../assets/arrow.png').default}/>
-                        </RowLink>
-                        <RowLink href={iOSUrl} target='__blank'>
+                        </RowLinkDisabled>
+                        <RowLinkDisabled>
                             <div className='content'>
                                 <img src={require('../../assets/download/ios.png').default}/>
-                                <span>iOS</span>
+                                <span>iOS({t('10')})</span>
                             </div>
                             <img className='download' src={require('../../assets/download/download.png').default}/>
-                        </RowLink>
-                        <RowLink href={AndroidUrl} target='__blank'>
+                        </RowLinkDisabled>
+                        <RowLinkDisabled>
                             <div className='content'>
                                 <img src={require('../../assets/download/android.png').default}/>
-                                <span>Android</span>
+                                <span>Android({t('10')})</span>
                             </div>
                             <img className='download' src={require('../../assets/download/download.png').default}/>
-                        </RowLink>
+                        </RowLinkDisabled>
                     </List>
                 </BottomH5>
             </ContentH5>
@@ -213,7 +213,7 @@ const List = styled.div`
 margin-top: 28px;
 ${({ theme }) => theme.mediaQueries.sm}{
 margin-top: 44px;
-width: 326px;
+width: 356px;
 };
 `
 const RowLink = styled.a`
@@ -257,18 +257,56 @@ height: 18px;
 }
 };
 `
-const Row = styled.div`
+const RowLinkDisabled = styled.div`
 position: relative;
-padding: 0 25px 0 20px;
+padding: 0 30px 0 20px;
 height: 60px;
-cursor: pointer;
+cursor: no-drop;
 margin-top: 12px;
 display: flex;
 justify-content: space-between;
 align-items: center;
-font-size: 18px;
+font-size: 16px;
 font-weight: 700;
-color: #121212;
+color: #999;
+border-radius: 15px;
+background: #FFF;
+.content {
+display: flex;
+gap: 18px;
+align-items: center;
+img {
+width: 40px;
+height: 40px;
+}
+}
+.arrow {
+width: 14px;
+height: 14px;
+}
+.download {
+width: 11px;
+height: 18px;
+}
+${({ theme }) => theme.mediaQueries.sm}{
+.arrow {
+width: 18px;
+height: 18px;
+}
+};
+`
+const Row = styled.div`
+position: relative;
+padding: 0 25px 0 20px;
+height: 60px;
+cursor: no-drop;
+margin-top: 12px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-size: 16px;
+font-weight: 700;
+color: #999;
 border-radius: 15px;
 background: #FFF;
 .content {
