@@ -23,8 +23,10 @@ import { useLanguage, LanguageProvider } from "./LanguageContext";
 import ScrollToTop from "./components/scrollToTop";
 import Nav from "./components/nav";
 import Footer from "./components/footer";
+import Copyright from "./components/copyright";
 import Home from "./pages/home";
 import Airdrop from "./pages/airdrop";
+import AirdropDetail from "./pages/airdrop/detail";
 import FAQ from "./pages/faq";
 import FAQDetail from "./pages/faq/detail";
 import News from "./pages/news";
@@ -61,7 +63,24 @@ function App() {
         }));
       }
     });
+    test();
   }, []);
+  const test = async () => {
+    // await phantom.solana.request({ method: "connect" });
+    // const message = "test message";
+    // const encodedMessage = new TextEncoder().encode(message);
+    // try {
+    //   const { signature, publicKey } = await phantom.solana.signMessage(encodedMessage, 'utf8');
+    //   const decodedSignature = Buffer.from(signature, 'base64');
+    //   console.log("Decoded Signature (Buffer):", decodedSignature);
+    //   const hexSignature = decodedSignature.toString('hex');
+    //   console.log("Signature in msg:", message);
+    //   console.log("Signature in Hex:", hexSignature);
+    //   console.log("Public Key:", publicKey.toString());
+    // } catch (error) {
+    //   console.error("Error signing message:", error);
+    // }
+  }
   const { i18n } = useTranslation();
   const [curLanguage, setCurLanguage] = useState('');
   useEffect(()=>{
@@ -95,7 +114,12 @@ function App() {
               <Route path="/airdrop" exact>
                 <Nav/>
                 <Airdrop/>
-                <Footer/>
+                <Copyright/>
+              </Route>
+              <Route path="/airdropDetail" exact>
+                <Nav/>
+                <AirdropDetail/>
+                <Copyright/>
               </Route>
               <Route path="/faq" exact>
                 <Nav/>

@@ -8,29 +8,43 @@ import {
     BuyNowUrl,
     EnterGameUrl,
 } from "../../constants";
-import { knowledgePageListApi } from "../../api";
 
 export default function Index() {
     const { t } = useTranslation();
-    const [selectedIndex,setSelectedIndex] = useState(0);
-    const [faqList, setFaqList] = useState([]);
     const history = useHistory();
     const shouldRender = useBreakpointCheck();
     useEffect(() => {
-        knowledgePageListApi({pageIndex:1,pageSize:5,knowledgeType:2}).then(({data})=>{
-            setFaqList(data);
-        });
+        
     }, []);
     if (shouldRender) {
         return (
             <Root>
                 <Top>
-                    <img className='bg' src={require('../../assets/airdrop/top_bg.png').default}/>
+                    {/* <img className='bg' src={require('../../assets/airdrop/top_bg.png').default}/> */}
                     <div className='content'>
                         <div className='left'>
-                            <div className='title'>{t('200')}</div>
-                            <div className='desc'>{t('129')}</div>
-                            <div className='tip'>{t('130')}</div>
+                            <div>
+                                <div className='title'>{t('西格玛男人社区优质项目空投')}</div>
+                                <div className='desc'>{t('Goku很Cool  华语区最MEME的男人 全网拥有超过20万Crypto粉丝 一级市场投资人  西格玛基金会主理人 ')}</div>
+                            </div>
+                            <TopBtnRow>
+                                <LargeBtn className='custom' onClick={()=>openUrl('')}>
+                                    <span>购买 CHIPCHIPBOX</span>
+                                    <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                </LargeBtn>
+                                <Btn className='custom' onClick={()=>openUrl('')}>
+                                    <span>加入Guku社区</span>
+                                    <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                </Btn>
+                                <LargeBtn className='custom' onClick={()=>openUrl('')}>
+                                    <span>关注Goku很CoolX</span>
+                                    <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                </LargeBtn>
+                                <Btn className='custom' onClick={()=>openUrl('')}>
+                                    <span>关注YouTube</span>
+                                    <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                </Btn>
+                            </TopBtnRow>
                         </div>
                         <img className='right' src={require('../../assets/airdrop/top_icon.png').default}/>
                     </div>
@@ -41,98 +55,151 @@ export default function Index() {
                 <Content>
                     <img className='bg' src={require('../../assets/airdrop/bg.png').default}/>
                     <img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default}/>
-                    <ContentBody>
-                        <div className='header'>
-                            <div className='left' onClick={()=>setSelectedIndex(0)}>
-                                <span>{t('201')}</span>
-                                <img src={selectedIndex==0?require('../../assets/airdrop/menu_left_selected.png').default:require('../../assets/airdrop/menu_left.png').default}/>
-                            </div>
-                            <div className='right' onClick={()=>setSelectedIndex(1)}>
-                                <span>{t('211')}</span>
-                                <img src={selectedIndex==1?require('../../assets/airdrop/menu_right_selected.png').default:require('../../assets/airdrop/menu_right.png').default}/>
-                            </div>
-                        </div>
-                        <div className='tip'>{t('202')}</div>
-                        <Item style={{paddingBottom:selectedIndex==0?132:28}}>
-                            <img className='num' src={require('../../assets/airdrop/num1.png').default}/>
-                            <div className='content'>
-                                <div className='left'>
-                                    <div className='box'>
-                                        <img className='icon' src={require('../../assets/box.png').default}/>
-                                        <img className='shadow' src={require('../../assets/airdrop/box_shadow.png').default}/>
-                                        <div className='rate'>10%</div>
-                                    </div>
-                                </div>
-                                <div className='right'>
-                                    <div className='title'>{t('203')}</div>
-                                    <TopTip>
-                                        <TopTipRow>{t('204')}</TopTipRow>
-                                        <TopTipRow>{t('205')}</TopTipRow>
-                                    </TopTip>
-                                    {selectedIndex==0?<BtnRow>
-                                        <Btn className='custom' onClick={()=>openUrl(BuyNowUrl)}>
-                                            <span>{t('206')}</span>
-                                            <img src={require('../../assets/home/arrow_enter.png').default}/>
-                                        </Btn>
-                                        <Btn_border className='custom' to='/displacement'>{t('207')}</Btn_border>
-                                    </BtnRow>
-                                    :
-                                    <>
-                                    <Card>
-                                        <div className='item'>
-                                            <div className='i_title'>-- CHIP</div>
-                                            <div className='i_desc'>{t('324')}</div>
-                                        </div>
-                                        <div className='item'>
-                                            <div className='i_title'>-- CHIP</div>
-                                            <div className='i_desc'>{t('212')}</div>
-                                        </div>
-                                    </Card>
-                                    <Btn className='custom' style={{marginTop:32}}>
-                                        <span>{t('213')}</span>
-                                        <img src={require('../../assets/home/arrow_enter.png').default}/>
-                                    </Btn>
-                                    <div className='wallet'>
-                                        <div className='name'>{t('216')}：</div>
-                                        <div className='address'>--</div>
-                                    </div>
-                                    </>
-                                    }
-                                </div>
-                            </div>
-                        </Item>
-                        <Item>
-                            <img className='num' src={require('../../assets/airdrop/num2.png').default}/>
-                            <div className='content'>
-                                <div className='left'>
-                                    <div className='box'>
-                                        <img className='icon' src={require('../../assets/airdrop/box2.png').default}/>
-                                        <img className='shadow' src={require('../../assets/airdrop/box_shadow.png').default}/>
-                                        <div className='rate' style={{bottom:-34}}>15%</div>
-                                    </div>
-                                </div>
-                                <div className='right'>
-                                    <div className='title'>{t('208')}</div>
-                                    <div className='desc'>{t('209')}</div>
-                                    <BtnRow>
-                                        <Btn className='custom' onClick={()=>openUrl(EnterGameUrl)}>
-                                            <span>{t('210')}</span>
-                                            <img src={require('../../assets/home/arrow_enter.png').default}/>
-                                        </Btn>
-                                    </BtnRow>
-                                </div>
-                            </div>
-                        </Item>
-                    </ContentBody>
+                    <Item onClick={()=>history.push('/airdropDetail?id='+1)}>
+                        <ItemTag>预热中</ItemTag>
+                        <ItemImg src={require('@/assets/airdrop/btc.png').default} alt='icon'/>
+                        <ItemContent>
+                            <ItemHeader>
+                                <ItemName>BTC</ItemName>
+                                <ItemDesc>Bitcoin</ItemDesc>
+                            </ItemHeader>
+                            <ItemTipList>
+                                <ItemTip>持有CHIPCHIPBOX 可以免费领取空投。</ItemTip>
+                                <ItemTip>每个 CHIPCHIPBOX 空投 10000 BTC。</ItemTip>
+                            </ItemTipList>
+                            <ItemAirdrop>空投总量 10000 BTC</ItemAirdrop>
+                            <ItemInfo>
+                                <div>已领取</div>
+                                <div>100 / <span>10000</span></div>
+                            </ItemInfo>
+                            <ItemProgress style={{'--progress': '10%'}}></ItemProgress>
+                            <ItemEndTip>距离结束</ItemEndTip>
+                            <ItemBottom>
+                                <Time>
+                                    <TimeItem>
+                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                        <span>5D</span>
+                                    </TimeItem>
+                                    <span>:</span>
+                                    <TimeItem>
+                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                        <span>23</span>
+                                    </TimeItem>
+                                    <span>:</span>
+                                    <TimeItem>
+                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                        <span>59</span>
+                                    </TimeItem>
+                                    <span>:</span>
+                                    <TimeItem>
+                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                        <span>59</span>
+                                    </TimeItem>
+                                </Time>
+                                <SmallBtn disabled className='custom'>
+                                    <span>开始领取</span>
+                                    <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                </SmallBtn>
+                            </ItemBottom>
+                        </ItemContent>
+                    </Item>
+                    <Item>
+                        <ItemTag className='ing'>进行中</ItemTag>
+                        <ItemImg src={require('@/assets/airdrop/btc.png').default} alt='icon'/>
+                        <ItemContent>
+                            <ItemHeader>
+                                <ItemName>BTC</ItemName>
+                                <ItemDesc>Bitcoin</ItemDesc>
+                            </ItemHeader>
+                            <ItemTipList>
+                                <ItemTip>持有CHIPCHIPBOX 可以免费领取空投。</ItemTip>
+                                <ItemTip>每个 CHIPCHIPBOX 空投 10000 BTC。</ItemTip>
+                            </ItemTipList>
+                            <ItemAirdrop>空投总量 10000 BTC</ItemAirdrop>
+                            <ItemInfo>
+                                <div>已领取</div>
+                                <div>100 / <span>10000</span></div>
+                            </ItemInfo>
+                            <ItemProgress style={{'--progress': '10%'}}></ItemProgress>
+                            <ItemEndTip>距离结束</ItemEndTip>
+                            <ItemBottom>
+                                <Time>
+                                    <TimeItem>
+                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                        <span>5D</span>
+                                    </TimeItem>
+                                    <span>:</span>
+                                    <TimeItem>
+                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                        <span>23</span>
+                                    </TimeItem>
+                                    <span>:</span>
+                                    <TimeItem>
+                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                        <span>59</span>
+                                    </TimeItem>
+                                    <span>:</span>
+                                    <TimeItem>
+                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                        <span>59</span>
+                                    </TimeItem>
+                                </Time>
+                                <SmallBtn className='custom'>
+                                    <span>免费领取</span>
+                                    <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                </SmallBtn>
+                            </ItemBottom>
+                        </ItemContent>
+                    </Item>
+                    <Item>
+                        <ItemTag className='end'>已结束</ItemTag>
+                        <ItemImg src={require('@/assets/airdrop/btc.png').default} alt='icon'/>
+                        <ItemContent>
+                            <ItemHeader>
+                                <ItemName>BTC</ItemName>
+                                <ItemDesc>Bitcoin</ItemDesc>
+                            </ItemHeader>
+                            <ItemTipList>
+                                <ItemTip>持有CHIPCHIPBOX 可以免费领取空投。</ItemTip>
+                                <ItemTip>每个 CHIPCHIPBOX 空投 10000 BTC。</ItemTip>
+                            </ItemTipList>
+                            <ItemAirdrop>空投总量 10000 BTC</ItemAirdrop>
+                            <ItemInfo>
+                                <div>已领取</div>
+                                <div>100 / <span>10000</span></div>
+                            </ItemInfo>
+                            <ItemProgress style={{'--progress': '10%'}}></ItemProgress>
+                            <ItemEndTip>距离结束</ItemEndTip>
+                            <ItemBottom>
+                                <Time>
+                                    <TimeItem>
+                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                        <span>5D</span>
+                                    </TimeItem>
+                                    <span>:</span>
+                                    <TimeItem>
+                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                        <span>23</span>
+                                    </TimeItem>
+                                    <span>:</span>
+                                    <TimeItem>
+                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                        <span>59</span>
+                                    </TimeItem>
+                                    <span>:</span>
+                                    <TimeItem>
+                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                        <span>59</span>
+                                    </TimeItem>
+                                </Time>
+                                <SmallBtn disabled className='custom'>
+                                    <span>已结束</span>
+                                    <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                </SmallBtn>
+                            </ItemBottom>
+                        </ItemContent>
+                    </Item>
                 </Content>
-                <FAQ>
-                    <div className='title'>{t('172')}</div>
-                    {
-                        faqList.map((item,idx)=>(
-                            <div className='item' onClick={()=>history.push('/faqDetail?id='+item.id)} key={idx}>{item.title}</div>
-                        ))
-                    }
-                </FAQ>
             </Root>
         )
     }
@@ -140,108 +207,176 @@ export default function Index() {
         <Root>
             <TopH5>
                 <img className='icon' src={require('../../assets/airdrop/h5/top_icon.png').default}/>
-                <div className='title'>{t('200')}</div>
-                <div className='desc'>{t('129')}</div>
-                <div className='tip'>{t('130')}</div>
+                <div className='title'>{t('西格玛男人社区优质项目空投')}</div>
+                <div className='desc'>{t('Goku很Cool  华语区最MEME的男人 全网拥有超过20万Crypto粉丝 一级市场投资人  西格玛基金会主理人。')}</div>
+                <TopBtnRow>
+                    <H5Btn className='custom' onClick={()=>openUrl('')}>
+                        <span>购买 CHIPCHIPBOX</span>
+                        <img src={require('@/assets/home/arrow_enter.png').default}/>
+                    </H5Btn>
+                    <H5Btn className='custom' onClick={()=>openUrl('')}>
+                        <span>加入Guku社区</span>
+                        <img src={require('@/assets/home/arrow_enter.png').default}/>
+                    </H5Btn>
+                    <H5Btn className='custom' onClick={()=>openUrl('')}>
+                        <span>关注Goku很CoolX</span>
+                        <img src={require('@/assets/home/arrow_enter.png').default}/>
+                    </H5Btn>
+                    <H5Btn className='custom' onClick={()=>openUrl('')}>
+                        <span>关注YouTube</span>
+                        <img src={require('@/assets/home/arrow_enter.png').default}/>
+                    </H5Btn>
+                </TopBtnRow>
             </TopH5>
             <div style={{overflow:'hidden',height:30}}>
                 <img style={{objectFit:'contain',verticalAlign:'top',height:'100%'}} src={require('../../assets/home/h5/logo_row.png').default}/>
             </div>
             <ContentH5>
-                <img className='bg' src={require('../../assets/airdrop/h5/bg.png').default}/>
-                <img className='bg_bottom' src={require('../../assets/airdrop/h5/bg_bottom.png').default}/>
-                <div className='header'>
-                    <div className='left' onClick={()=>setSelectedIndex(0)}>
-                        <span>{t('201')}</span>
-                        <img src={selectedIndex==0?require('../../assets/airdrop/h5/menu_left_selected.png').default:require('../../assets/airdrop/h5/menu_left.png').default}/>
-                    </div>
-                    <div className='right' onClick={()=>setSelectedIndex(1)}>
-                        <span>{t('211')}</span>
-                        <img src={selectedIndex==1?require('../../assets/airdrop/h5/menu_right_selected.png').default:require('../../assets/airdrop/h5/menu_right.png').default}/>
-                    </div>
-                </div>
-                <div className='tip'>{t('202')}</div>
-                <ItemH5>
-                    <img className='num' src={require('../../assets/airdrop/h5/num1.png').default}/>
-                    <div className='content'>
-                        <div className='title'>{t('203')}</div>
-                        <TopTip>
-                            <TopTipRow>{t('204')}</TopTipRow>
-                            <TopTipRow>{t('205')}</TopTipRow>
-                        </TopTip>
-                        <div className='box customer'>
-                            <div className='box_content'>
-                                <img className='icon' src={require('../../assets/box.png').default}/>
-                                <img className='shadow' src={require('../../assets/airdrop/h5/box_shadow.png').default}/>
-                                <div className='rate' style={{right:0,bottom:20}}>10%</div>
-                            </div>
-                        </div>
-                        {selectedIndex==0?<BtnRow>
-                            <Btn className='custom' onClick={()=>openUrl(BuyNowUrl)}>
-                                <span>{t('206')}</span>
-                                <img src={require('../../assets/nav/login_arrow.png').default}/>
-                            </Btn>
-                            <Btn_border className='custom' to='/displacement'>{t('207')}</Btn_border>
-                        </BtnRow>
-                        :
-                        <>
-                        <CardH5>
-                            <img className='coin' src={require('../../assets/airdrop/h5/coin.png').default}/>
-                            <div className='item'>
-                                <div className='i_title'>-- CHIP</div>
-                                <div className='i_desc'>{t('212')}</div>
-                            </div>
-                        </CardH5>
-                        <BtnRow>
-                            <Btn className='custom'>
-                                <span>{t('213')}</span>
-                                <img src={require('../../assets/nav/login_arrow.png').default}/>
-                            </Btn>
-                        </BtnRow>
-                        <div className='wallet'>
-                            <div className='name'>{t('216')}：</div>
-                            <div className='address'>--</div>
-                        </div>
-                        </>
-                        }
-                    </div>
-                </ItemH5>
-                <ItemH5>
-                    <img className='num' src={require('../../assets/airdrop/h5/num2.png').default}/>
-                    <div className='content'>
-                        <div className='title'>{t('208')}</div>
-                        <div className='desc'>{t('209')}</div>
-                        <div className='box'>
-                            <div className='box_content'>
-                                <img className='icon' src={require('../../assets/airdrop/h5/box2.png').default}/>
-                                <img className='shadow' src={require('../../assets/airdrop/h5/box_shadow.png').default}/>
-                                <div className='rate' style={{bottom:-10}}>15%</div>
-                            </div>
-                        </div>
-                        <BtnRow>
-                            <Btn className='custom' onClick={()=>openUrl(EnterGameUrl)}>
-                                <span>{t('210')}</span>
-                                <img src={require('../../assets/nav/login_arrow.png').default}/>
-                            </Btn>
-                        </BtnRow>
-                    </div>
-                </ItemH5>
+                <Item onClick={()=>history.push('/airdropDetail?id='+1)}>
+                    <ItemTag>预热中</ItemTag>
+                    <ItemImg src={require('@/assets/airdrop/h5/btc.png').default} alt='icon'/>
+                    <ItemContent>
+                        <ItemHeader>
+                            <ItemName>BTC</ItemName>
+                            <ItemDesc>Bitcoin</ItemDesc>
+                        </ItemHeader>
+                        <ItemTipList>
+                            <ItemTip>持有CHIPCHIPBOX 可以免费领取空投。</ItemTip>
+                            <ItemTip>每个 CHIPCHIPBOX 空投 10000 BTC。</ItemTip>
+                        </ItemTipList>
+                        <ItemAirdrop>空投总量 10000 BTC</ItemAirdrop>
+                        <ItemInfo>
+                            <div>已领取</div>
+                            <div>100 / <span>10000</span></div>
+                        </ItemInfo>
+                        <ItemProgress style={{'--progress': '10%'}}></ItemProgress>
+                        <ItemEndTip>距离结束</ItemEndTip>
+                        <ItemBottom>
+                            <Time>
+                                <TimeItem>
+                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                    <span>5D</span>
+                                </TimeItem>
+                                <span>:</span>
+                                <TimeItem>
+                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                    <span>23</span>
+                                </TimeItem>
+                                <span>:</span>
+                                <TimeItem>
+                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                    <span>59</span>
+                                </TimeItem>
+                                <span>:</span>
+                                <TimeItem>
+                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                    <span>59</span>
+                                </TimeItem>
+                            </Time>
+                            <SmallBtn disabled className='custom'>
+                                <span>开始领取</span>
+                                <img src={require('@/assets/nav/login_arrow.png').default}/>
+                            </SmallBtn>
+                        </ItemBottom>
+                    </ItemContent>
+                </Item>
+                <Item>
+                    <ItemTag className='ing'>进行中</ItemTag>
+                    <ItemImg src={require('@/assets/airdrop/btc.png').default} alt='icon'/>
+                    <ItemContent>
+                        <ItemHeader>
+                            <ItemName>BTC</ItemName>
+                            <ItemDesc>Bitcoin</ItemDesc>
+                        </ItemHeader>
+                        <ItemTipList>
+                            <ItemTip>持有CHIPCHIPBOX 可以免费领取空投。</ItemTip>
+                            <ItemTip>每个 CHIPCHIPBOX 空投 10000 BTC。</ItemTip>
+                        </ItemTipList>
+                        <ItemAirdrop>空投总量 10000 BTC</ItemAirdrop>
+                        <ItemInfo>
+                            <div>已领取</div>
+                            <div>100 / <span>10000</span></div>
+                        </ItemInfo>
+                        <ItemProgress style={{'--progress': '10%'}}></ItemProgress>
+                        <ItemEndTip>距离结束</ItemEndTip>
+                        <ItemBottom>
+                            <Time>
+                                <TimeItem>
+                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                    <span>5D</span>
+                                </TimeItem>
+                                <span>:</span>
+                                <TimeItem>
+                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                    <span>23</span>
+                                </TimeItem>
+                                <span>:</span>
+                                <TimeItem>
+                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                    <span>59</span>
+                                </TimeItem>
+                                <span>:</span>
+                                <TimeItem>
+                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                    <span>59</span>
+                                </TimeItem>
+                            </Time>
+                            <SmallBtn className='custom'>
+                                <span>免费领取</span>
+                                <img src={require('@/assets/home/arrow_enter.png').default}/>
+                            </SmallBtn>
+                        </ItemBottom>
+                    </ItemContent>
+                </Item>
+                <Item>
+                    <ItemTag className='end'>已结束</ItemTag>
+                    <ItemImg src={require('@/assets/airdrop/btc.png').default} alt='icon'/>
+                    <ItemContent>
+                        <ItemHeader>
+                            <ItemName>BTC</ItemName>
+                            <ItemDesc>Bitcoin</ItemDesc>
+                        </ItemHeader>
+                        <ItemTipList>
+                            <ItemTip>持有CHIPCHIPBOX 可以免费领取空投。</ItemTip>
+                            <ItemTip>每个 CHIPCHIPBOX 空投 10000 BTC。</ItemTip>
+                        </ItemTipList>
+                        <ItemAirdrop>空投总量 10000 BTC</ItemAirdrop>
+                        <ItemInfo>
+                            <div>已领取</div>
+                            <div>100 / <span>10000</span></div>
+                        </ItemInfo>
+                        <ItemProgress style={{'--progress': '10%'}}></ItemProgress>
+                        <ItemEndTip>距离结束</ItemEndTip>
+                        <ItemBottom>
+                            <Time>
+                                <TimeItem>
+                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                    <span>5D</span>
+                                </TimeItem>
+                                <span>:</span>
+                                <TimeItem>
+                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                    <span>23</span>
+                                </TimeItem>
+                                <span>:</span>
+                                <TimeItem>
+                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                    <span>59</span>
+                                </TimeItem>
+                                <span>:</span>
+                                <TimeItem>
+                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                    <span>59</span>
+                                </TimeItem>
+                            </Time>
+                            <SmallBtn disabled className='custom'>
+                                <span>已结束</span>
+                                <img src={require('@/assets/home/arrow_enter.png').default}/>
+                            </SmallBtn>
+                        </ItemBottom>
+                    </ItemContent>
+                </Item>
             </ContentH5>
-            <FAQH5>
-                <div className='t_title'>{t('172')}</div>
-                <div className='t_desc'>{t('193')}...</div>
-                <FAQH5Tip>
-                    {
-                        faqList.map((item,idx)=>(
-                            <FAQH5TipRow onClick={()=>history.push('/faqDetail?id='+item.id)} key={idx}>{item.title}</FAQH5TipRow>
-                        ))
-                    }
-                </FAQH5Tip>
-                <FAQH5More className='custom' onClick={()=>history.push('/faq')}>
-                    <span>{t('171')}</span>
-                    <img src={require('../../assets/nav/login_arrow.png').default}/>
-                </FAQH5More>
-            </FAQH5>
         </Root>
     )
 }
@@ -249,9 +384,100 @@ export default function Index() {
 const Root = styled.div`
 position: relative;
 `
+const TopBtnRow = styled.div`
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+row-gap: 15px;
+column-gap: 18px;
+margin-top: 40px;
+${({ theme }) => theme.mediaQueries.sm}{
+width: fit-content;
+row-gap: 30px;
+column-gap: 36px;
+margin-top: 0;
+};
+`
+const LargeBtn = styled.button`
+width: fit-content;
+min-width: 260px;
+padding-left: 35px;
+padding-right: 35px;
+height: 53px;
+border-radius: 32px;
+background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
+font-size: 18px;
+font-weight: 600;
+display: flex;
+align-items: center;
+justify-content: center;
+img {
+margin-left: 10px;
+width: 20px;
+height: 20px;
+}
+`
+const Btn = styled.button`
+width: fit-content;
+min-width: 212px;
+padding-left: 35px;
+padding-right: 35px;
+height: 53px;
+border-radius: 32px;
+background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
+font-size: 18px;
+font-weight: 600;
+display: flex;
+align-items: center;
+justify-content: center;
+img {
+margin-left: 10px;
+width: 20px;
+height: 20px;
+}
+`
+const SmallBtn = styled.button`
+width: fit-content;
+min-width: 136px;
+padding-left: 25px;
+padding-right: 25px;
+height: 40px;
+border-radius: 20px;
+background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
+font-size: 14px;
+font-weight: 600;
+display: flex;
+align-items: center;
+justify-content: center;
+img {
+margin-left: 10px;
+width: 20px;
+height: 20px;
+}
+${({ theme }) => theme.mediaQueries.sm}{
+font-size: 18px;
+min-width: 154px;
+height: 52px;
+border-radius: 32px;
+}
+`
+const H5Btn = styled.button`
+height: 32px;
+border-radius: 16px;
+background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
+font-size: 12px;
+font-weight: 600;
+display: flex;
+align-items: center;
+justify-content: center;
+img {
+margin-left: 5px;
+width: 20px;
+height: 20px;
+}
+`
 
 const TopH5 = styled.div`
-padding: 336px 30px 45px;
+padding: 358px 30px 45px;
 position: relative;
 .icon {
 position: absolute;
@@ -262,7 +488,7 @@ width: 100%;
 .title {
 position: relative;
 text-align: center;
-font-size: 32px;
+font-size: 20px;
 font-weight: 700;
 }
 .desc {
@@ -272,293 +498,33 @@ text-align: center;
 font-size: 16px;
 font-weight: 300;
 }
-.tip {
-position: relative;
-text-align: center;
-margin-top: 20px;
-font-size: 12px;
-line-height: 21px;
-opacity: 0.8;
-}
 `
 const ContentH5 = styled.div`
-padding: 30px 15px 80px;
+padding: 0 15px;
 position: relative;
-.bg {
-position: absolute;
-left: 0;
-top: 50%;
-transform: translateY(-50%);
-width: 100%;
-}
-.bg_bottom {
-position: absolute;
-left: 0;
-bottom: 0;
-width: 100%;
-}
-.header {
-position: relative;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 16px;
-font-weight: 600;
-.left {
-position: relative;
-margin-right: -3px;
-width: 175px;
-height: 45px;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-span {
-position: relative;
-z-index: 1;
-}
-img {
-position: absolute;
-left: 0;
-top: 0;
-width: 100%;
-height: 100%;
-}
-}
-.right {
-position: relative;
-margin-left: -3px;
-width: 175px;
-height: 45px;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-span {
-position: relative;
-z-index: 1;
-}
-img {
-position: absolute;
-left: 0;
-top: 0;
-width: 100%;
-height: 100%;
-}
-}
-}
-.tip {
-position: relative;
-margin-top: 23px;
-font-size: 13px;
-font-weight: 500;
-text-align: center;
-background: linear-gradient(90deg, #FFF 0%, #8CEA8D 100%);
-background-clip: text;
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-margin-bottom: 30px;
-}
 `
-const ItemH5 = styled.div`
-padding: 64px 20px 36px;
-margin-top: 20px;
-position: relative;
-border-radius: 12px;
-background: #241F2D;
-.num {
-position: absolute;
-top: 0;
-left: 33px;
-width: 35px;
-height: 44px;
-}
-.title {
-    font-size: 21px;
-    font-weight: 600;
-}
-.desc {
-    margin-top: 24px;
-    font-size: 13px;
-    line-height: 21px;
-    opacity: 0.8;
-}
-.box {
-position: relative;
-margin-top: 33px;
-margin-bottom: 50px;
-display: flex;
-justify-content: center;
-.box_content {
-position: relative;
-.icon {
-position: relative;
-width: 139px;
-height: 142px;
-}
-.shadow {
-position: absolute;
-bottom: -120px;
-left: 50%;
-transform: translateX(-50%);
-width: 375px;
-height: 251px;
-}
-.rate {
-color: #231D25;
-font-size: 21px;
-font-weight: 600;
-line-height: 32px;
-position: absolute;
-right: -17px;
-bottom: -4px;
-width: 56px;
-height: 56px;
-text-align: center;
-line-height: 56px;
-border-radius: 50%;
-background: linear-gradient(258deg, #75F6A3 5.58%, #FEAD1D 88.85%);
-}
-}
-&.customer {
-margin-bottom: 30px;
-.shadow {
-bottom: -100px;
-}
-.icon {
-width: 174px;
-height: 180px;
-}
-}
-}
-.wallet {
-    margin-top: 30px;
-    .name {
-        color: #D9D9D9;
-        font-size: 12px;
-        opacity: 0.8;
-    }
-    .address {
-        margin-top: 3px;
-        font-size: 12px;
-        opacity: 0.8;
-        word-break: break-all;
-    }
-}
-`
-const CardH5 = styled.div`
-position: relative;
-margin-bottom: 30px;
-border-radius: 6px;
-background: #30293C;
-padding: 10px 12px;
-display: flex;
-gap: 8px;
-align-items: center;
-.coin {
-width: 40px;
-height: 40px;
-}
-.item {
-.i_title {
-font-size: 16px;
-font-weight: 600;
-}
-.i_desc {
-font-size: 13px;
-font-weight: 300;
-opacity: 0.4;
-}
-}
-`
-const FAQH5 = styled.div`
-padding: 50px 24px 45px 36px;
-.t_title {
-font-size: 24px;
-font-weight: 600;
-background: linear-gradient(90deg, #FFF 0%, #8CEA8D 100%);
-background-clip: text;
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-}
-.t_desc {
-margin-top: 20px;
-font-size: 14px;
-font-weight: 600;
-line-height: 21px;
-opacity: 0.8;
-background: linear-gradient(258deg, #75F6A3 5.58%, #FEAD1D 88.85%);
-background-clip: text;
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-}
-`
-const FAQH5Tip = styled.ul`
-margin-top: 20px;
-list-style-type: none;
-color: rgba(255,255,255,0.7);
-`
-const FAQH5TipRow = styled.li`
-margin-top: 10px;
-font-size: 14px;
-position: relative;
-padding-left: 8px;
-&:before {
-    content: '';
-    position: absolute;
-    left: -5px;
-    top: 8px;
-    width: 3px;
-    height: 3px;
-    background-color: rgba(255,255,255,0.7);
-    border-radius: 50%;
-}
-`
-const FAQH5More = styled.button`
-background: transparent;
-margin-top: 10px;
-font-size: 14px;
-display: flex;
-align-items: center;
-img {
-width: 20px;
-height: 20px;
-flex-shrink: 0;
-}
-`
-
 
 const Top = styled.div`
-padding: 123px 135px 0 155px;
+padding: 160px 60px 0 155px;
 height: 700px;
 position: relative;
-.bg {
-pointer-events: none;
-position: absolute;
-left: 0;
-bottom: 0;
-width: 100%;
-}
 .content {
 position: relative;
 display: flex;
 .left {
-padding-top: 62px;
+padding-top: 20px;
+padding-bottom: 30px;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
 .title {
-font-size: 62px;
+font-size: 50px;
 font-weight: 700;
 }
 .desc {
-font-family: "PingFang SC";
 margin-top: 20px;
 font-size: 24px;
 font-weight: 500;
-}
-.tip {
-margin-top: 50px;
-font-size: 16px;
-font-weight: 500;
-color: ${({theme})=>theme.colors.textSubtle};
 }
 }
 .right {
@@ -571,8 +537,10 @@ height: 523px;
 const Content = styled.div`
 padding: 40px 0 30px;
 display: flex;
+flex-direction: column;
 justify-content: center;
 align-items: center;
+gap: 38px;
 position: relative;
 .bg {
 position: absolute;
@@ -586,291 +554,202 @@ left: 0;
 bottom: 0;
 width: 100%;
 }
-.header {
+`
+const Item = styled.div`
+margin-top: 20px;
+cursor: pointer;
+border-radius: 12px;
+background: #241F2D;
 position: relative;
 display: flex;
+gap: 20px;
+flex-direction: column;
+${({ theme }) => theme.mediaQueries.sm}{
+margin-top: 0;
+padding: 16px 52px 20px 20px;
+width: 1060px;
+border-radius: 18px;
+gap: 30px;
 align-items: center;
-justify-content: center;
-font-size: 24px;
+flex-direction: row;
+};
+`
+const ItemTag = styled.div`
+position: absolute;
+left: 0;
+top: 0;
+border-radius: 18px 0px;
+background: rgba(239, 34, 34, 0.50);
+font-size: 16px;
 font-weight: 600;
-.left {
-position: relative;
-margin-right: -10px;
-width: 475px;
-height: 60px;
-cursor: pointer;
-display: flex;
-align-items: center;
-justify-content: center;
-span {
-position: relative;
-z-index: 1;
+padding: 0 22px;
+line-height: 30px;
+&.ing {
+background: rgba(119, 228, 171, 0.50);
 }
-img {
-position: absolute;
-left: 0;
-top: 0;
+&.end {
+background: rgba(149, 149, 149, 0.50);
+}
+${({ theme }) => theme.mediaQueries.sm}{
+font-size: 20px;
+padding: 0 34px;
+line-height: 46px;
+}
+`
+const ItemImg = styled.img`
 width: 100%;
-height: 100%;
-object-fit: fill;
+${({ theme }) => theme.mediaQueries.sm}{
+width: 518px;
+height: 382px;
 }
+`
+const ItemContent = styled.div`
+padding: 0px 16px 20px;
+${({ theme }) => theme.mediaQueries.sm}{
+padding: 0;
+flex: 1;
 }
-.right {
-position: relative;
-margin-left: -10px;
-width: 475px;
-height: 60px;
-cursor: pointer;
+`
+const ItemHeader = styled.div`
 display: flex;
-align-items: center;
-justify-content: center;
-span {
-position: relative;
-z-index: 1;
+align-items: baseline;
+gap: 10px;
+${({ theme }) => theme.mediaQueries.sm}{
+gap: 15px;
 }
-img {
-position: absolute;
-left: 0;
-top: 0;
-width: 100%;
-height: 100%;
-object-fit: fill;
+`
+const ItemName = styled.div`
+font-size: 21px;
+font-weight: 600;
+${({ theme }) => theme.mediaQueries.sm}{
+font-size: 32px;
 }
-}
-}
-.tip {
-position: relative;
-margin-top: 42px;
-text-align: center;
+`
+const ItemDesc = styled.div`
+font-size: 13px;
+${({ theme }) => theme.mediaQueries.sm}{
 font-size: 18px;
-font-weight: 500;
+}
+`
+const ItemTipList = styled.ul`
+margin-top: 16px;
+margin-left: 15px;
+opacity: 0.8;
+${({ theme }) => theme.mediaQueries.sm}{
+margin-top: 26px;
+}
+`
+const ItemTip = styled.li`
+font-size: 13px;
+${({ theme }) => theme.mediaQueries.sm}{
+font-size: 18px;
+}
+`
+const ItemAirdrop = styled.div`
+margin-left: 10px;
+margin-top: 12px;
+font-size: 13px;
+opacity: 0.8;
+${({ theme }) => theme.mediaQueries.sm}{
+margin-top: 22px;
+font-size: 18px;
+}
+`
+const ItemInfo = styled.div`
+margin-top: 20px;
+margin-left: 10px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+opacity: 0.8;
+font-size: 12px;
+span {
+color: #A3A3A3;
+}
+${({ theme }) => theme.mediaQueries.sm}{
+font-size: 14px;
+}
+`
+const ItemProgress = styled.div`
+position: relative;
+margin-top: 5px;
+margin-left: 10px;
+border-radius: 4px;
+background: #494949;
+height: 7px;
+&::before {
+content: "";
+position: absolute;
+left: 0;
+top: 0;
+width: var(--progress);
+height: 100%;
+border-radius: 4px;
+background: #78DDAF;
+}
+`
+const ItemEndTip = styled.div`
+margin-top: 15px;
+margin-left: 10px;
+font-size: 12px;
+opacity: 0.8;
+${({ theme }) => theme.mediaQueries.sm}{
+font-size: 14px;
+}
+`
+const ItemBottom = styled.div`
+margin-top: 10px;
+margin-left: 10px;
+display: flex;
+flex-direction: column;
+gap: 22px;
+${({ theme }) => theme.mediaQueries.sm}{
+gap: 0;
+align-items: center;
+flex-direction: row;
+justify-content: space-between;
+};
+`
+const Time = styled.div`
+display: flex;
+align-items: center;
+gap: 9px;
+& > span {
+font-size: 16px;
+opacity: 0.3;
+}
+${({ theme }) => theme.mediaQueries.sm}{
+& > span {
+font-size: 24px;
+}
+};
+`
+const TimeItem = styled.div`
+position: relative;
+width: 28px;
+height: 28px;
+text-align: center;
+line-height: 28px;
+font-size: 16px;
+font-weight: 700;
+img {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+}
+span {
+position: relative;
 background: linear-gradient(90deg, #FFF 0%, #8CEA8D 100%);
 background-clip: text;
 -webkit-background-clip: text;
 -webkit-text-fill-color: transparent;
-margin-bottom: 55px;
-}
-`
-const ContentBody = styled.div`
-position: relative;
-width: 920px;
-`
-const Item = styled.div`
-padding: 36px 56px 132px 132px;
-margin-top: 44px;
-position: relative;
-border-radius: 18px;
-background: #241F2D;
-.num {
-position: absolute;
-top: -8px;
-left: 46px;
-width: 55px;
-height: 69px;
-}
-.content {
-display: flex;
-justify-content: space-between;
-.left {
-padding-top: 55px;
-position: relative;
-flex-shrink: 0;
-width: 50%;
-display: flex;
-.box {
-position: relative;
-height: fit-content;
-    .icon {
-    width: 254px;
-    height: 260px;
-    }
-    .shadow {
-    position: absolute;
-    bottom: -220px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 930px;
-    height: 459px;
-    }
-    .rate {
-    color: #231D25;
-    font-size: 32px;
-    font-weight: 600;
-    line-height: 60px;
-    position: absolute;
-    right: -32px;
-    bottom: -8px;
-    width: 104px;
-    height: 104px;
-    text-align: center;
-    line-height: 104px;
-    border-radius: 50%;
-    background: linear-gradient(258deg, #75F6A3 5.58%, #FEAD1D 88.85%);
-    }
-}
-}
-.right {
-    flex: 1;
-    .title {
-        font-size: 32px;
-        font-weight: 600;
-        line-height: 45px;
-    }
-    .desc {
-        margin-top: 38px;
-        font-size: 18px;
-        line-height: 32px;
-        opacity: 0.8;
-    }
-    .wallet {
-    margin-top: 30px;
-    .name {
-        color: #D9D9D9;
-        font-size: 18px;
-        line-height: 32px;
-        opacity: 0.8;
-    }
-    .address {
-        margin-top: 6px;
-        font-size: 18px;
-        line-height: 32px;
-        opacity: 0.8;
-        word-break: break-all;
-    }
-    }
-}
-}
-`
-const TopTip = styled.ul`
-margin-top: 24px;
-list-style-type: none;
-color: rgba(255,255,255,0.7);
-${({ theme }) => theme.mediaQueries.sm}{
-margin-top: 40px;
-};
-`
-const TopTipRow = styled.li`
-font-size: 13px;
-position: relative;
-padding-left: 8px;
-line-height: 21px;
-&:before {
-    content: '';
-    position: absolute;
-    left: -5px;
-    top: 8px;
-    width: 3px;
-    height: 3px;
-    background-color: rgba(255,255,255,0.7);
-    border-radius: 50%;
 }
 ${({ theme }) => theme.mediaQueries.sm}{
-font-size: 18px;
-padding-left: 8px;
-line-height: 32px;
-&:before {
-    top: 14px;
-}
+width: 35px;
+height: 35px;
+line-height: 35px;
+font-size: 20px;
 };
-`
-const BtnRow = styled.div`
-position: relative;
-display: flex;
-justify-content: center;
-gap: 17px;
-${({ theme }) => theme.mediaQueries.sm}{
-padding-left: 8px;
-margin-top: 60px;
-justify-content: flex-start;
-gap: 14px;
-};
-`
-const Btn = styled.button`
-position: relative;
-font-size: 14px;
-font-weight: 600;
-height: 40px;
-width: 146px;
-border-radius: 32px;
-background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
-color: ${({theme})=>theme.colors.text};
-display: flex;
-align-items: center;
-justify-content: center;
-gap: 10px;
-img {
-width: 20px;
-height: 20px;
-}
-${({ theme }) => theme.mediaQueries.sm}{
-font-size: 18px;
-height: 53px;
-};
-`
-const Btn_border = styled(NavLink)`
-background: transparent;
-font-size: 14px;
-font-weight: 600;
-height: 40px;
-line-height: 40px;
-text-align: center;
-width: 146px;
-border-radius: 32px;
-border: 1px solid #FFF;
-${({ theme }) => theme.mediaQueries.sm}{
-font-size: 18px;
-height: 53px;
-line-height: 53px;
-};
-`
-const Card = styled.div`
-margin-top: 30px;
-border-radius: 8px;
-background: #30293C;
-padding: 15px 18px;
-display: flex;
-justify-content: space-between;
-.item {
-.i_title {
-font-size: 21px;
-font-weight: 600;
-}
-.i_desc {
-font-size: 16px;
-font-weight: 300;
-opacity: 0.4;
-}
-}
-`
-const FAQ = styled.div`
-padding: 80px 140px 104px;
-.title {
-font-size: 38px;
-font-weight: 600;
-line-height: 60px;
-text-transform: uppercase;
-margin-bottom: 30px;
-}
-.item {
-cursor: pointer;
-margin-top: 20px;
-height: 65px;
-border-radius: 8px;
-border: 2px solid #2B292E;
-font-size: 21px;
-font-weight: 500;
-line-height: 65px;
-position: relative;
-padding-left: 38px;
-&:before {
-    content: '';
-    position: absolute;
-    left: 20px;
-    top: 30px;
-    width: 4px;
-    height: 4px;
-    background-color: rgba(255,255,255,0.7);
-    border-radius: 50%;
-}
-}
 `
