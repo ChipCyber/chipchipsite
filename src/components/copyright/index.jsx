@@ -1,10 +1,15 @@
 import React from 'react'
 import styled from "styled-components";
+import useBreakpointCheck from "@/hooks/useBreakpointCheck";
 
 export default function Index() {
-    return (
-        <Root>Copyright © 2025 CHIPCHIP</Root>
-    )
+    const shouldRender = useBreakpointCheck();
+    if (shouldRender) {
+        return (
+            <Root>Copyright © 2025 CHIPCHIP</Root>
+        )
+    }
+    return null;
 }
 
 const Root = styled.div`

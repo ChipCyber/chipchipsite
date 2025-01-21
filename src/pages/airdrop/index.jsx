@@ -57,7 +57,7 @@ export default function Index() {
                     <img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default}/>
                     <Item onClick={()=>history.push('/airdropDetail?id='+1)}>
                         <ItemTag>预热中</ItemTag>
-                        <ItemImg src={require('@/assets/airdrop/btc.png').default} alt='icon'/>
+                        <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
                         <ItemContent>
                             <ItemHeader>
                                 <ItemName>BTC</ItemName>
@@ -73,7 +73,7 @@ export default function Index() {
                                 <div>100 / <span>10000</span></div>
                             </ItemInfo>
                             <ItemProgress style={{'--progress': '10%'}}></ItemProgress>
-                            <ItemEndTip>距离结束</ItemEndTip>
+                            <ItemEndTip>距离开始领取</ItemEndTip>
                             <ItemBottom>
                                 <Time>
                                     <TimeItem>
@@ -105,7 +105,7 @@ export default function Index() {
                     </Item>
                     <Item>
                         <ItemTag className='ing'>进行中</ItemTag>
-                        <ItemImg src={require('@/assets/airdrop/btc.png').default} alt='icon'/>
+                        <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
                         <ItemContent>
                             <ItemHeader>
                                 <ItemName>BTC</ItemName>
@@ -153,7 +153,7 @@ export default function Index() {
                     </Item>
                     <Item>
                         <ItemTag className='end'>已结束</ItemTag>
-                        <ItemImg src={require('@/assets/airdrop/btc.png').default} alt='icon'/>
+                        <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
                         <ItemContent>
                             <ItemHeader>
                                 <ItemName>BTC</ItemName>
@@ -234,7 +234,7 @@ export default function Index() {
             <ContentH5>
                 <Item onClick={()=>history.push('/airdropDetail?id='+1)}>
                     <ItemTag>预热中</ItemTag>
-                    <ItemImg src={require('@/assets/airdrop/h5/btc.png').default} alt='icon'/>
+                    <ItemImg src={require('@/assets/airdrop/h5/airdrop.png').default} alt='icon'/>
                     <ItemContent>
                         <ItemHeader>
                             <ItemName>BTC</ItemName>
@@ -282,7 +282,7 @@ export default function Index() {
                 </Item>
                 <Item>
                     <ItemTag className='ing'>进行中</ItemTag>
-                    <ItemImg src={require('@/assets/airdrop/btc.png').default} alt='icon'/>
+                    <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
                     <ItemContent>
                         <ItemHeader>
                             <ItemName>BTC</ItemName>
@@ -330,7 +330,7 @@ export default function Index() {
                 </Item>
                 <Item>
                     <ItemTag className='end'>已结束</ItemTag>
-                    <ItemImg src={require('@/assets/airdrop/btc.png').default} alt='icon'/>
+                    <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
                     <ItemContent>
                         <ItemHeader>
                             <ItemName>BTC</ItemName>
