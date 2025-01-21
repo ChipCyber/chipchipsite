@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components";
+import { Input } from "antd";
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { DialogOverlay, DialogContent } from "@reach/dialog";
 import useBreakpointCheck from "../../hooks/useBreakpointCheck";
 
 export default function Index() {
@@ -10,6 +12,8 @@ export default function Index() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     let aValue = searchParams.get('id');
+    const [showSearch, setShowSearch] = useState(false);
+    const [chipBoxId, setChipBoxId] = useState(null);
     const [id, setId] = useState(aValue);
     useEffect(() => {
         // knowledgeGetApi({id}).then(({data})=>{
@@ -76,11 +80,13 @@ export default function Index() {
                         <InfoBtnRow>
                             <SmallBtn className='custom'>
                                 <span>Connect Wallet / 开始领取</span>
-                                <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
+                                <img src={require('@/assets/nav/login_arrow.png').default}/>}
                             </SmallBtn>
-                            <SmallBtn className='custom'>
+                            <SmallBtn className='custom' onClick={()=>setShowSearch(true)}>
                                 <span>查询</span>
-                                <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
+                                <img src={require('@/assets/nav/login_arrow.png').default}/>}
                             </SmallBtn>
                         </InfoBtnRow>
                     </InfoRight>
@@ -121,15 +127,18 @@ export default function Index() {
                     <LeaderBtnRow>
                         <SmallBtn className='custom'>
                             <span>Buy CHIPCHIPBOX</span>
-                            <img src={require('@/assets/home/arrow_enter.png').default}/>
+                            {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
+                                <img src={require('@/assets/nav/login_arrow.png').default}/>}
                         </SmallBtn>
                         <SmallBtn className='custom'>
                             <span>加入社区</span>
-                            <img src={require('@/assets/home/arrow_enter.png').default}/>
+                            {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
+                                <img src={require('@/assets/nav/login_arrow.png').default}/>}
                         </SmallBtn>
                         <SmallBtn className='custom'>
                             <span>关注狗哥</span>
-                            <img src={require('@/assets/home/arrow_enter.png').default}/>
+                            {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
+                                <img src={require('@/assets/nav/login_arrow.png').default}/>}
                         </SmallBtn>
                     </LeaderBtnRow>
                     <LeaderContent>
@@ -154,6 +163,24 @@ export default function Index() {
                 {shouldRender?<img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default}/>:
                 <img className='bg_bottom' src={require('../../assets/airdrop/h5/bottom_bg.png').default}/>}
             </Content>
+            <DialogOverlay
+                style={{ height: '100vh', zIndex: 99, background: 'hsla(0, 0%, 0%, 0.6)' }}
+                isOpen={showSearch}
+                onDismiss={()=>setShowSearch(false)}
+            >
+                <Dialog aria-label='search'>
+                    <DialogHeader>
+                        <div className='title'>{t('查询')}</div>
+                        <img className='close' onClick={()=>setShowSearch(false)} src={require('@/assets/nav/close.png').default}/>
+                    </DialogHeader>
+                    <DialogTip>通过CHIPCHIPBOX ID可查询获得空投代币的数量</DialogTip>
+                    <DialogInput>
+                        <input type='text' value={chipBoxId} onChange={(e)=>setChipBoxId(e.target.value)} placeholder='输入CHIPCHIPBOX ID'/>
+                    </DialogInput>
+                    <Btn className='custom'>查询</Btn>
+                    <DialogResult>查询结果： 10000 BTC</DialogResult>
+                </Dialog>
+            </DialogOverlay>
         </Root>
     )
 }
@@ -652,5 +679,104 @@ line-height: 21px;
 ${({ theme }) => theme.mediaQueries.sm}{
 font-size: 18px;
 line-height: 32px;
+}
+`
+const Dialog = styled(DialogContent)`
+width: calc(100% - 50px) !important;
+padding: 12px 16px 20px !important;
+border-radius: 12px;
+background: #362F42 !important;
+${({ theme }) => theme.mediaQueries.sm}{
+    width: 475px !important;
+    padding: 25px 38px 40px !important;
+};
+`
+const DialogHeader = styled.div`
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 14px;
+.title {
+font-size: 18px;
+font-weight: 600;
+line-height: 32px;
+}
+.close {
+cursor: pointer;
+width: 17.5px;
+height: 17.5px;
+}
+${({ theme }) => theme.mediaQueries.sm}{
+margin-bottom: 20px;
+.title {
+font-size: 24px;
+}
+};
+`
+const DialogTip = styled.div`
+font-size: 12px;
+font-weight: 500;
+opacity: 0.8;
+${({ theme }) => theme.mediaQueries.sm}{
+font-size: 16px;
+}
+`
+const DialogInput = styled.div`
+margin-top: 12px;
+border-radius: 4px;
+background: #121212;
+display: flex;
+height: 40px;
+padding: 0 10px;
+input, input[disabled] {
+    width: 100%;
+    height: 100%;
+    color: #FFF;
+    background: none;
+    border: none;
+    border-color: transparent;
+    font-size: 14px;
+    font-weight: 600;
+}
+${({ theme }) => theme.mediaQueries.sm}{
+margin-top: 15px;
+height: 50px;
+input, input[disabled] {
+    font-size: 21px;
+}
+}
+`
+const DialogResult = styled.div`
+margin-top: 20px;
+font-size: 14px;
+font-weight: 500;
+opacity: 0.8;
+${({ theme }) => theme.mediaQueries.sm}{
+margin-top: 32px;
+font-size: 16px;
+}
+`
+const Btn = styled.button`
+margin-top: 20px;
+width: 100%;
+height: 40px;
+border-radius: 20px;
+background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
+font-size: 14px;
+font-weight: 600;
+display: flex;
+align-items: center;
+justify-content: center;
+img {
+margin-left: 10px;
+width: 20px;
+height: 20px;
+}
+${({ theme }) => theme.mediaQueries.sm}{
+margin-top: 40px;
+font-size: 18px;
+min-width: 154px;
+height: 52px;
+border-radius: 32px;
 }
 `
