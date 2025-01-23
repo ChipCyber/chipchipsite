@@ -5,22 +5,70 @@ import useBreakpointCheck from "../../hooks/useBreakpointCheck";
 import { NavLink, useHistory } from 'react-router-dom';
 import {
     openUrl,
-    BuyNowUrl,
-    EnterGameUrl,
 } from "../../constants";
+import { _saveToTwoWei,_getValueDivided } from "@/constants/constantsFunction";
+import { airdropGetHomeApi } from "@/api/mint.js";
 
 export default function Index() {
-    const { t } = useTranslation();
+    const { t,i18n } = useTranslation();
     const history = useHistory();
     const shouldRender = useBreakpointCheck();
+    const [list, setList] = useState([]);
     useEffect(() => {
-        
+        const handleLanguageChange = () => {
+            fetchData();
+        }
+        i18n.on('languageChanged', handleLanguageChange);
+        return () => {
+            i18n.off('languageChanged', handleLanguageChange);
+        };
+    }, [i18n]);
+    useEffect(() => {
+        const timer = setInterval(() => {
+            refreshList();
+        }, 1000);
+        return () => clearInterval(timer);
     }, []);
+    const refreshList = () => {
+        setList((prevList) =>
+            prevList.map((item) => {
+                const now = new Date();
+                const startTime = new Date(item.start_time);
+                const endTime = new Date(item.end_time);
+                let startDiff = startTime - now;
+                let endDiff = endTime - now;
+                const formatTime = (diff) => {
+                    if (diff <= 0) return { days: '0', hours: '00', minutes: '00', seconds: '00' };
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24).toString().padStart(2, '0');
+                    const minutes = Math.floor((diff / (1000 * 60)) % 60).toString().padStart(2, '0');
+                    const seconds = Math.floor((diff / 1000) % 60).toString().padStart(2, '0');
+                    return { days: days.toString(), hours, minutes, seconds };
+                };
+                const isBegin = startDiff<=0;
+                const isEnd = endDiff<=0;
+                return {
+                    ...item,
+                    isBegin,
+                    isEnd,
+                    remaining: isBegin||isEnd?formatTime(endDiff):formatTime(startDiff),
+                };
+            })
+        );
+    }
+    useEffect(()=>{
+        fetchData();
+    },[]);
+    const fetchData = () => {
+        airdropGetHomeApi({}).then(({data})=>{
+            setList(data.active);
+            refreshList();
+        });
+    }
     if (shouldRender) {
         return (
             <Root>
                 <Top>
-                    {/* <img className='bg' src={require('../../assets/airdrop/top_bg.png').default}/> */}
                     <div className='content'>
                         <div className='left'>
                             <div>
@@ -55,150 +103,57 @@ export default function Index() {
                 <Content>
                     <img className='bg' src={require('../../assets/airdrop/bg.png').default}/>
                     <img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default}/>
-                    <Item onClick={()=>history.push('/airdropDetail?id='+1)}>
-                        <ItemTag>预热中</ItemTag>
-                        <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
-                        <ItemContent>
-                            <ItemHeader>
-                                <ItemName>BTC</ItemName>
-                                <ItemDesc>Bitcoin</ItemDesc>
-                            </ItemHeader>
-                            <ItemTipList>
-                                <ItemTip>持有CHIPCHIPBOX 可以免费领取空投。</ItemTip>
-                                <ItemTip>每个 CHIPCHIPBOX 空投 10000 BTC。</ItemTip>
-                            </ItemTipList>
-                            <ItemAirdrop>空投总量 10000 BTC</ItemAirdrop>
-                            <ItemInfo>
-                                <div>已领取</div>
-                                <div>100 / <span>10000</span></div>
-                            </ItemInfo>
-                            <ItemProgress style={{'--progress': '10%'}}></ItemProgress>
-                            <ItemEndTip>距离开始领取</ItemEndTip>
-                            <ItemBottom>
-                                <Time>
-                                    <TimeItem>
-                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                        <span>5D</span>
-                                    </TimeItem>
-                                    <span>:</span>
-                                    <TimeItem>
-                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                        <span>23</span>
-                                    </TimeItem>
-                                    <span>:</span>
-                                    <TimeItem>
-                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                        <span>59</span>
-                                    </TimeItem>
-                                    <span>:</span>
-                                    <TimeItem>
-                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                        <span>59</span>
-                                    </TimeItem>
-                                </Time>
-                                <SmallBtn disabled className='custom'>
-                                    <span>开始领取</span>
-                                    <img src={require('@/assets/home/arrow_enter.png').default}/>
-                                </SmallBtn>
-                            </ItemBottom>
-                        </ItemContent>
-                    </Item>
-                    <Item>
-                        <ItemTag className='ing'>进行中</ItemTag>
-                        <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
-                        <ItemContent>
-                            <ItemHeader>
-                                <ItemName>BTC</ItemName>
-                                <ItemDesc>Bitcoin</ItemDesc>
-                            </ItemHeader>
-                            <ItemTipList>
-                                <ItemTip>持有CHIPCHIPBOX 可以免费领取空投。</ItemTip>
-                                <ItemTip>每个 CHIPCHIPBOX 空投 10000 BTC。</ItemTip>
-                            </ItemTipList>
-                            <ItemAirdrop>空投总量 10000 BTC</ItemAirdrop>
-                            <ItemInfo>
-                                <div>已领取</div>
-                                <div>100 / <span>10000</span></div>
-                            </ItemInfo>
-                            <ItemProgress style={{'--progress': '10%'}}></ItemProgress>
-                            <ItemEndTip>距离结束</ItemEndTip>
-                            <ItemBottom>
-                                <Time>
-                                    <TimeItem>
-                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                        <span>5D</span>
-                                    </TimeItem>
-                                    <span>:</span>
-                                    <TimeItem>
-                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                        <span>23</span>
-                                    </TimeItem>
-                                    <span>:</span>
-                                    <TimeItem>
-                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                        <span>59</span>
-                                    </TimeItem>
-                                    <span>:</span>
-                                    <TimeItem>
-                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                        <span>59</span>
-                                    </TimeItem>
-                                </Time>
-                                <SmallBtn className='custom'>
-                                    <span>免费领取</span>
-                                    <img src={require('@/assets/home/arrow_enter.png').default}/>
-                                </SmallBtn>
-                            </ItemBottom>
-                        </ItemContent>
-                    </Item>
-                    <Item>
-                        <ItemTag className='end'>已结束</ItemTag>
-                        <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
-                        <ItemContent>
-                            <ItemHeader>
-                                <ItemName>BTC</ItemName>
-                                <ItemDesc>Bitcoin</ItemDesc>
-                            </ItemHeader>
-                            <ItemTipList>
-                                <ItemTip>持有CHIPCHIPBOX 可以免费领取空投。</ItemTip>
-                                <ItemTip>每个 CHIPCHIPBOX 空投 10000 BTC。</ItemTip>
-                            </ItemTipList>
-                            <ItemAirdrop>空投总量 10000 BTC</ItemAirdrop>
-                            <ItemInfo>
-                                <div>已领取</div>
-                                <div>100 / <span>10000</span></div>
-                            </ItemInfo>
-                            <ItemProgress style={{'--progress': '10%'}}></ItemProgress>
-                            <ItemEndTip>距离结束</ItemEndTip>
-                            <ItemBottom>
-                                <Time>
-                                    <TimeItem>
-                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                        <span>5D</span>
-                                    </TimeItem>
-                                    <span>:</span>
-                                    <TimeItem>
-                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                        <span>23</span>
-                                    </TimeItem>
-                                    <span>:</span>
-                                    <TimeItem>
-                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                        <span>59</span>
-                                    </TimeItem>
-                                    <span>:</span>
-                                    <TimeItem>
-                                        <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                        <span>59</span>
-                                    </TimeItem>
-                                </Time>
-                                <SmallBtn disabled className='custom'>
-                                    <span>已结束</span>
-                                    <img src={require('@/assets/home/arrow_enter.png').default}/>
-                                </SmallBtn>
-                            </ItemBottom>
-                        </ItemContent>
-                    </Item>
+                    {
+                        list.map(item=>(
+                            <Item key={item.id} onClick={()=>history.push('/airdropDetail?id='+item.id)}>
+                                <ItemTag className={item.isEnd?'end':(item.isBegin?'ing':'')}>{item.isEnd?t('已结束'):(item.isBegin?t('进行中'):t('预热中'))}</ItemTag>
+                                <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
+                                <ItemContent>
+                                    <ItemHeader>
+                                        <ItemName>{item.name}</ItemName>
+                                        <ItemDesc>{item.symbol}</ItemDesc>
+                                    </ItemHeader>
+                                    <ItemTipList>
+                                        {item.slogan.split('\n').map((line, index) => (<React.Fragment key={index}><ItemTip>{line}</ItemTip></React.Fragment>))}
+                                    </ItemTipList>
+                                    <ItemAirdrop>空投总量 {_saveToTwoWei(item.airdrop_total,6)} {item.symbol}</ItemAirdrop>
+                                    <ItemInfo>
+                                        <div>已领取</div>
+                                        <div>{_saveToTwoWei(item.airdrop_current,6)} / <span>{_saveToTwoWei(item.airdrop_total,6)}</span></div>
+                                    </ItemInfo>
+                                    <ItemProgress style={{'--progress': _getValueDivided(item.airdrop_current,item.airdrop_total)+'%'}}></ItemProgress>
+                                    <ItemEndTip>{item.isEnd?t('距离结束'):(item.isBegin?t('距离开始领取'):t('距离结束'))}</ItemEndTip>
+                                    <ItemBottom>
+                                        <Time>
+                                            <TimeItem>
+                                                <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                                <span>{item.remaining?.days ?? 0}D</span>
+                                            </TimeItem>
+                                            <span>:</span>
+                                            <TimeItem>
+                                                <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                                <span>{item.remaining?.hours ?? 0}</span>
+                                            </TimeItem>
+                                            <span>:</span>
+                                            <TimeItem>
+                                                <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                                <span>{item.remaining?.minutes ?? 0}</span>
+                                            </TimeItem>
+                                            <span>:</span>
+                                            <TimeItem>
+                                                <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                                <span>{item.remaining?.seconds ?? 0}</span>
+                                            </TimeItem>
+                                        </Time>
+                                        <SmallBtn disabled={!item.isBegin||item.isEnd} className='custom'>
+                                            <span>{item.isEnd?t('已结束'):(item.isBegin?t('开始领取'):t('免费领取'))}</span>
+                                            <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                        </SmallBtn>
+                                    </ItemBottom>
+                                </ItemContent>
+                            </Item>
+                        ))
+                    }
                 </Content>
             </Root>
         )
@@ -232,150 +187,57 @@ export default function Index() {
                 <img style={{objectFit:'contain',verticalAlign:'top',height:'100%'}} src={require('../../assets/home/h5/logo_row.png').default}/>
             </div>
             <ContentH5>
-                <Item onClick={()=>history.push('/airdropDetail?id='+1)}>
-                    <ItemTag>预热中</ItemTag>
-                    <ItemImg src={require('@/assets/airdrop/h5/airdrop.png').default} alt='icon'/>
-                    <ItemContent>
-                        <ItemHeader>
-                            <ItemName>BTC</ItemName>
-                            <ItemDesc>Bitcoin</ItemDesc>
-                        </ItemHeader>
-                        <ItemTipList>
-                            <ItemTip>持有CHIPCHIPBOX 可以免费领取空投。</ItemTip>
-                            <ItemTip>每个 CHIPCHIPBOX 空投 10000 BTC。</ItemTip>
-                        </ItemTipList>
-                        <ItemAirdrop>空投总量 10000 BTC</ItemAirdrop>
-                        <ItemInfo>
-                            <div>已领取</div>
-                            <div>100 / <span>10000</span></div>
-                        </ItemInfo>
-                        <ItemProgress style={{'--progress': '10%'}}></ItemProgress>
-                        <ItemEndTip>距离结束</ItemEndTip>
-                        <ItemBottom>
-                            <Time>
-                                <TimeItem>
-                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                    <span>5D</span>
-                                </TimeItem>
-                                <span>:</span>
-                                <TimeItem>
-                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                    <span>23</span>
-                                </TimeItem>
-                                <span>:</span>
-                                <TimeItem>
-                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                    <span>59</span>
-                                </TimeItem>
-                                <span>:</span>
-                                <TimeItem>
-                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                    <span>59</span>
-                                </TimeItem>
-                            </Time>
-                            <SmallBtn disabled className='custom'>
-                                <span>开始领取</span>
-                                <img src={require('@/assets/nav/login_arrow.png').default}/>
-                            </SmallBtn>
-                        </ItemBottom>
-                    </ItemContent>
-                </Item>
-                <Item>
-                    <ItemTag className='ing'>进行中</ItemTag>
-                    <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
-                    <ItemContent>
-                        <ItemHeader>
-                            <ItemName>BTC</ItemName>
-                            <ItemDesc>Bitcoin</ItemDesc>
-                        </ItemHeader>
-                        <ItemTipList>
-                            <ItemTip>持有CHIPCHIPBOX 可以免费领取空投。</ItemTip>
-                            <ItemTip>每个 CHIPCHIPBOX 空投 10000 BTC。</ItemTip>
-                        </ItemTipList>
-                        <ItemAirdrop>空投总量 10000 BTC</ItemAirdrop>
-                        <ItemInfo>
-                            <div>已领取</div>
-                            <div>100 / <span>10000</span></div>
-                        </ItemInfo>
-                        <ItemProgress style={{'--progress': '10%'}}></ItemProgress>
-                        <ItemEndTip>距离结束</ItemEndTip>
-                        <ItemBottom>
-                            <Time>
-                                <TimeItem>
-                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                    <span>5D</span>
-                                </TimeItem>
-                                <span>:</span>
-                                <TimeItem>
-                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                    <span>23</span>
-                                </TimeItem>
-                                <span>:</span>
-                                <TimeItem>
-                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                    <span>59</span>
-                                </TimeItem>
-                                <span>:</span>
-                                <TimeItem>
-                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                    <span>59</span>
-                                </TimeItem>
-                            </Time>
-                            <SmallBtn className='custom'>
-                                <span>免费领取</span>
-                                <img src={require('@/assets/home/arrow_enter.png').default}/>
-                            </SmallBtn>
-                        </ItemBottom>
-                    </ItemContent>
-                </Item>
-                <Item>
-                    <ItemTag className='end'>已结束</ItemTag>
-                    <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
-                    <ItemContent>
-                        <ItemHeader>
-                            <ItemName>BTC</ItemName>
-                            <ItemDesc>Bitcoin</ItemDesc>
-                        </ItemHeader>
-                        <ItemTipList>
-                            <ItemTip>持有CHIPCHIPBOX 可以免费领取空投。</ItemTip>
-                            <ItemTip>每个 CHIPCHIPBOX 空投 10000 BTC。</ItemTip>
-                        </ItemTipList>
-                        <ItemAirdrop>空投总量 10000 BTC</ItemAirdrop>
-                        <ItemInfo>
-                            <div>已领取</div>
-                            <div>100 / <span>10000</span></div>
-                        </ItemInfo>
-                        <ItemProgress style={{'--progress': '10%'}}></ItemProgress>
-                        <ItemEndTip>距离结束</ItemEndTip>
-                        <ItemBottom>
-                            <Time>
-                                <TimeItem>
-                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                    <span>5D</span>
-                                </TimeItem>
-                                <span>:</span>
-                                <TimeItem>
-                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                    <span>23</span>
-                                </TimeItem>
-                                <span>:</span>
-                                <TimeItem>
-                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                    <span>59</span>
-                                </TimeItem>
-                                <span>:</span>
-                                <TimeItem>
-                                    <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                    <span>59</span>
-                                </TimeItem>
-                            </Time>
-                            <SmallBtn disabled className='custom'>
-                                <span>已结束</span>
-                                <img src={require('@/assets/home/arrow_enter.png').default}/>
-                            </SmallBtn>
-                        </ItemBottom>
-                    </ItemContent>
-                </Item>
+                {
+                    list.map(item=>(
+                        <Item key={item.id} onClick={()=>history.push('/airdropDetail?id='+item.id)}>
+                            <ItemTag className={item.isEnd?'end':(item.isBegin?'ing':'')}>{item.isEnd?t('已结束'):(item.isBegin?t('进行中'):t('预热中'))}</ItemTag>
+                            <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
+                            <ItemContent>
+                                <ItemHeader>
+                                    <ItemName>{item.name}</ItemName>
+                                    <ItemDesc>{item.symbol}</ItemDesc>
+                                </ItemHeader>
+                                <ItemTipList>
+                                    {item.slogan.split('\n').map((line, index) => (<React.Fragment key={index}><ItemTip>{line}</ItemTip></React.Fragment>))}
+                                </ItemTipList>
+                                <ItemAirdrop>空投总量 {_saveToTwoWei(item.airdrop_total,6)} {item.symbol}</ItemAirdrop>
+                                <ItemInfo>
+                                    <div>已领取</div>
+                                    <div>{_saveToTwoWei(item.airdrop_current,6)} / <span>{_saveToTwoWei(item.airdrop_total,6)}</span></div>
+                                </ItemInfo>
+                                <ItemProgress style={{'--progress': _getValueDivided(item.airdrop_current,item.airdrop_total)+'%'}}></ItemProgress>
+                                <ItemEndTip>{item.isEnd?t('距离结束'):(item.isBegin?t('距离开始领取'):t('距离结束'))}</ItemEndTip>
+                                <ItemBottom>
+                                    <Time>
+                                        <TimeItem>
+                                            <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                            <span>{item.remaining?.days ?? 0}D</span>
+                                        </TimeItem>
+                                        <span>:</span>
+                                        <TimeItem>
+                                            <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                            <span>{item.remaining?.hours ?? 0}</span>
+                                        </TimeItem>
+                                        <span>:</span>
+                                        <TimeItem>
+                                            <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                            <span>{item.remaining?.minutes ?? 0}</span>
+                                        </TimeItem>
+                                        <span>:</span>
+                                        <TimeItem>
+                                            <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                            <span>{item.remaining?.seconds ?? 0}</span>
+                                        </TimeItem>
+                                    </Time>
+                                    <SmallBtn disabled={!item.isBegin||item.isEnd} className='custom'>
+                                        <span>{item.isEnd?t('已结束'):(item.isBegin?t('开始领取'):t('免费领取'))}</span>
+                                        <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                    </SmallBtn>
+                                </ItemBottom>
+                            </ItemContent>
+                        </Item>
+                    ))
+                }
             </ContentH5>
         </Root>
     )
@@ -500,7 +362,7 @@ font-weight: 300;
 }
 `
 const ContentH5 = styled.div`
-padding: 0 15px;
+padding: 0 15px 20px;
 position: relative;
 `
 

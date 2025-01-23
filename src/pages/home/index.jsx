@@ -198,7 +198,7 @@ export default function Home() {
                             <Top1TipRow>{t('110')}</Top1TipRow>
                         </Top1Tip>
                         <Top1TipBtnRow>
-                            <Top1TipDisabledBtn disabled>Fair Launch</Top1TipDisabledBtn>
+                            {/* <Top1TipDisabledBtn disabled>Fair Launch</Top1TipDisabledBtn> */}
                             <Top1TipBorderBtn className='custom' to='/airdrop'>{t('101')}</Top1TipBorderBtn>
                             <Top1TipBorderBtn className='custom' to='/displacement'>{t('111')}</Top1TipBorderBtn>
                             <Top1TipBorderBtn className='custom' to='/download'>
@@ -300,10 +300,10 @@ export default function Home() {
                                         </Top4Row1LeftCardItem>
                                     </Top4Row1LeftCardContent>
                                 </Top4Row1LeftCard>
-                                <Top2Btn className='custom' disabled>
+                                {/* <Top2Btn className='custom' disabled>
                                     <span>Fair Launch</span>
                                     <img src={require('../../assets/home/arrow_enter.png').default}/>
-                                </Top2Btn>
+                                </Top2Btn> */}
                             </Top4Row1Left>
                             {/* <Chart ref={(node) => { ref(node); chartRef.current = node; }}></Chart> */}
                             <Chart><img src={require("../../assets/home/chart_icon.png").default} alt='icon'/></Chart>
@@ -490,7 +490,7 @@ export default function Home() {
                     <div className='desc'>{t('106')}</div>
                     <div className='tip'>{t('107')}<br/>{t('109')}<br/>{t('108')}<br/>{t('110')}</div>
                     <div className='row'>
-                        <Top1TipDisabledBtn disabled>Fair Launch</Top1TipDisabledBtn>
+                        {/* <Top1TipDisabledBtn disabled>Fair Launch</Top1TipDisabledBtn> */}
                         <Top1TipBorderBtn to='/airdrop'>{t('101')}</Top1TipBorderBtn>
                     </div>
                     <div className='row'>
@@ -571,10 +571,10 @@ export default function Home() {
                         <div className='item_desc'>{t('344')}</div>
                     </Top4H5CardItem>
                 </Top4H5Card>
-                <BtnH5 className='custom' disabled>
+                {/* <BtnH5 className='custom' disabled>
                     <span>Fair Launch</span>
                     <img src={require('../../assets/nav/login_arrow.png').default}/>
-                </BtnH5>
+                </BtnH5> */}
             </Top4H5>
             <Top5H5>
                 <img className='bg' src={require('../../assets/home/h5/bg5.png').default}/>
@@ -1662,7 +1662,7 @@ color: ${({theme})=>theme.colors.textSubtle};
 `
 const Top4 = styled.div`
 position: relative;
-padding: 61px 72px 28px 157px;
+padding: 61px 72px 88px 157px;
 `
 const Top4Content = styled.div`
 position: relative;

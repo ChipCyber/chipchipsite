@@ -1,25 +1,113 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components";
-import { Input } from "antd";
+import { message } from 'antd';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import useBreakpointCheck from "../../hooks/useBreakpointCheck";
+import { useSelector, useDispatch } from 'react-redux';
+import { setShowConnectWallet } from '@/store/userSlice';
+import {
+    airdropGetDetailApi,
+    airdropGetWalletInfoApi,
+    airdropQueryBoxApi,
+    airdropGetRewardApi,
+} from "@/api/mint.js";
+import { _saveToTwoWei,_getValueDivided } from '../../constants/constantsFunction';
+import { shortenAddress } from "@/utils";
+import { getWalletProvider } from "@/wallet/walletProvider.js";
+import { openUrl } from '../../constants';
 
 export default function Index() {
     const { t } = useTranslation();
+    const currentWalletAddress = useSelector((state) => state.user.currentWalletAddress);
+    const dispatch = useDispatch();
     const shouldRender = useBreakpointCheck();
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     let aValue = searchParams.get('id');
+    const [data, setData] = useState(null);
     const [showSearch, setShowSearch] = useState(false);
     const [chipBoxId, setChipBoxId] = useState(null);
-    const [id, setId] = useState(aValue);
+    const [id, _] = useState(aValue);
+    const [walletInfo, setWalletInfo] = useState(null);
+    const [searchResult, setSearchResult] = useState(null);
     useEffect(() => {
-        // knowledgeGetApi({id}).then(({data})=>{
-        //     setData(data);
-        // });
+        if(id) {
+            airdropGetDetailApi({active_id:Number(id)}).then(({data})=>{
+                setData(data);
+                refreshData();
+            });
+        }
     }, [id]);
+    useEffect(() => {
+        if(currentWalletAddress) {
+            airdropGetWalletInfoApi({active_id:Number(id),address:currentWalletAddress}).then(({data})=>{
+                setWalletInfo(data);
+            });
+        }
+    }, [currentWalletAddress]);
+    const receiveAirdrop = async () => {
+        try {
+            const encodedMessage = new TextEncoder().encode(`${id}_${currentWalletAddress}`);
+            const { signature, publicKey } = await getWalletProvider().signMessage(encodedMessage, 'utf8');
+            const decodedSignature = Buffer.from(signature, 'base64');
+            const hexSignature = decodedSignature.toString('hex');
+            airdropGetRewardApi({
+                "active_id": id,
+                "address": publicKey,
+                "signature": hexSignature,
+            }).then(({data})=>{
+                
+            });
+        } catch (error) {
+            message.error(error);
+        }
+    }
+    const closeSearch = () => {
+        setShowSearch(false);
+        setChipBoxId(null);
+        setSearchResult(null);
+    }
+    const searchAirdrop = () => {
+        airdropQueryBoxApi({active_id:Number(id),box_id:chipBoxId}).then(({data})=>{
+            setSearchResult(data);
+        });
+    }
+    useEffect(() => {
+        const timer = setInterval(() => {
+            refreshData();
+        }, 1000);
+        return () => clearInterval(timer);
+    }, []);
+    const refreshData = () => {
+        setData((prevData) => {
+            const now = new Date();
+            const startTime = new Date(prevData.start_time);
+            const endTime = new Date(prevData.end_time);
+            let startDiff = startTime - now;
+            let endDiff = endTime - now;
+            const formatTime = (diff) => {
+                if (diff <= 0) return { days: '0', hours: '00', minutes: '00', seconds: '00' };
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24).toString().padStart(2, '0');
+                const minutes = Math.floor((diff / (1000 * 60)) % 60).toString().padStart(2, '0');
+                const seconds = Math.floor((diff / 1000) % 60).toString().padStart(2, '0');
+                return { days: days.toString(), hours, minutes, seconds };
+            };
+            const isBegin = startDiff<=0;
+            const isEnd = endDiff<=0;
+            return {
+                ...prevData,
+                isBegin,
+                isEnd,
+                remaining: isBegin||isEnd?formatTime(endDiff):formatTime(startDiff),
+            };
+        });
+    }
+    if(!data) {
+        return null;
+    }
     return (
         <Root>
             <Content>
@@ -27,59 +115,58 @@ export default function Index() {
                     <Icon src={require('@/assets/airdrop/airdrop_detail.png').default} alt='icon' />
                     <HeaderContent>
                         <InfoLeftHeader>
-                            <div>Bitcoin</div>
-                            {!shouldRender&&<InfoTag className='ing'>进行中</InfoTag>}
+                            <div>{data.name}</div>
+                            {!shouldRender&&<InfoTag className={data.isEnd?'end':(data.isBegin?'ing':'')}>{data.isEnd?t('已结束'):(data.isBegin?t('进行中'):t('预热中'))}</InfoTag>}
                         </InfoLeftHeader>
-                        <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.</div>
+                        <div>{data.token_overview}</div>
                     </HeaderContent>
                 </Header>
                 <Info>
                     <InfoLeft>
                         <InfoLeftHeader>
-                            <div>BTC</div>
-                            {shouldRender&&<InfoTag className='ing'>进行中</InfoTag>}
+                            <div>{data.name}</div>
+                            {shouldRender&&<InfoTag className={data.isEnd?'end':(data.isBegin?'ing':'')}>{data.isEnd?t('已结束'):(data.isBegin?t('进行中'):t('预热中'))}</InfoTag>}
                         </InfoLeftHeader>
                         <InfoTipList>
-                            <InfoTip>持有CHIPCHIPBOX 可以免费领取空投。</InfoTip>
-                            <InfoTip>每个 CHIPCHIPBOX 空投 10000 BTC。</InfoTip>
+                            {data.slogan&&data.slogan.split('\n').map((line, index) => (<React.Fragment key={index}><InfoTip>{line}</InfoTip></React.Fragment>))}
                         </InfoTipList>
                         <InfoAirdrop>
                             <div>空投总量</div>
-                            <span>10000 BTC</span>
+                            <span>{_saveToTwoWei(data.airdrop_total,6)} {data.symbol}</span>
                         </InfoAirdrop>
                     </InfoLeft>
                     <InfoRight>
-                        <InfoTimeTip>距离开始领取</InfoTimeTip>
+                        <InfoTimeTip>{data.isEnd?t('距离结束'):(data.isBegin?t('距离开始领取'):t('距离结束'))}</InfoTimeTip>
                         <Time>
                             <TimeItem>
                                 <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                <span>5D</span>
+                                <span>{data.remaining?.days ?? 0}D</span>
                             </TimeItem>
                             <span>:</span>
                             <TimeItem>
                                 <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                <span>23</span>
+                                <span>{data.remaining?.hours ?? 0}</span>
                             </TimeItem>
                             <span>:</span>
                             <TimeItem>
                                 <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                <span>59</span>
+                                <span>{data.remaining?.minutes ?? 0}</span>
                             </TimeItem>
                             <span>:</span>
                             <TimeItem>
                                 <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
-                                <span>59</span>
+                                <span>{data.remaining?.seconds ?? 0}</span>
                             </TimeItem>
                         </Time>
                         <InfoProgressTip>
                             <div>已领取</div>
-                            <div>100 / <span>10000</span></div>
+                            <div>{_saveToTwoWei(data.airdrop_current,6)} / <span>{_saveToTwoWei(data.airdrop_total,6)}</span></div>
                         </InfoProgressTip>
-                        <InfoProgress style={{'--progress': '10%'}}></InfoProgress>
-                        <InfoAccountInfo>当前钱包地址：0x34535……DE35，获得空投 20000 BTC</InfoAccountInfo>
+                        <InfoProgress style={{'--progress': _getValueDivided(data.airdrop_current,data.airdrop_total)+'%'}}></InfoProgress>
+                        <InfoAccountInfo>当前钱包地址：{currentWalletAddress?shortenAddress(currentWalletAddress):'--'}，获得空投 {walletInfo?`${_saveToTwoWei(walletInfo.airdrop_amount,6)} ${walletInfo.symbol}`:'--'}</InfoAccountInfo>
                         <InfoBtnRow>
-                            <SmallBtn className='custom'>
-                                <span>Connect Wallet / 开始领取</span>
+                            <SmallBtn className='custom' disabled={currentWalletAddress||!data.isBegin||data.isEnd} onClick={()=>{currentWalletAddress?receiveAirdrop():dispatch(setShowConnectWallet())}}>
+                                <span>{currentWalletAddress?(data.isEnd?t('已结束'):(data.isBegin?t('开始领取'):t('免费领取'))):'Connect Wallet'}</span>
                                 {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
                                 <img src={require('@/assets/nav/login_arrow.png').default}/>}
                             </SmallBtn>
@@ -95,18 +182,18 @@ export default function Index() {
                     <IntroductionHeader>
                         <img src={require('@/assets/airdrop/btc.png').default} alt='coin'/>
                         <div>
-                            <div>BTC</div>
-                            <div>Bitcoin</div>
+                            <div>{data.symbol}</div>
+                            <div>{data.chain_name}</div>
                         </div>
                     </IntroductionHeader>
                     <Title>项目介绍</Title>
-                    <IntroductionDesc>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.</IntroductionDesc>
+                    <IntroductionDesc>{data.token_introduce}</IntroductionDesc>
                     <IntroductionContact>
-                        <div>
+                        <div onClick={()=>openUrl(data.token_website)}>
                             <img src={require('@/assets/airdrop/website.png').default}/>
                             <span>官网</span>
                         </div>
-                        <div>
+                        <div onClick={()=>openUrl(data.token_telegram)}>
                             <img src={require('@/assets/airdrop/telegram.png').default}/>
                             <span>Telegram</span>
                         </div>
@@ -114,10 +201,10 @@ export default function Index() {
                     <Title>代币信息</Title>
                     <TokenInfo>代币名称：BTC</TokenInfo>
                     <TokenInfo>总量：10 亿</TokenInfo>
-                    <TokenInfo>公链：Bitcoin</TokenInfo>
-                    <TokenInfo>发行价格：$0.1</TokenInfo>
+                    <TokenInfo>公链：{data.chain_name}</TokenInfo>
+                    <TokenInfo>发行价格：${_saveToTwoWei(data.token_price,6)}</TokenInfo>
                     <Title>西格玛投研小组点评</Title>
-                    <IntroductionDesc>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et viverra justo commodo. Proin sodales pulvinar sic tempor. Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam fermentum, nulla luctus pharetra vulputate, felis tellus mollis orci, sed rhoncus pronin sapien nunc accuan eget.</IntroductionDesc>
+                    <IntroductionDesc>{data.community_reviews}</IntroductionDesc>
                 </Introduction>
                 <Leader>
                     <LeaderHeader>
@@ -166,19 +253,19 @@ export default function Index() {
             <DialogOverlay
                 style={{ height: '100vh', zIndex: 99, background: 'hsla(0, 0%, 0%, 0.6)' }}
                 isOpen={showSearch}
-                onDismiss={()=>setShowSearch(false)}
+                onDismiss={()=>closeSearch()}
             >
                 <Dialog aria-label='search'>
                     <DialogHeader>
                         <div className='title'>{t('查询')}</div>
-                        <img className='close' onClick={()=>setShowSearch(false)} src={require('@/assets/nav/close.png').default}/>
+                        <img className='close' onClick={()=>closeSearch()} src={require('@/assets/nav/close.png').default}/>
                     </DialogHeader>
                     <DialogTip>通过CHIPCHIPBOX ID可查询获得空投代币的数量</DialogTip>
                     <DialogInput>
                         <input type='text' value={chipBoxId} onChange={(e)=>setChipBoxId(e.target.value)} placeholder='输入CHIPCHIPBOX ID'/>
                     </DialogInput>
-                    <Btn className='custom'>查询</Btn>
-                    <DialogResult>查询结果： 10000 BTC</DialogResult>
+                    <Btn disabled={!chipBoxId} className='custom' onClick={()=>searchAirdrop()}>查询</Btn>
+                    {searchResult&&<DialogResult>查询结果： {_saveToTwoWei(searchResult.airdrop_amount,6)} {searchResult.symbol}</DialogResult>}
                 </Dialog>
             </DialogOverlay>
         </Root>
@@ -269,10 +356,11 @@ width: 50%;
 const InfoLeftHeader = styled.div`
 display: flex;
 align-items: center;
-gap: 30px;
+gap: 20px;
 font-size: 21px;
 ${({ theme }) => theme.mediaQueries.sm}{
 font-size: 32px;
+gap: 30px;
 }
 `
 const InfoTag = styled.div`
@@ -563,19 +651,19 @@ span {
 font-size: 12px;
 opacity: 0.8;
 }
+}
 ${({ theme }) => theme.mediaQueries.sm}{
 padding-left: 22px;
 gap: 20px;
 > div {
-gap: 10px;
-img {
-width: 26px;
-height: 26px;
-}
-span {
-font-size: 18px;
-}
-}
+    gap: 10px;
+    img {
+    width: 26px;
+    height: 26px;
+    }
+    span {
+    font-size: 18px;
+    }
 }
 }
 `

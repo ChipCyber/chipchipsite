@@ -39,3 +39,43 @@ export function queryKlineApi(data) {
         loading: true,
     })
 }
+export function airdropGetHomeApi(data) {
+    return request({
+        url: '/airdrop/getHome',
+        method: 'post',
+        data,
+        loading: true,
+    })
+}
+export function airdropGetDetailApi(data) {
+    return request({
+        url: '/airdrop/getDetail',
+        method: 'post',
+        data,
+        loading: true,
+    })
+}
+export function airdropGetWalletInfoApi(data) {
+    return request({
+        url: '/airdrop/getWalletInfo',
+        method: 'post',
+        data,
+        loading: true,
+    })
+}
+export function airdropQueryBoxApi(data) {
+    return request({
+        url: '/airdrop/queryBox',
+        method: 'post',
+        data,
+        loading: true,
+    })
+}
+export function airdropGetRewardApi(data) {
+    return request({
+        url: '/airdrop/getReward',
+        method: 'post',
+        data,
+        loading: true,
+    })
+}
