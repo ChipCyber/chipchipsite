@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from "styled-components";
 import { useTranslation } from 'react-i18next';
 import useBreakpointCheck from "../../hooks/useBreakpointCheck";
-import { NavLink, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import {
     openUrl,
 } from "../../constants";
@@ -72,24 +72,24 @@ export default function Index() {
                     <div className='content'>
                         <div className='left'>
                             <div>
-                                <div className='title'>{t('西格玛男人社区优质项目空投')}</div>
-                                <div className='desc'>{t('Goku很Cool  华语区最MEME的男人 全网拥有超过20万Crypto粉丝 一级市场投资人  西格玛基金会主理人 ')}</div>
+                                <div className='title'>{t('2000')}</div>
+                                <div className='desc'>{t('2001')}</div>
                             </div>
                             <TopBtnRow>
                                 <LargeBtn className='custom' onClick={()=>openUrl('')}>
-                                    <span>购买 CHIPCHIPBOX</span>
+                                    <span>{t('2002')}</span>
                                     <img src={require('@/assets/home/arrow_enter.png').default}/>
                                 </LargeBtn>
                                 <Btn className='custom' onClick={()=>openUrl('')}>
-                                    <span>加入Guku社区</span>
+                                    <span>{t('2003')}</span>
                                     <img src={require('@/assets/home/arrow_enter.png').default}/>
                                 </Btn>
                                 <LargeBtn className='custom' onClick={()=>openUrl('')}>
-                                    <span>关注Goku很CoolX</span>
+                                    <span>{t('2004')}</span>
                                     <img src={require('@/assets/home/arrow_enter.png').default}/>
                                 </LargeBtn>
                                 <Btn className='custom' onClick={()=>openUrl('')}>
-                                    <span>关注YouTube</span>
+                                    <span>{t('2005')}</span>
                                     <img src={require('@/assets/home/arrow_enter.png').default}/>
                                 </Btn>
                             </TopBtnRow>
@@ -106,7 +106,7 @@ export default function Index() {
                     {
                         list.map(item=>(
                             <Item key={item.id} onClick={()=>history.push('/airdropDetail?id='+item.id)}>
-                                <ItemTag className={item.isEnd?'end':(item.isBegin?'ing':'')}>{item.isEnd?t('已结束'):(item.isBegin?t('进行中'):t('预热中'))}</ItemTag>
+                                <ItemTag className={item.isEnd?'end':(item.isBegin?'ing':'')}>{item.isEnd?t('2006'):(item.isBegin?t('2007'):t('2008'))}</ItemTag>
                                 <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
                                 <ItemContent>
                                     <ItemHeader>
@@ -116,13 +116,13 @@ export default function Index() {
                                     <ItemTipList>
                                         {item.slogan.split('\n').map((line, index) => (<React.Fragment key={index}><ItemTip>{line}</ItemTip></React.Fragment>))}
                                     </ItemTipList>
-                                    <ItemAirdrop>空投总量 {_saveToTwoWei(item.airdrop_total,6)} {item.symbol}</ItemAirdrop>
+                                    <ItemAirdrop>{t('2009')} {_saveToTwoWei(item.airdrop_total,6)} {item.symbol}</ItemAirdrop>
                                     <ItemInfo>
-                                        <div>已领取</div>
+                                        <div>{t('2010')}</div>
                                         <div>{_saveToTwoWei(item.airdrop_current,6)} / <span>{_saveToTwoWei(item.airdrop_total,6)}</span></div>
                                     </ItemInfo>
                                     <ItemProgress style={{'--progress': _getValueDivided(item.airdrop_current,item.airdrop_total)+'%'}}></ItemProgress>
-                                    <ItemEndTip>{item.isEnd?t('距离结束'):(item.isBegin?t('距离开始领取'):t('距离结束'))}</ItemEndTip>
+                                    <ItemEndTip>{item.isEnd?t('2011'):(item.isBegin?t('2012'):t('2011'))}</ItemEndTip>
                                     <ItemBottom>
                                         <Time>
                                             <TimeItem>
@@ -146,7 +146,7 @@ export default function Index() {
                                             </TimeItem>
                                         </Time>
                                         <SmallBtn disabled={!item.isBegin||item.isEnd} className='custom'>
-                                            <span>{item.isEnd?t('已结束'):(item.isBegin?t('开始领取'):t('免费领取'))}</span>
+                                            <span>{item.isEnd?t('2006'):(item.isBegin?t('2013'):t('2014'))}</span>
                                             <img src={require('@/assets/home/arrow_enter.png').default}/>
                                         </SmallBtn>
                                     </ItemBottom>
@@ -162,23 +162,23 @@ export default function Index() {
         <Root>
             <TopH5>
                 <img className='icon' src={require('../../assets/airdrop/h5/top_icon.png').default}/>
-                <div className='title'>{t('西格玛男人社区优质项目空投')}</div>
-                <div className='desc'>{t('Goku很Cool  华语区最MEME的男人 全网拥有超过20万Crypto粉丝 一级市场投资人  西格玛基金会主理人。')}</div>
+                <div className='title'>{t('2000')}</div>
+                <div className='desc'>{t('2001')}</div>
                 <TopBtnRow>
                     <H5Btn className='custom' onClick={()=>openUrl('')}>
-                        <span>购买 CHIPCHIPBOX</span>
+                        <span>{t('2002')}</span>
                         <img src={require('@/assets/home/arrow_enter.png').default}/>
                     </H5Btn>
                     <H5Btn className='custom' onClick={()=>openUrl('')}>
-                        <span>加入Guku社区</span>
+                        <span>{t('2003')}</span>
                         <img src={require('@/assets/home/arrow_enter.png').default}/>
                     </H5Btn>
                     <H5Btn className='custom' onClick={()=>openUrl('')}>
-                        <span>关注Goku很CoolX</span>
+                        <span>{t('2004')}</span>
                         <img src={require('@/assets/home/arrow_enter.png').default}/>
                     </H5Btn>
                     <H5Btn className='custom' onClick={()=>openUrl('')}>
-                        <span>关注YouTube</span>
+                        <span>{t('2005')}</span>
                         <img src={require('@/assets/home/arrow_enter.png').default}/>
                     </H5Btn>
                 </TopBtnRow>
@@ -190,7 +190,7 @@ export default function Index() {
                 {
                     list.map(item=>(
                         <Item key={item.id} onClick={()=>history.push('/airdropDetail?id='+item.id)}>
-                            <ItemTag className={item.isEnd?'end':(item.isBegin?'ing':'')}>{item.isEnd?t('已结束'):(item.isBegin?t('进行中'):t('预热中'))}</ItemTag>
+                            <ItemTag className={item.isEnd?'end':(item.isBegin?'ing':'')}>{item.isEnd?t('2006'):(item.isBegin?t('2007'):t('2008'))}</ItemTag>
                             <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
                             <ItemContent>
                                 <ItemHeader>
@@ -200,13 +200,13 @@ export default function Index() {
                                 <ItemTipList>
                                     {item.slogan.split('\n').map((line, index) => (<React.Fragment key={index}><ItemTip>{line}</ItemTip></React.Fragment>))}
                                 </ItemTipList>
-                                <ItemAirdrop>空投总量 {_saveToTwoWei(item.airdrop_total,6)} {item.symbol}</ItemAirdrop>
+                                <ItemAirdrop>{t('2009')} {_saveToTwoWei(item.airdrop_total,6)} {item.symbol}</ItemAirdrop>
                                 <ItemInfo>
-                                    <div>已领取</div>
+                                    <div>{t('2010')}</div>
                                     <div>{_saveToTwoWei(item.airdrop_current,6)} / <span>{_saveToTwoWei(item.airdrop_total,6)}</span></div>
                                 </ItemInfo>
                                 <ItemProgress style={{'--progress': _getValueDivided(item.airdrop_current,item.airdrop_total)+'%'}}></ItemProgress>
-                                <ItemEndTip>{item.isEnd?t('距离结束'):(item.isBegin?t('距离开始领取'):t('距离结束'))}</ItemEndTip>
+                                <ItemEndTip>{item.isEnd?t('2011'):(item.isBegin?t('2012'):t('2011'))}</ItemEndTip>
                                 <ItemBottom>
                                     <Time>
                                         <TimeItem>
@@ -230,7 +230,7 @@ export default function Index() {
                                         </TimeItem>
                                     </Time>
                                     <SmallBtn disabled={!item.isBegin||item.isEnd} className='custom'>
-                                        <span>{item.isEnd?t('已结束'):(item.isBegin?t('开始领取'):t('免费领取'))}</span>
+                                        <span>{item.isEnd?t('2006'):(item.isBegin?t('2013'):t('2014'))}</span>
                                         <img src={require('@/assets/home/arrow_enter.png').default}/>
                                     </SmallBtn>
                                 </ItemBottom>
@@ -261,7 +261,7 @@ margin-top: 0;
 `
 const LargeBtn = styled.button`
 width: fit-content;
-min-width: 260px;
+min-width: 292px;
 padding-left: 35px;
 padding-right: 35px;
 height: 53px;
@@ -280,7 +280,7 @@ height: 20px;
 `
 const Btn = styled.button`
 width: fit-content;
-min-width: 212px;
+min-width: 292px;
 padding-left: 35px;
 padding-right: 35px;
 height: 53px;

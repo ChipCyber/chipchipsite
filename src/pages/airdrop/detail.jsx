@@ -54,14 +54,14 @@ export default function Index() {
             const decodedSignature = Buffer.from(signature, 'base64');
             const hexSignature = decodedSignature.toString('hex');
             airdropGetRewardApi({
-                "active_id": id,
+                "active_id": Number(id),
                 "address": publicKey,
                 "signature": hexSignature,
             }).then(({data})=>{
-                
+                message.success(`${t('领取成功')} ${data.airdrop_amount} ${data.symbol}`);
             });
         } catch (error) {
-            message.error(error);
+            message.error(error.message);
         }
     }
     const closeSearch = () => {
@@ -82,6 +82,9 @@ export default function Index() {
     }, []);
     const refreshData = () => {
         setData((prevData) => {
+            if(!prevData) {
+                return null;
+            }
             const now = new Date();
             const startTime = new Date(prevData.start_time);
             const endTime = new Date(prevData.end_time);
@@ -116,7 +119,7 @@ export default function Index() {
                     <HeaderContent>
                         <InfoLeftHeader>
                             <div>{data.name}</div>
-                            {!shouldRender&&<InfoTag className={data.isEnd?'end':(data.isBegin?'ing':'')}>{data.isEnd?t('已结束'):(data.isBegin?t('进行中'):t('预热中'))}</InfoTag>}
+                            {!shouldRender&&<InfoTag className={data.isEnd?'end':(data.isBegin?'ing':'')}>{data.isEnd?t('2006'):(data.isBegin?t('2007'):t('2008'))}</InfoTag>}
                         </InfoLeftHeader>
                         <div>{data.token_overview}</div>
                     </HeaderContent>
@@ -125,18 +128,18 @@ export default function Index() {
                     <InfoLeft>
                         <InfoLeftHeader>
                             <div>{data.name}</div>
-                            {shouldRender&&<InfoTag className={data.isEnd?'end':(data.isBegin?'ing':'')}>{data.isEnd?t('已结束'):(data.isBegin?t('进行中'):t('预热中'))}</InfoTag>}
+                            {shouldRender&&<InfoTag className={data.isEnd?'end':(data.isBegin?'ing':'')}>{data.isEnd?t('2006'):(data.isBegin?t('2007'):t('2008'))}</InfoTag>}
                         </InfoLeftHeader>
                         <InfoTipList>
                             {data.slogan&&data.slogan.split('\n').map((line, index) => (<React.Fragment key={index}><InfoTip>{line}</InfoTip></React.Fragment>))}
                         </InfoTipList>
                         <InfoAirdrop>
-                            <div>空投总量</div>
+                            <div>{t('2009')}</div>
                             <span>{_saveToTwoWei(data.airdrop_total,6)} {data.symbol}</span>
                         </InfoAirdrop>
                     </InfoLeft>
                     <InfoRight>
-                        <InfoTimeTip>{data.isEnd?t('距离结束'):(data.isBegin?t('距离开始领取'):t('距离结束'))}</InfoTimeTip>
+                        <InfoTimeTip>{data.isEnd?t('2011'):(data.isBegin?t('2012'):t('2011'))}</InfoTimeTip>
                         <Time>
                             <TimeItem>
                                 <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
@@ -159,19 +162,19 @@ export default function Index() {
                             </TimeItem>
                         </Time>
                         <InfoProgressTip>
-                            <div>已领取</div>
+                            <div>{t('2010')}</div>
                             <div>{_saveToTwoWei(data.airdrop_current,6)} / <span>{_saveToTwoWei(data.airdrop_total,6)}</span></div>
                         </InfoProgressTip>
                         <InfoProgress style={{'--progress': _getValueDivided(data.airdrop_current,data.airdrop_total)+'%'}}></InfoProgress>
-                        <InfoAccountInfo>当前钱包地址：{currentWalletAddress?shortenAddress(currentWalletAddress):'--'}，获得空投 {walletInfo?`${_saveToTwoWei(walletInfo.airdrop_amount,6)} ${walletInfo.symbol}`:'--'}</InfoAccountInfo>
+                        <InfoAccountInfo>{t('2015')}：{currentWalletAddress?shortenAddress(currentWalletAddress):'--'}，{t('2016')} {walletInfo?`${_saveToTwoWei(walletInfo.airdrop_amount,6)} ${walletInfo.symbol}`:'--'}</InfoAccountInfo>
                         <InfoBtnRow>
                             <SmallBtn className='custom' disabled={currentWalletAddress||!data.isBegin||data.isEnd} onClick={()=>{currentWalletAddress?receiveAirdrop():dispatch(setShowConnectWallet())}}>
-                                <span>{currentWalletAddress?(data.isEnd?t('已结束'):(data.isBegin?t('开始领取'):t('免费领取'))):'Connect Wallet'}</span>
+                                <span>{currentWalletAddress?(data.isEnd?t('2006'):(data.isBegin?t('2013'):t('2014'))):t('602')}</span>
                                 {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
                                 <img src={require('@/assets/nav/login_arrow.png').default}/>}
                             </SmallBtn>
                             <SmallBtn className='custom' onClick={()=>setShowSearch(true)}>
-                                <span>查询</span>
+                                <span>{t('2017')}</span>
                                 {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
                                 <img src={require('@/assets/nav/login_arrow.png').default}/>}
                             </SmallBtn>
@@ -186,63 +189,63 @@ export default function Index() {
                             <div>{data.chain_name}</div>
                         </div>
                     </IntroductionHeader>
-                    <Title>项目介绍</Title>
+                    <Title>{t('2018')}</Title>
                     <IntroductionDesc>{data.token_introduce}</IntroductionDesc>
                     <IntroductionContact>
                         <div onClick={()=>openUrl(data.token_website)}>
                             <img src={require('@/assets/airdrop/website.png').default}/>
-                            <span>官网</span>
+                            <span>{t('2019')}</span>
                         </div>
                         <div onClick={()=>openUrl(data.token_telegram)}>
                             <img src={require('@/assets/airdrop/telegram.png').default}/>
                             <span>Telegram</span>
                         </div>
                     </IntroductionContact>
-                    <Title>代币信息</Title>
-                    <TokenInfo>代币名称：BTC</TokenInfo>
-                    <TokenInfo>总量：10 亿</TokenInfo>
-                    <TokenInfo>公链：{data.chain_name}</TokenInfo>
-                    <TokenInfo>发行价格：${_saveToTwoWei(data.token_price,6)}</TokenInfo>
-                    <Title>西格玛投研小组点评</Title>
+                    <Title>{t('2020')}</Title>
+                    <TokenInfo>{t('342')}：{data.symbol}</TokenInfo>
+                    <TokenInfo>{t('2021')}</TokenInfo>
+                    <TokenInfo>{t('344')}：{data.chain_name}</TokenInfo>
+                    <TokenInfo>{t('2022')}：${_saveToTwoWei(data.token_price,6)}</TokenInfo>
+                    <Title>{t('2023')}</Title>
                     <IntroductionDesc>{data.community_reviews}</IntroductionDesc>
                 </Introduction>
                 <Leader>
                     <LeaderHeader>
                         <img src={require('@/assets/airdrop/leader_avatar.png').default} alt='icon'/>
-                        <span>Goku很Cool</span>
+                        <span>{t('2024')}</span>
                     </LeaderHeader>
                     <LeaderBtnRow>
                         <SmallBtn className='custom'>
-                            <span>Buy CHIPCHIPBOX</span>
+                            <span>{t('2002')}</span>
                             {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
                                 <img src={require('@/assets/nav/login_arrow.png').default}/>}
                         </SmallBtn>
                         <SmallBtn className='custom'>
-                            <span>加入社区</span>
+                            <span>{t('176')}</span>
                             {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
                                 <img src={require('@/assets/nav/login_arrow.png').default}/>}
                         </SmallBtn>
                         <SmallBtn className='custom'>
-                            <span>关注狗哥</span>
+                            <span>{t('2025')}</span>
                             {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
                                 <img src={require('@/assets/nav/login_arrow.png').default}/>}
                         </SmallBtn>
                     </LeaderBtnRow>
                     <LeaderContent>
                         <div>
-                            <Title>西格玛男人社区</Title>
-                            <LeaderContentLeftDesc>我们只建设最纯粹的meme和拥护最有价值的项目。</LeaderContentLeftDesc>
-                            <LeaderContentLeftDesc>持有CHIPCHIPBOX，成为西格玛男人社区最忠诚的信徒！收获最强投研小组的CA和研究成果，收获西格玛男人社区深度建设项目的持续空投！</LeaderContentLeftDesc>
+                            <Title>{t('2026')}</Title>
+                            <LeaderContentLeftDesc>{t('2027')}</LeaderContentLeftDesc>
+                            <LeaderContentLeftDesc>{t('2028')}</LeaderContentLeftDesc>
                         </div>
                         <div>
-                            <Title>西格玛男人福利</Title>
+                            <Title>{t('2029')}</Title>
                             <LeaderTipList>
-                                <LeaderTip>持有CHIPCHIPBOX等于可以获得持续性的社区福利空投，包括不限于优质白单、优质项目投资额度、优质项目代币空投。</LeaderTip>
-                                <LeaderTip>可以成为MEME Club的荣誉会员，享受全球会所的入场资格。</LeaderTip>
-                                <LeaderTip>享受西格玛男人社区基金的投资资格。</LeaderTip>
-                                <LeaderTip>享受精品禁言群的资格。</LeaderTip>
-                                <LeaderTip>享受精品小群资格。</LeaderTip>
-                                <LeaderTip>不定期城市聚会。</LeaderTip>
+                                <LeaderTip>{t('2030')}</LeaderTip>
+                                <LeaderTip>{t('2031')}</LeaderTip>
+                                <LeaderTip>{t('2032')}</LeaderTip>
+                                <LeaderTip>{t('2033')}</LeaderTip>
+                                <LeaderTip>{t('2034')}</LeaderTip>
+                                <LeaderTip>{t('2035')}</LeaderTip>
                             </LeaderTipList>
                         </div>
                     </LeaderContent>
@@ -257,15 +260,15 @@ export default function Index() {
             >
                 <Dialog aria-label='search'>
                     <DialogHeader>
-                        <div className='title'>{t('查询')}</div>
+                        <div className='title'>{t('2017')}</div>
                         <img className='close' onClick={()=>closeSearch()} src={require('@/assets/nav/close.png').default}/>
                     </DialogHeader>
-                    <DialogTip>通过CHIPCHIPBOX ID可查询获得空投代币的数量</DialogTip>
+                    <DialogTip>{t('2036')}</DialogTip>
                     <DialogInput>
-                        <input type='text' value={chipBoxId} onChange={(e)=>setChipBoxId(e.target.value)} placeholder='输入CHIPCHIPBOX ID'/>
+                        <input type='text' value={chipBoxId} onChange={(e)=>setChipBoxId(e.target.value)} placeholder={t('2037')}/>
                     </DialogInput>
-                    <Btn disabled={!chipBoxId} className='custom' onClick={()=>searchAirdrop()}>查询</Btn>
-                    {searchResult&&<DialogResult>查询结果： {_saveToTwoWei(searchResult.airdrop_amount,6)} {searchResult.symbol}</DialogResult>}
+                    <Btn disabled={!chipBoxId} className='custom' onClick={()=>searchAirdrop()}>{t('2017')}</Btn>
+                    {searchResult&&<DialogResult>{t('335')}： {_saveToTwoWei(searchResult.airdrop_amount,6)} {searchResult.symbol}</DialogResult>}
                 </Dialog>
             </DialogOverlay>
         </Root>
