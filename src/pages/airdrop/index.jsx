@@ -392,7 +392,7 @@ font-weight: 500;
 .right {
 pointer-events: none;
 width: 623px;
-height: 523px;
+height: 525px;
 }
 }
 `
