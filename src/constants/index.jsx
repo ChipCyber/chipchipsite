@@ -9,6 +9,13 @@ export const InscriptionNumberEnd = 52233856;
 //初始价格
 export const InitialPrice = "--";
 
+//Airdrop
+export const OKX_BUY_CHIPBOX_URL = "https://www.okx.com/zh-hans/web3/marketplace/nft/collection/sol/chipchipbox-collection";
+export const ME_BUY_CHIPBOX_URL = "https://magiceden.io/marketplace/chipchip";
+export const JOIN_GOKU_COMMUNITY = "https://t.me/sigma_goku";
+export const FOLLOW_GOKU_X = "https://x.com/gokunocool";
+export const FOLLOW_GOKU_YOUTUBE = "https://www.youtube.com/@Gokunocool";
+
 export const GitbookUrl = "https://chipchipgame.gitbook.io/chipchipgame-english";
 export const GitbookTokenUrl = "https://chipchipgame.gitbook.io/chipchipgame-english/usdchip-token";
 export const DiscordUrl = "https://discord.gg/h8wHpwVsyh";

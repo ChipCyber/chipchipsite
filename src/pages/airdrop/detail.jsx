@@ -13,10 +13,15 @@ import {
     airdropQueryBoxApi,
     airdropGetRewardApi,
 } from "@/api/mint.js";
-import { _saveToTwoWei,_getValueDivided } from '../../constants/constantsFunction';
+import { _saveToTwoWei,_getValueDivided } from '@/constants/constantsFunction';
+import {
+    openUrl,
+    OKX_BUY_CHIPBOX_URL,
+    JOIN_GOKU_COMMUNITY,
+    FOLLOW_GOKU_X,
+} from "@/constants";
 import { shortenAddress } from "@/utils";
 import { getWalletProvider } from "@/wallet/walletProvider.js";
-import { openUrl } from '../../constants';
 
 export default function Index() {
     const { t } = useTranslation();
@@ -190,7 +195,7 @@ export default function Index() {
                         </div>
                     </IntroductionHeader>
                     <Title>{t('2018')}</Title>
-                    <IntroductionDesc>{data.token_introduce}</IntroductionDesc>
+                    <IntroductionDesc dangerouslySetInnerHTML={{__html:data.token_introduce}}></IntroductionDesc>
                     <IntroductionContact>
                         <div onClick={()=>openUrl(data.token_website)}>
                             <img src={require('@/assets/airdrop/website.png').default}/>
@@ -207,7 +212,7 @@ export default function Index() {
                     <TokenInfo>{t('344')}：{data.chain_name}</TokenInfo>
                     <TokenInfo>{t('2022')}：${_saveToTwoWei(data.token_price,6)}</TokenInfo>
                     <Title>{t('2023')}</Title>
-                    <IntroductionDesc>{data.community_reviews}</IntroductionDesc>
+                    <IntroductionDesc dangerouslySetInnerHTML={{__html:data.community_reviews}}></IntroductionDesc>
                 </Introduction>
                 <Leader>
                     <LeaderHeader>
@@ -215,17 +220,17 @@ export default function Index() {
                         <span>{t('2024')}</span>
                     </LeaderHeader>
                     <LeaderBtnRow>
-                        <SmallBtn className='custom'>
+                        <SmallBtn className='custom' onClick={()=>openUrl(OKX_BUY_CHIPBOX_URL)}>
                             <span>{t('2002')}</span>
                             {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
                                 <img src={require('@/assets/nav/login_arrow.png').default}/>}
                         </SmallBtn>
-                        <SmallBtn className='custom'>
+                        <SmallBtn className='custom' onClick={()=>openUrl(JOIN_GOKU_COMMUNITY)}>
                             <span>{t('176')}</span>
                             {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
                                 <img src={require('@/assets/nav/login_arrow.png').default}/>}
                         </SmallBtn>
-                        <SmallBtn className='custom'>
+                        <SmallBtn className='custom' onClick={()=>openUrl(FOLLOW_GOKU_X)}>
                             <span>{t('2025')}</span>
                             {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
                                 <img src={require('@/assets/nav/login_arrow.png').default}/>}
@@ -671,7 +676,7 @@ gap: 20px;
 }
 `
 const TokenInfo = styled.div`
-margin-top: 8px;
+margin-top: 0;
 margin-left: 0;
 font-size: 13px;
 font-weight: 500;

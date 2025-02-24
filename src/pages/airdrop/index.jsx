@@ -3,10 +3,14 @@ import styled from "styled-components";
 import { useTranslation } from 'react-i18next';
 import useBreakpointCheck from "../../hooks/useBreakpointCheck";
 import { useHistory } from 'react-router-dom';
+import { _saveToTwoWei,_getValueDivided } from "@/constants/constantsFunction";
 import {
     openUrl,
-} from "../../constants";
-import { _saveToTwoWei,_getValueDivided } from "@/constants/constantsFunction";
+    OKX_BUY_CHIPBOX_URL,
+    JOIN_GOKU_COMMUNITY,
+    FOLLOW_GOKU_X,
+    FOLLOW_GOKU_YOUTUBE,
+} from "@/constants";
 import { airdropGetHomeApi } from "@/api/mint.js";
 
 export default function Index() {
@@ -76,19 +80,19 @@ export default function Index() {
                                 <div className='desc'>{t('2001')}</div>
                             </div>
                             <TopBtnRow>
-                                <LargeBtn className='custom' onClick={()=>openUrl('')}>
+                                <LargeBtn className='custom' onClick={()=>openUrl(OKX_BUY_CHIPBOX_URL)}>
                                     <span>{t('2002')}</span>
                                     <img src={require('@/assets/home/arrow_enter.png').default}/>
                                 </LargeBtn>
-                                <Btn className='custom' onClick={()=>openUrl('')}>
+                                <Btn className='custom' onClick={()=>openUrl(JOIN_GOKU_COMMUNITY)}>
                                     <span>{t('2003')}</span>
                                     <img src={require('@/assets/home/arrow_enter.png').default}/>
                                 </Btn>
-                                <LargeBtn className='custom' onClick={()=>openUrl('')}>
+                                <LargeBtn className='custom' onClick={()=>openUrl(FOLLOW_GOKU_X)}>
                                     <span>{t('2004')}</span>
                                     <img src={require('@/assets/home/arrow_enter.png').default}/>
                                 </LargeBtn>
-                                <Btn className='custom' onClick={()=>openUrl('')}>
+                                <Btn className='custom' onClick={()=>openUrl(FOLLOW_GOKU_YOUTUBE)}>
                                     <span>{t('2005')}</span>
                                     <img src={require('@/assets/home/arrow_enter.png').default}/>
                                 </Btn>
@@ -165,19 +169,19 @@ export default function Index() {
                 <div className='title'>{t('2000')}</div>
                 <div className='desc'>{t('2001')}</div>
                 <TopBtnRow>
-                    <H5Btn className='custom' onClick={()=>openUrl('')}>
+                    <H5Btn className='custom' onClick={()=>openUrl(OKX_BUY_CHIPBOX_URL)}>
                         <span>{t('2002')}</span>
                         <img src={require('@/assets/home/arrow_enter.png').default}/>
                     </H5Btn>
-                    <H5Btn className='custom' onClick={()=>openUrl('')}>
+                    <H5Btn className='custom' onClick={()=>openUrl(JOIN_GOKU_COMMUNITY)}>
                         <span>{t('2003')}</span>
                         <img src={require('@/assets/home/arrow_enter.png').default}/>
                     </H5Btn>
-                    <H5Btn className='custom' onClick={()=>openUrl('')}>
+                    <H5Btn className='custom' onClick={()=>openUrl(FOLLOW_GOKU_X)}>
                         <span>{t('2004')}</span>
                         <img src={require('@/assets/home/arrow_enter.png').default}/>
                     </H5Btn>
-                    <H5Btn className='custom' onClick={()=>openUrl('')}>
+                    <H5Btn className='custom' onClick={()=>openUrl(FOLLOW_GOKU_YOUTUBE)}>
                         <span>{t('2005')}</span>
                         <img src={require('@/assets/home/arrow_enter.png').default}/>
                     </H5Btn>
@@ -245,6 +249,7 @@ export default function Index() {
 
 const Root = styled.div`
 position: relative;
+overflow: hidden;
 `
 const TopBtnRow = styled.div`
 display: grid;
