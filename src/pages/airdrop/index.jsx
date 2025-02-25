@@ -111,14 +111,14 @@ export default function Index() {
                         list.map(item=>(
                             <Item key={item.id} onClick={()=>history.push('/airdropDetail?id='+item.id)}>
                                 <ItemTag className={item.isEnd?'end':(item.isBegin?'ing':'')}>{item.isEnd?t('2006'):(item.isBegin?t('2007'):t('2008'))}</ItemTag>
-                                <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
+                                <ItemImg src={item.head_image} alt='icon'/>
                                 <ItemContent>
                                     <ItemHeader>
                                         <ItemName>{item.name}</ItemName>
                                         <ItemDesc>{item.symbol}</ItemDesc>
                                     </ItemHeader>
                                     <ItemTipList>
-                                        {item.slogan.split('\n').map((line, index) => (<React.Fragment key={index}><ItemTip>{line}</ItemTip></React.Fragment>))}
+                                        {item.slogan.split('\n').map((line, index) => (<React.Fragment key={index}>{line&&<ItemTip>{line}</ItemTip>}</React.Fragment>))}
                                     </ItemTipList>
                                     <ItemAirdrop>{t('2009')} {_saveToTwoWei(item.airdrop_total,6)} {item.symbol}</ItemAirdrop>
                                     <ItemInfo>
@@ -195,14 +195,14 @@ export default function Index() {
                     list.map(item=>(
                         <Item key={item.id} onClick={()=>history.push('/airdropDetail?id='+item.id)}>
                             <ItemTag className={item.isEnd?'end':(item.isBegin?'ing':'')}>{item.isEnd?t('2006'):(item.isBegin?t('2007'):t('2008'))}</ItemTag>
-                            <ItemImg src={require('@/assets/airdrop/airdrop.png').default} alt='icon'/>
+                            <ItemImg src={item.head_image} alt='icon'/>
                             <ItemContent>
                                 <ItemHeader>
                                     <ItemName>{item.name}</ItemName>
                                     <ItemDesc>{item.symbol}</ItemDesc>
                                 </ItemHeader>
                                 <ItemTipList>
-                                    {item.slogan.split('\n').map((line, index) => (<React.Fragment key={index}><ItemTip>{line}</ItemTip></React.Fragment>))}
+                                    {item.slogan.split('\n').map((line, index) => (<React.Fragment key={index}>{line&&<ItemTip>{line}</ItemTip>}</React.Fragment>))}
                                 </ItemTipList>
                                 <ItemAirdrop>{t('2009')} {_saveToTwoWei(item.airdrop_total,6)} {item.symbol}</ItemAirdrop>
                                 <ItemInfo>
@@ -433,7 +433,7 @@ gap: 20px;
 flex-direction: column;
 ${({ theme }) => theme.mediaQueries.sm}{
 margin-top: 0;
-padding: 16px 52px 20px 20px;
+padding: 20px;
 width: 1060px;
 border-radius: 18px;
 gap: 30px;
@@ -445,7 +445,7 @@ const ItemTag = styled.div`
 position: absolute;
 left: 0;
 top: 0;
-border-radius: 18px 0px;
+border-radius: 12px 0px;
 background: rgba(239, 34, 34, 0.50);
 font-size: 16px;
 font-weight: 600;
@@ -458,6 +458,7 @@ background: rgba(119, 228, 171, 0.50);
 background: rgba(149, 149, 149, 0.50);
 }
 ${({ theme }) => theme.mediaQueries.sm}{
+border-radius: 18px 0px;
 font-size: 20px;
 padding: 0 34px;
 line-height: 46px;
@@ -465,9 +466,11 @@ line-height: 46px;
 `
 const ItemImg = styled.img`
 width: 100%;
+border-radius: 12px;
 ${({ theme }) => theme.mediaQueries.sm}{
-width: 518px;
-height: 382px;
+width: 566px;
+height: 309px;
+border-radius: 18px;
 }
 `
 const ItemContent = styled.div`

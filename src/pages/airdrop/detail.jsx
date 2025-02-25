@@ -24,7 +24,7 @@ import { shortenAddress } from "@/utils";
 import { getWalletProvider } from "@/wallet/walletProvider.js";
 
 export default function Index() {
-    const { t } = useTranslation();
+    const { t,i18n } = useTranslation();
     const currentWalletAddress = useSelector((state) => state.user.currentWalletAddress);
     const dispatch = useDispatch();
     const shouldRender = useBreakpointCheck();
@@ -38,11 +38,23 @@ export default function Index() {
     const [walletInfo, setWalletInfo] = useState(null);
     const [searchResult, setSearchResult] = useState(null);
     useEffect(() => {
+        const handleLanguageChange = () => {
+            fetchData();
+        }
+        i18n.on('languageChanged', handleLanguageChange);
+        return () => {
+            i18n.off('languageChanged', handleLanguageChange);
+        };
+    }, [i18n]);
+    const fetchData = () => {
+        airdropGetDetailApi({active_id:Number(id)}).then(({data})=>{
+            setData(data);
+            refreshData();
+        });
+    }
+    useEffect(() => {
         if(id) {
-            airdropGetDetailApi({active_id:Number(id)}).then(({data})=>{
-                setData(data);
-                refreshData();
-            });
+            fetchData();
         }
     }, [id]);
     useEffect(() => {
@@ -120,7 +132,7 @@ export default function Index() {
         <Root>
             <Content>
                 <Header>
-                    <Icon src={require('@/assets/airdrop/airdrop_detail.png').default} alt='icon' />
+                    <Icon src={data.head_image} alt='icon' />
                     <HeaderContent>
                         <InfoLeftHeader>
                             <div>{data.name}</div>
@@ -136,7 +148,7 @@ export default function Index() {
                             {shouldRender&&<InfoTag className={data.isEnd?'end':(data.isBegin?'ing':'')}>{data.isEnd?t('2006'):(data.isBegin?t('2007'):t('2008'))}</InfoTag>}
                         </InfoLeftHeader>
                         <InfoTipList>
-                            {data.slogan&&data.slogan.split('\n').map((line, index) => (<React.Fragment key={index}><InfoTip>{line}</InfoTip></React.Fragment>))}
+                            {data.slogan&&data.slogan.split('\n').map((line, index) => (<React.Fragment key={index}>{line&&<InfoTip>{line}</InfoTip>}</React.Fragment>))}
                         </InfoTipList>
                         <InfoAirdrop>
                             <div>{t('2009')}</div>
@@ -188,10 +200,10 @@ export default function Index() {
                 </Info>
                 <Introduction>
                     <IntroductionHeader>
-                        <img src={require('@/assets/airdrop/btc.png').default} alt='coin'/>
+                        <img src={data.logo} alt='coin'/>
                         <div>
                             <div>{data.symbol}</div>
-                            <div>{data.chain_name}</div>
+                            <div>{data.token_slogan}</div>
                         </div>
                     </IntroductionHeader>
                     <Title>{t('2018')}</Title>
@@ -310,8 +322,10 @@ gap: 52px;
 `
 const Icon = styled.img`
 width: 100%;
+border-radius: 12px;
 ${({ theme }) => theme.mediaQueries.sm}{
 width: 50%;
+border-radius: 18px;
 }
 `
 const HeaderContent = styled.div`
@@ -566,8 +580,8 @@ display: flex;
 align-items: center;
 gap: 12px;
 img {
-width: 30px;
-height: 30px;
+width: 45px;
+height: 45px;
 }
 > div {
     > div {
@@ -584,17 +598,17 @@ height: 30px;
 }
 ${({ theme }) => theme.mediaQueries.sm}{
 img {
-width: 45px;
-height: 45px;
+width: 65px;
+height: 65px;
 }
 > div {
     > div {
         &:first-child {
-        font-size: 32px;
+        font-size: 28px;
         line-height: 45px;
         }
         &:nth-child(2) {
-        font-size: 12px;
+        font-size: 16px;
         line-height: 32px;
         }
     }
