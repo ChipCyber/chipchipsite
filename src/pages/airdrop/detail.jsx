@@ -22,9 +22,10 @@ import {
 } from "@/constants";
 import { shortenAddress } from "@/utils";
 import { getWalletProvider } from "@/wallet/walletProvider.js";
+import useLanguageChange from '@/hooks/useLanguageChange.js';
 
 export default function Index() {
-    const { t,i18n } = useTranslation();
+    const { t } = useTranslation();
     const currentWalletAddress = useSelector((state) => state.user.currentWalletAddress);
     const dispatch = useDispatch();
     const shouldRender = useBreakpointCheck();
@@ -37,21 +38,13 @@ export default function Index() {
     const [id, _] = useState(aValue);
     const [walletInfo, setWalletInfo] = useState(null);
     const [searchResult, setSearchResult] = useState(null);
-    useEffect(() => {
-        const handleLanguageChange = () => {
-            fetchData();
-        }
-        i18n.on('languageChanged', handleLanguageChange);
-        return () => {
-            i18n.off('languageChanged', handleLanguageChange);
-        };
-    }, [i18n]);
     const fetchData = () => {
         airdropGetDetailApi({active_id:Number(id)}).then(({data})=>{
             setData(data);
             refreshData();
         });
     }
+    useLanguageChange(fetchData);
     useEffect(() => {
         if(id) {
             fetchData();

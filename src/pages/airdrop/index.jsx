@@ -12,21 +12,13 @@ import {
     FOLLOW_GOKU_YOUTUBE,
 } from "@/constants";
 import { airdropGetHomeApi } from "@/api/mint.js";
+import useLanguageChange from '@/hooks/useLanguageChange.js';
 
 export default function Index() {
-    const { t,i18n } = useTranslation();
+    const { t } = useTranslation();
     const history = useHistory();
     const shouldRender = useBreakpointCheck();
     const [list, setList] = useState([]);
-    useEffect(() => {
-        const handleLanguageChange = () => {
-            fetchData();
-        }
-        i18n.on('languageChanged', handleLanguageChange);
-        return () => {
-            i18n.off('languageChanged', handleLanguageChange);
-        };
-    }, [i18n]);
     useEffect(() => {
         const timer = setInterval(() => {
             refreshList();
@@ -69,6 +61,7 @@ export default function Index() {
             refreshList();
         });
     }
+    useLanguageChange(fetchData);
     if (shouldRender) {
         return (
             <Root>
@@ -265,6 +258,7 @@ margin-top: 0;
 };
 `
 const LargeBtn = styled.button`
+line-height: 1.2;
 width: fit-content;
 min-width: 292px;
 padding-left: 35px;
@@ -284,6 +278,7 @@ height: 20px;
 }
 `
 const Btn = styled.button`
+line-height: 1.2;
 width: fit-content;
 min-width: 292px;
 padding-left: 35px;
@@ -303,6 +298,7 @@ height: 20px;
 }
 `
 const SmallBtn = styled.button`
+line-height: 1.2;
 width: fit-content;
 min-width: 136px;
 padding-left: 25px;
