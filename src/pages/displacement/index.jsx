@@ -349,6 +349,7 @@ export default function Index() {
                         <ul className='tip'>
                             <li>{t('607')}</li>
                             <li>{t('615')}</li>
+                            <li>{t('618')}</li>
                         </ul>
                     </Row>
                     <Sure disabled={!btnEnabled} className='custom' onClick={()=>sureAction()} type='button'>{address?t('608'):t('602')}</Sure>
@@ -436,6 +437,7 @@ export default function Index() {
                         <ul className='tip'>
                             <li>{t('607')}</li>
                             <li>{t('615')}</li>
+                            <li>{t('618')}</li>
                         </ul>
                     </Row>
                     <Sure disabled={!btnEnabled} className='custom' onClick={()=>sureAction()} type='button'>{address?t('608'):t('602')}</Sure>
