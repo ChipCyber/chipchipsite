@@ -119,7 +119,7 @@ export default function Index() {
                                         <div>{_saveToTwoWei(item.airdrop_current,6)} / <span>{_saveToTwoWei(item.airdrop_total,6)}</span></div>
                                     </ItemInfo>
                                     <ItemProgress style={{'--progress': _getValueDivided(item.airdrop_current,item.airdrop_total)+'%'}}></ItemProgress>
-                                    <ItemEndTip>{item.isEnd?t('2011'):(item.isBegin?t('2012'):t('2011'))}</ItemEndTip>
+                                    <ItemEndTip>{item.isEnd?t('2011'):(item.isBegin?t('2011'):t('2012'))}</ItemEndTip>
                                     <ItemBottom>
                                         <Time>
                                             <TimeItem>
@@ -203,7 +203,7 @@ export default function Index() {
                                     <div>{_saveToTwoWei(item.airdrop_current,6)} / <span>{_saveToTwoWei(item.airdrop_total,6)}</span></div>
                                 </ItemInfo>
                                 <ItemProgress style={{'--progress': _getValueDivided(item.airdrop_current,item.airdrop_total)+'%'}}></ItemProgress>
-                                <ItemEndTip>{item.isEnd?t('2011'):(item.isBegin?t('2012'):t('2011'))}</ItemEndTip>
+                                <ItemEndTip>{item.isEnd?t('2011'):(item.isBegin?t('2011'):t('2012'))}</ItemEndTip>
                                 <ItemBottom>
                                     <Time>
                                         <TimeItem>
