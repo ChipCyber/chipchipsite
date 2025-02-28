@@ -10,7 +10,7 @@ import './index.css';
 import './fonts.css';
 import App from './App';
 import i18n from './i18n'
-import 'amfe-flexible'
+// import 'amfe-flexible'
 import "@reach/dialog/styles.css";
 
 import * as serviceWorker from './serviceWorker';

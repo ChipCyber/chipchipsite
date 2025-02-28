@@ -226,7 +226,7 @@ export default function Index() {
                                             <span>{item.remaining?.seconds ?? 0}</span>
                                         </TimeItem>
                                     </Time>
-                                    <SmallBtn disabled={!item.isBegin||item.isEnd} className='custom'>
+                                    <SmallBtn className='custom'>
                                         <span>{item.isEnd?t('2006'):(item.isBegin?t('2013'):t('2014'))}</span>
                                         <img src={require('@/assets/home/arrow_enter.png').default}/>
                                     </SmallBtn>
