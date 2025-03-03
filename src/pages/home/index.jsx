@@ -229,8 +229,8 @@ export default function Home() {
                             <Top2Row2Right className="wow animate__animated animate__fadeInRight">
                                 <img src={require('../../assets/home/66.png').default}/>
                                 <div className='desc'>{t('115')}</div>
-                                <Top2Btn className='custom' onClick={()=>openUrl(DiscordUrl)}>
-                                    <span>Discord</span>
+                                <Top2Btn className='custom' onClick={()=>openUrl(SocialMediaTelegramUrl)}>
+                                    <span>{t('199')}</span>
                                     <img src={require('../../assets/home/arrow_enter.png').default}/>
                                 </Top2Btn>
                             </Top2Row2Right>
@@ -287,8 +287,8 @@ export default function Home() {
                                     <img src={require('../../assets/home/img41.png').default}/>
                                     <Top4Row1LeftCardContent>
                                         <Top4Row1LeftCardItem>
-                                            <div className='item_title'>{InitialPrice}</div>
-                                            <div className='item_desc'>{t('191')}</div>
+                                            <div className='item_title'>NGNF</div>
+                                            <div className='item_desc'>{t('342')}</div>
                                         </Top4Row1LeftCardItem>
                                         <Top4Row1LeftCardItem>
                                             <div className='item_title'>1 billion</div>
@@ -513,8 +513,8 @@ export default function Home() {
                     <img src={require('../../assets/nav/login_arrow.png').default}/>
                 </BtnH5>
                 <div className='desc'>{t('115')}</div>
-                <BtnH5 className='custom' onClick={()=>openUrl(DiscordUrl)}>
-                    <span>Discord</span>
+                <BtnH5 className='custom' onClick={()=>openUrl(SocialMediaTelegramUrl)}>
+                    <span>{t('199')}</span>
                     <img src={require('../../assets/nav/login_arrow.png').default}/>
                 </BtnH5>
             </Top2H5>
@@ -559,8 +559,8 @@ export default function Home() {
                 <Top4H5Card>
                     <img className='icon' src={require('../../assets/home/h5/img41.png').default}/>
                     <Top4H5CardItem>
-                        <div className='item_title'>{InitialPrice}</div>
-                        <div className='item_desc'>{t('191')}</div>
+                        <div className='item_title'>NGNF</div>
+                        <div className='item_desc'>{t('342')}</div>
                     </Top4H5CardItem>
                     <Top4H5CardItem>
                         <div className='item_title'>1 billion</div>

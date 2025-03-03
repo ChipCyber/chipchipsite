@@ -8,10 +8,9 @@ import {
 } from "../../constants";
 
 const quarters = [
-    { name: '2024 Q4', startDate: new Date('2024-10-01'), endDate: new Date('2024-12-31'), seq: 1 },
-    { name: '2025 Q1', startDate: new Date('2025-01-01'), endDate: new Date('2025-03-31'), seq: 2 },
-    { name: '2025 Q2', startDate: new Date('2025-04-01'), endDate: new Date('2025-06-30'), seq: 3 },
-    { name: '2025 Q3', startDate: new Date('2025-07-01'), endDate: new Date('2025-07-31'), seq: 4 }
+    { name: '2025 Q1', startDate: new Date('2025-01-01'), endDate: new Date('2025-03-31'), seq: 1 },
+    { name: '2025 Q2', startDate: new Date('2025-04-01'), endDate: new Date('2025-06-30'), seq: 2 },
+    { name: '2025 Q3', startDate: new Date('2025-07-01'), endDate: new Date('2025-07-31'), seq: 3 }
 ];
 const convertToUTC8 = (date) => {
     const utcDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
@@ -48,7 +47,6 @@ export default function Index() {
                         {currentQuarterSeq==1&&<Img className='wow animate__animated animate__fadeIn' src={require('../../assets/roadmap/bg1.png').default}/>}
                         {currentQuarterSeq==2&&<Img className='wow animate__animated animate__fadeIn' src={require('../../assets/roadmap/bg2.png').default}/>}
                         {currentQuarterSeq==3&&<Img className='wow animate__animated animate__fadeIn' src={require('../../assets/roadmap/bg3.png').default}/>}
-                        {currentQuarterSeq==4&&<Img className='wow animate__animated animate__fadeIn' src={require('../../assets/roadmap/bg4.png').default}/>}
                         <Item>
                             <ItemTitle>Q2 2023</ItemTitle>
                             <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('135')}</ItemRow>
@@ -90,7 +88,7 @@ export default function Index() {
                         </Item>
                         <Item>
                             <ItemTitle>Q4 2024</ItemTitle>
-                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1491')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1491')}</ItemRow>
                             <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1492')}</ItemRow>
                             <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1493')}</ItemRow>
                             <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1494')}</ItemRow>
@@ -104,16 +102,16 @@ export default function Index() {
                             <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1502')}</ItemRow>
                             <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1503')}</ItemRow>
                             <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1504')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1505')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1506')}</ItemRow>
                         </Item>
                         <Item>
                             <ItemTitle>Q2 2025</ItemTitle>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1511')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1512')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1513')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1514')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1515')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1511')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1512')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1513')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1514')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1515')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1516')}</ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1517')}</ItemRow>
                         </Item>
                         <Item>
                             <ItemTitle>Q3 2025</ItemTitle>
@@ -169,12 +167,13 @@ export default function Index() {
                             <ItemH5Row>{t('1513')}</ItemH5Row>
                             <ItemH5Row>{t('1514')}</ItemH5Row>
                             <ItemH5Row>{t('1515')}</ItemH5Row>
+                            <ItemH5Row>{t('1516')}</ItemH5Row>
+                            <ItemH5Row>{t('1517')}</ItemH5Row>
                         </ItemH5>
                     </Left>
                     {currentQuarterSeq==1&&<img className='middle' src={require('../../assets/roadmap/h5/bg1.png').default}/>}
                     {currentQuarterSeq==2&&<img className='middle' src={require('../../assets/roadmap/h5/bg2.png').default}/>}
                     {currentQuarterSeq==3&&<img className='middle' src={require('../../assets/roadmap/h5/bg3.png').default}/>}
-                    {currentQuarterSeq==4&&<img className='middle' src={require('../../assets/roadmap/h5/bg4.png').default}/>}
                     <Right>
                         <ItemH5>
                             <ItemH5Title>Q3 2023</ItemH5Title>
@@ -204,8 +203,6 @@ export default function Index() {
                             <ItemH5Row>{t('1502')}</ItemH5Row>
                             <ItemH5Row>{t('1503')}</ItemH5Row>
                             <ItemH5Row>{t('1504')}</ItemH5Row>
-                            <ItemH5Row>{t('1505')}</ItemH5Row>
-                            <ItemH5Row>{t('1506')}</ItemH5Row>
                         </ItemH5>
                         <ItemH5>
                             <ItemH5Title>Q3 2025</ItemH5Title>
@@ -462,8 +459,8 @@ position: relative;
 width: max-content;
 `
 const Img = styled.img`
-width: 1102px;
-height: 1961px;
+width: 1106px;
+height: 2207px;
 `
 const Item = styled.div`
 position: absolute;
@@ -471,22 +468,22 @@ width: 340px;
 display: flex;
 flex-direction: column;
 &:nth-of-type(1) {
-left: 45px;
+left: 55px;
 top: 0;
 transform: translateY(calc(-100% - 10px));
 }
 &:nth-of-type(2) {
 top: 68px;
-left: 398px;
+left: 418px;
 }
 &:nth-of-type(3) {
 top: 0;
-right: -30px;
+right: -20px;
 transform: translateY(calc(-100% - 10px));
 }
 &:nth-of-type(4) {
 top: 415px;
-right: -40px;
+right: -30px;
 }
 &:nth-of-type(5) {
 width: 460px;
@@ -495,26 +492,26 @@ left: 178px;
 }
 &:nth-of-type(6) {
 width: 452px;
-top: 880px;
+top: 885px;
 left: 158px;
 }
 &:nth-of-type(7) {
-top: 880px;
+top: 885px;
 right: 40px;
 width: 380px;
 }
 &:nth-of-type(8) {
-top: 1530px;
-right: 68px;
+top: 1550px;
+right: 50px;
 }
 &:nth-of-type(9) {
-top: 1530px;
-left: 158px;
+top: 1555px;
+left: 248px;
 width: 400px;
 }
 &:nth-of-type(10) {
 bottom: 0;
-left: 158px;
+left: 288px;
 transform: translateY(calc(100% + 10px));
 }
 `

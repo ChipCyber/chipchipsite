@@ -182,7 +182,7 @@ export default function Index() {
                         <InfoProgress style={{'--progress': _getValueDivided(data.airdrop_current,data.airdrop_total)+'%'}}></InfoProgress>
                         <InfoAccountInfo>{t('2015')}：{currentWalletAddress?shortenAddress(currentWalletAddress):'--'}，{t('2016')} {walletInfo?`${_saveToTwoWei(walletInfo.airdrop_amount,6)} ${walletInfo.symbol}`:'--'}，{t('217')} {walletInfo?`${_saveToTwoWei(walletInfo.claimed_amount,6)} ${walletInfo.symbol}`:'--'}</InfoAccountInfo>
                         <InfoBtnRow>
-                            <SmallBtn className='custom' disabled={!currentWalletAddress||!data.isBegin||data.isEnd||!walletInfo||walletInfo.claiming==1||walletInfo.airdrop_amount<=0} onClick={()=>{currentWalletAddress?receiveAirdrop():dispatch(setShowConnectWallet())}}>
+                            <SmallBtn className='custom' disabled={currentWalletAddress?(!data.isBegin||data.isEnd||!walletInfo||walletInfo.claiming==1||walletInfo.airdrop_amount<=0):false} onClick={()=>{currentWalletAddress?receiveAirdrop():dispatch(setShowConnectWallet())}}>
                                 <span>{currentWalletAddress?(data.isEnd?t('2006'):(data.isBegin?t('2013'):t('2014'))):t('602')}</span>
                                 {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
                                 <img src={require('@/assets/nav/login_arrow.png').default}/>}

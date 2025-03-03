@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { NavLink } from "react-router-dom"
 import styled from "styled-components";
 import { useTranslation } from 'react-i18next';
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { message, Pagination, Modal } from "antd";
 import useBreakpointCheck from "../../hooks/useBreakpointCheck";
 import { shortenString, parseTime }  from "../../utils";
-import { DestructionAddress, InscriptionNumberStart, InscriptionNumberEnd } from "../../constants";
+import { DestructionAddress, InscriptionNumberStart, InscriptionNumberEnd, openUrl, OKX_BUY_CHIPBOX_URL, ME_BUY_CHIPBOX_URL } from "../../constants";
 
 import { exchangeBtcbalanceApi, exchangeExchangeinfoApi, exchangeRegistApi, exchangeCommitHashApi } from "../../api/exchange";
 import { showLoading, hideLoading } from '../../utils/loading';
@@ -358,6 +359,19 @@ export default function Index() {
                     <div>{t('612')}</div>
                     <div className='d'>{DestructionAddress}</div>
                 </ExplainAddress>
+                <Benefits>
+                    <div className='title'>{t('618')}</div>
+                    {t('619').split('\n').map((line, index) => (<React.Fragment key={index}>{line&&<div className='desc'>{line}</div>}</React.Fragment>))}
+                </Benefits>
+                <BtnRow>
+                    <NavLinkBtn className='link' to={'/airdrop'}>{t('211')}</NavLinkBtn>
+                    <RowBtn className='custom' onClick={()=>openUrl(OKX_BUY_CHIPBOX_URL)}>
+                        <span>{t('620')}</span>
+                    </RowBtn>
+                    <RowBtn className='custom' onClick={()=>openUrl(ME_BUY_CHIPBOX_URL)}>
+                        <span>{t('621')}</span>
+                    </RowBtn>
+                </BtnRow>
             </Content>
             <DialogOverlay
                     style={{ height: '100vh', zIndex: 99, background: 'hsla(0, 0%, 0%, 0.6)' }}
@@ -445,6 +459,19 @@ export default function Index() {
                     <div>{t('612')}</div>
                     <div className='d'>{DestructionAddress}</div>
                 </ExplainAddress>
+                <Benefits>
+                    <div className='title'>{t('618')}</div>
+                    {t('619').split('\n').map((line, index) => (<React.Fragment key={index}>{line&&<div className='desc'>{line}</div>}</React.Fragment>))}
+                </Benefits>
+                <BtnRow>
+                    <NavLinkBtn className='link' to={'/airdrop'}>{t('211')}</NavLinkBtn>
+                    <RowBtn className='custom' onClick={()=>openUrl(OKX_BUY_CHIPBOX_URL)}>
+                        <span>{t('620')}</span>
+                    </RowBtn>
+                    <RowBtn className='custom' onClick={()=>openUrl(ME_BUY_CHIPBOX_URL)}>
+                        <span>{t('621')}</span>
+                    </RowBtn>
+                </BtnRow>
             </ContentH5>
             <DialogOverlay
                     style={{ height: '100vh', zIndex: 99, background: 'hsla(0, 0%, 0%, 0.6)' }}
@@ -660,6 +687,20 @@ color: ${({ theme }) => theme.colors.failure};
 word-break: break-all;
 .d {
 font-size: 14px;
+}
+`
+const Benefits = styled.div`
+text-align: left;
+margin-top: 20px;
+.title {
+font-size: 24px;
+font-weight: 700;
+text-align: center;
+margin-bottom: 20px;
+}
+.desc {
+margin-top: 5px;
+font-size: 16px;
 }
 `
 const Card = styled.div`
@@ -937,4 +978,65 @@ height: 80px;
 const ConnectWalletTitle = styled.span`
 font-size: 16px;
 font-weight: bold;
+`
+const BtnRow = styled.div`
+display: flex;
+align-items: center;
+gap: 10px;
+${({ theme }) => theme.mediaQueries.sm}{
+gap: 20px;
+};
+`
+const NavLinkBtn = styled(NavLink)`
+margin-top: 24px;
+position: relative;
+font-size: 14px;
+font-weight: 600;
+width: 160px;
+height: 40px;
+border-radius: 32px;
+background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
+color: ${({theme})=>theme.colors.text};
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+img {
+width: 20px;
+height: 20px;
+}
+${({ theme }) => theme.mediaQueries.sm}{
+margin: 0 auto;
+margin-top: 32px;
+font-size: 16px;
+width: 160px;
+height: 53px;
+};
+`
+const RowBtn = styled.button`
+margin-top: 24px;
+position: relative;
+font-size: 14px;
+font-weight: 600;
+width: 160px;
+height: 40px;
+line-height: 1;
+border-radius: 32px;
+background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
+color: ${({theme})=>theme.colors.text};
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
+img {
+width: 20px;
+height: 20px;
+}
+${({ theme }) => theme.mediaQueries.sm}{
+margin: 0 auto;
+margin-top: 32px;
+font-size: 16px;
+width: 160px;
+height: 53px;
+};
 `
