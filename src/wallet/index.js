@@ -1,5 +1,7 @@
-import { setWalletProvider }  from "@/wallet/walletProvider";
+import { setWalletProvider, getWalletProvider }  from "@/wallet/walletProvider";
 import { message } from "antd";
+import store from '@/store';
+import { removeWalletInfo } from '@/store/userSlice';
 
 export const WalletType = {
     OKX: 'OKX',
@@ -34,6 +36,7 @@ export function recentConnector() {
 export function runConnectWallet(wallet, network) {
     return new Promise((resolve, reject) => {
         getProviderAddress(wallet, network).then(res=>{
+            res.provider.on("disconnect", handleDisconnect);
             setWalletProvider(res.provider);
             localStorage.setItem(saveLocalKey, `${wallet}_${network}`);
             resolve({...res, wallet, network, provider: undefined});
@@ -41,6 +44,18 @@ export function runConnectWallet(wallet, network) {
             reject(error);
         });
     });
+}
+const handleDisconnect = () => {
+    store.dispatch(removeWalletInfo());
+};
+export function disConnectWallet() {
+    console.log("disconnected!");
+    const provider = getWalletProvider();
+    if(provider) {
+        provider.off("disconnect", handleDisconnect);
+        provider.disconnect();
+        setWalletProvider(undefined);
+    }
 }
 async function getProviderAddress(wallet, network) {
     console.log('wallet :>> ', wallet);
