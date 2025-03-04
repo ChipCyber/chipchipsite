@@ -27,6 +27,7 @@ import Copyright from "./components/copyright";
 import Home from "./pages/home";
 import Airdrop from "./pages/airdrop";
 import AirdropDetail from "./pages/airdrop/detail";
+import NGNF from "./pages/ngnf";
 import FAQ from "./pages/faq";
 import FAQDetail from "./pages/faq/detail";
 import News from "./pages/news";
@@ -103,6 +104,10 @@ function App() {
                 <Nav/>
                 <AirdropDetail/>
                 <Copyright/>
+              </Route>
+              <Route path="/ngnf" exact>
+                <Nav/>
+                <NGNF/>
               </Route>
               <Route path="/faq" exact>
                 <Nav/>

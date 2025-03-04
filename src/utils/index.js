@@ -19,6 +19,15 @@ export function scrollToAnchor(anchorName) {
       if(anchorElement) { anchorElement.scrollIntoView({block: 'start', behavior: 'smooth'}); }
   }
 }
+export function formatNumberWithCommas(number) {
+  if (number === null || number === undefined || isNaN(number)) {
+    return number;
+  }
+  const numStr = number.toString();
+  const [integerPart, decimalPart] = numStr.split('.');
+  const formattedIntegerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  return decimalPart ? `${formattedIntegerPart}.${decimalPart}` : formattedIntegerPart;
+}
 export function debounce(fn, delay=500) {
   let timer; // 定时器变量
   return function (...args) {

@@ -212,6 +212,7 @@ class Nav extends Component {
                     <NavCenterLink to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLink>
                     {/* <NavCenterLink to='/ido' onClick={this.closeMenu} isActive={()=>pathname==='/ido'}>IDO</NavCenterLink> */}
                     {/* <NavCenterLinkDisabled>Fair Launch</NavCenterLinkDisabled> */}
+                    <NavCenterLink to='/ngnf' onClick={this.closeMenu} isActive={()=>pathname==='/ngnf'}>$NGNF</NavCenterLink>
                     {/* <NavCenterLink to='/mint' onClick={this.closeMenu} isActive={()=>pathname==='/mint'}>Fair Launch</NavCenterLink> */}
                     <NavCenterLink to='/roadmap' onClick={this.closeMenu} isActive={()=>pathname==='/roadmap'}>{t('102')}</NavCenterLink>
                     <NavCenterLink to='/news' onClick={this.closeMenu} isActive={()=>pathname==='/news'}>{t('103')}</NavCenterLink>
@@ -310,6 +311,7 @@ class Nav extends Component {
                             <Row><NavLink to='/' onClick={this.closeMenu}>{t('100')}</NavLink></Row>
                             <Row><NavLink to='/displacement' onClick={this.closeMenu}>{t('207')}</NavLink></Row>
                             <Row><NavLink to='/airdrop' onClick={this.closeMenu}>{t('101')}</NavLink></Row>
+                            <Row><NavLink to='/ngnf' onClick={this.closeMenu}>$NGNF</NavLink></Row>
                             {/* <Row><NavLink to='/ido' onClick={this.closeMenu}>IDO</NavLink></Row> */}
                             <Row><NavLink to='/roadmap' onClick={this.closeMenu}>{t('102')}</NavLink></Row>
                             <Row><NavLink to='/news' onClick={this.closeMenu}>{t('103')}</NavLink></Row>

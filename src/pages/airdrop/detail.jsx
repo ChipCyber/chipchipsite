@@ -20,7 +20,7 @@ import {
     JOIN_GOKU_COMMUNITY,
     FOLLOW_GOKU_X,
 } from "@/constants";
-import { shortenAddress } from "@/utils";
+import { shortenAddress, formatNumberWithCommas } from "@/utils";
 import { getWalletProvider } from "@/wallet/walletProvider.js";
 import useLanguageChange from '@/hooks/useLanguageChange.js';
 
@@ -149,7 +149,7 @@ export default function Index() {
                         </InfoTipList>
                         <InfoAirdrop>
                             <div>{t('2009')}</div>
-                            <span>{_saveToTwoWei(data.airdrop_total,6)} {data.symbol}</span>
+                            <span>{formatNumberWithCommas(_saveToTwoWei(data.airdrop_total,6))} {data.symbol}</span>
                         </InfoAirdrop>
                     </InfoLeft>
                     <InfoRight>
@@ -177,10 +177,10 @@ export default function Index() {
                         </Time>
                         <InfoProgressTip>
                             <div>{t('2010')}</div>
-                            <div>{_saveToTwoWei(data.airdrop_current,6)} / <span>{_saveToTwoWei(data.airdrop_total,6)}</span></div>
+                            <div>{formatNumberWithCommas(_saveToTwoWei(data.airdrop_current,6))} / <span>{formatNumberWithCommas(_saveToTwoWei(data.airdrop_total,6))}</span></div>
                         </InfoProgressTip>
                         <InfoProgress style={{'--progress': _getValueDivided(data.airdrop_current,data.airdrop_total)+'%'}}></InfoProgress>
-                        <InfoAccountInfo>{t('2015')}：{currentWalletAddress?shortenAddress(currentWalletAddress):'--'}，{t('2016')} {walletInfo?`${_saveToTwoWei(walletInfo.airdrop_amount,6)} ${walletInfo.symbol}`:'--'}，{t('217')} {walletInfo?`${_saveToTwoWei(walletInfo.claimed_amount,6)} ${walletInfo.symbol}`:'--'}</InfoAccountInfo>
+                        <InfoAccountInfo>{t('2015')}：{currentWalletAddress?shortenAddress(currentWalletAddress):'--'}<br/>{t('2016')}：{walletInfo?`${_saveToTwoWei(walletInfo.airdrop_amount,6)} ${walletInfo.symbol}`:'--'}<br/>{t('2010')}：{walletInfo?`${_saveToTwoWei(walletInfo.claimed_amount,6)} ${walletInfo.symbol}`:'--'}</InfoAccountInfo>
                         <InfoBtnRow>
                             <SmallBtn className='custom' disabled={currentWalletAddress?(!data.isBegin||data.isEnd||!walletInfo||walletInfo.claiming==1||walletInfo.airdrop_amount<=0):false} onClick={()=>{currentWalletAddress?receiveAirdrop():dispatch(setShowConnectWallet())}}>
                                 <span>{currentWalletAddress?(data.isEnd?t('2006'):(data.isBegin?t('2013'):t('2014'))):t('602')}</span>

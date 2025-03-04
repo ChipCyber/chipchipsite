@@ -153,9 +153,9 @@
     "2012": "Time Remaining Until Claiming Starts",
     "2013": "Start Claiming",
     "2014": "Claim for Free",
-    "2015": "Current Wallet Address",
-    "2016": "Receive Airdrop",
-    "2017": "Search",
+    "2015": "Address",
+    "2016": "Claimable",
+    "2017": "Check",
     "2018": "Project Introduction",
     "2019": "Official Website",
     "2020": "Token Information",
@@ -330,6 +330,11 @@
     "8020":"The year is 2024, and the Web3 industry is undergoing significant changes. No one is willing to pay for the sky-high valuations set by VCs anymore. People don't even care whether a project’s token gets listed on exchanges. They are tired of free token handouts and refuse to be exit liquidity. Instead, they want to join projects at more reasonable valuations and at earlier stages.\n\nPeople buy into consensus, and they go crazy for MEME. $NGNF is the core of our community, and our goal is simple: to rally behind $NGNF. No one gets free tokens. If you like this project, if you’re a true supporter, then hold $NGNF. Here, you’ll find the purest joy and the people who truly understand you!\n\nOur founding team spent 18 months and millions of dollars, but none of that really matters. With the community, we can achieve anything!",
     "8021":"Time remaining until trading starts",
     "8022":"The countdown is about to start",
+
+    "900":"$NGNF is the only token supported by CHIPCHIP, which can obtain more benefits for users.",
+    "901":"$NGNF token is the only currency supported by CHIPCHIP platform. CHIPCHIP will use 70% of the platform's revenue for the repurchase and destruction of $NGNF.",
+    "902":"For detailed $NGNF content, ",
+    "903":"Please read",
 
     "":""
 }

@@ -13,6 +13,7 @@ import {
 } from "@/constants";
 import { airdropGetHomeApi } from "@/api/mint.js";
 import useLanguageChange from '@/hooks/useLanguageChange.js';
+import { formatNumberWithCommas } from '@/utils';
 
 export default function Index() {
     const { t } = useTranslation();
@@ -113,10 +114,10 @@ export default function Index() {
                                     <ItemTipList>
                                         {item.slogan.split('\n').map((line, index) => (<React.Fragment key={index}>{line&&<ItemTip>{line}</ItemTip>}</React.Fragment>))}
                                     </ItemTipList>
-                                    <ItemAirdrop>{t('2009')} {_saveToTwoWei(item.airdrop_total,6)} {item.symbol}</ItemAirdrop>
+                                    <ItemAirdrop>{t('2009')} {formatNumberWithCommas(_saveToTwoWei(item.airdrop_total,6))} {item.symbol}</ItemAirdrop>
                                     <ItemInfo>
                                         <div>{t('2010')}</div>
-                                        <div>{_saveToTwoWei(item.airdrop_current,6)} / <span>{_saveToTwoWei(item.airdrop_total,6)}</span></div>
+                                        <div>{formatNumberWithCommas(_saveToTwoWei(item.airdrop_current,6))} / <span>{formatNumberWithCommas(_saveToTwoWei(item.airdrop_total,6))}</span></div>
                                     </ItemInfo>
                                     <ItemProgress style={{'--progress': _getValueDivided(item.airdrop_current,item.airdrop_total)+'%'}}></ItemProgress>
                                     <ItemEndTip>{item.isEnd?t('2011'):(item.isBegin?t('2011'):t('2012'))}</ItemEndTip>
@@ -197,10 +198,10 @@ export default function Index() {
                                 <ItemTipList>
                                     {item.slogan.split('\n').map((line, index) => (<React.Fragment key={index}>{line&&<ItemTip>{line}</ItemTip>}</React.Fragment>))}
                                 </ItemTipList>
-                                <ItemAirdrop>{t('2009')} {_saveToTwoWei(item.airdrop_total,6)} {item.symbol}</ItemAirdrop>
+                                <ItemAirdrop>{t('2009')} {formatNumberWithCommas(_saveToTwoWei(item.airdrop_total,6))} {item.symbol}</ItemAirdrop>
                                 <ItemInfo>
                                     <div>{t('2010')}</div>
-                                    <div>{_saveToTwoWei(item.airdrop_current,6)} / <span>{_saveToTwoWei(item.airdrop_total,6)}</span></div>
+                                    <div>{formatNumberWithCommas(_saveToTwoWei(item.airdrop_current,6))} / <span>{formatNumberWithCommas(_saveToTwoWei(item.airdrop_total,6))}</span></div>
                                 </ItemInfo>
                                 <ItemProgress style={{'--progress': _getValueDivided(item.airdrop_current,item.airdrop_total)+'%'}}></ItemProgress>
                                 <ItemEndTip>{item.isEnd?t('2011'):(item.isBegin?t('2011'):t('2012'))}</ItemEndTip>
