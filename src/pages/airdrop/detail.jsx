@@ -503,7 +503,7 @@ span {
 color: #A3A3A3;
 }
 ${({ theme }) => theme.mediaQueries.sm}{
-margin-top: 45px;
+margin-top: 25px;
 font-size: 14px;
 }
 `

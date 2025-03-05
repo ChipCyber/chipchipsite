@@ -9,8 +9,8 @@ const GlobalStyle = createGlobalStyle`
     scroll-padding-top: 100px;
   }
   body {
-    background-color: ${({ theme }) => theme.colors.background};
-    color: ${({ theme }) => theme.colors.text};
+    background-color: ${({ theme }) => theme.colors.background} !important;
+    color: ${({ theme }) => theme.colors.text} !important;
     img {
       object-fit: contain;
       // height: auto;

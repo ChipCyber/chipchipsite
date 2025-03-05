@@ -202,7 +202,7 @@ class Nav extends Component {
     renderNav() {
         const {t,i18n,history,location:{pathname},userInfo,showLogin,setShowLogin,currentWalletAddress,showConnectWallet,setShowConnectWallet,setCloseConnectWallet} = this.props;
         const {showMenu,showMore,showPModal,countdown} = this.state;
-        console.log('pathname :>> ', pathname);
+        // console.log('pathname :>> ', pathname);
         return (
             <NavBody>
                 <NavLeft>
