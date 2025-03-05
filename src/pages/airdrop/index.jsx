@@ -112,7 +112,7 @@ export default function Index() {
                                         <ItemDesc>{item.symbol}</ItemDesc>
                                     </ItemHeader>
                                     <ItemTipList>
-                                        {item.slogan.split('\n').map((line, index) => (<React.Fragment key={index}>{line&&<ItemTip>{line}</ItemTip>}</React.Fragment>))}
+                                        {item.slogan.split('\\n').map((line, index) => (<React.Fragment key={index}>{line&&<ItemTip>{line}</ItemTip>}</React.Fragment>))}
                                     </ItemTipList>
                                     <ItemAirdrop>{t('2009')} {formatNumberWithCommas(_saveToTwoWei(item.airdrop_total,6))} {item.symbol}</ItemAirdrop>
                                     <ItemInfo>
@@ -196,7 +196,7 @@ export default function Index() {
                                     <ItemDesc>{item.symbol}</ItemDesc>
                                 </ItemHeader>
                                 <ItemTipList>
-                                    {item.slogan.split('\n').map((line, index) => (<React.Fragment key={index}>{line&&<ItemTip>{line}</ItemTip>}</React.Fragment>))}
+                                    {item.slogan.split('\\n').map((line, index) => (<React.Fragment key={index}>{line&&<ItemTip>{line}</ItemTip>}</React.Fragment>))}
                                 </ItemTipList>
                                 <ItemAirdrop>{t('2009')} {formatNumberWithCommas(_saveToTwoWei(item.airdrop_total,6))} {item.symbol}</ItemAirdrop>
                                 <ItemInfo>

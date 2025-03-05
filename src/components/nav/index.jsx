@@ -202,33 +202,36 @@ class Nav extends Component {
     renderNav() {
         const {t,i18n,history,location:{pathname},userInfo,showLogin,setShowLogin,currentWalletAddress,showConnectWallet,setShowConnectWallet,setCloseConnectWallet} = this.props;
         const {showMenu,showMore,showPModal,countdown} = this.state;
-        // console.log('pathname :>> ', pathname);
+        console.log('pathname :>> ', pathname);
         return (
             <NavBody>
-                <NavLogo onClick={()=>history.push('/')} src={require('@/assets/nav/logo.png').default} alt='logo'/>
+                <NavLeft>
+                    <NavLogo onClick={()=>history.push('/')} src={require('@/assets/nav/logo.png').default} alt='logo'/>
+                </NavLeft>
                 <NavCenter>
                     <NavCenterLink to='/' onClick={this.closeMenu} isActive={()=>pathname==='/'}>{t('100')}</NavCenterLink>
                     <NavCenterLink to='/displacement' onClick={this.closeMenu} isActive={()=>pathname==='/displacement'}>{t('207')}</NavCenterLink>
                     <NavCenterLink to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLink>
                     {/* <NavCenterLink to='/ido' onClick={this.closeMenu} isActive={()=>pathname==='/ido'}>IDO</NavCenterLink> */}
                     {/* <NavCenterLinkDisabled>Fair Launch</NavCenterLinkDisabled> */}
-                    <NavCenterLink to='/ngnf' onClick={this.closeMenu} isActive={()=>pathname==='/ngnf'}>$NGNF</NavCenterLink>
+                    <NavCenterLinkAuto to='/ngnf' onClick={this.closeMenu} isActive={()=>pathname==='/ngnf'}>$NGNF</NavCenterLinkAuto>
                     {/* <NavCenterLink to='/mint' onClick={this.closeMenu} isActive={()=>pathname==='/mint'}>Fair Launch</NavCenterLink> */}
-                    <NavCenterLink to='/roadmap' onClick={this.closeMenu} isActive={()=>pathname==='/roadmap'}>{t('102')}</NavCenterLink>
-                    <NavCenterLink to='/news' onClick={this.closeMenu} isActive={()=>pathname==='/news'}>{t('103')}</NavCenterLink>
-                    {/* <NavCenterNoLink className='custom'>
+                    <NavCenterLinkAuto to='/roadmap' onClick={this.closeMenu} isActive={()=>pathname==='/roadmap'}>{t('102')}</NavCenterLinkAuto>
+                    <NavCenterLinkAuto to='/news' onClick={this.closeMenu} isActive={()=>pathname==='/news'}>{t('103')}</NavCenterLinkAuto>
+                    <NavCenterNoLink className='default'>
                         <span>{t('104')}</span>
                         <img src={require('@/assets/arrow_down.png').default}/>
                         {showMore&&<Modal className='modal'>
                             <ModalContent>
-                                <ModalRow to='/news' onClick={this.closeMore}>{t('103')}</ModalRow>
-                                <ModalRow to='/displacement' onClick={this.closeMore}>{t('207')}</ModalRow>
+                                <ModalRow to='/ngnf' onClick={this.closeMore} isActive={()=>pathname==='/ngnf'}>$NGNF</ModalRow>
+                                <ModalRow to='/roadmap' onClick={this.closeMore} isActive={()=>pathname==='/roadmap'}>{t('102')}</ModalRow>
+                                <ModalRow to='/news' onClick={this.closeMore} isActive={()=>pathname==='/news'}>{t('103')}</ModalRow>
                             </ModalContent>
                         </Modal>}
-                    </NavCenterNoLink> */}
+                    </NavCenterNoLink>
                 </NavCenter>
                 <NavRight>
-                    {isEmpty(currentWalletAddress)?
+                    {(pathname==='/airdropDetail')&&(isEmpty(currentWalletAddress)?
                     <LoginBtn className='custom' onClick={()=>setShowConnectWallet()}>{t('602')}</LoginBtn>
                     :
                     <LoginBtn className='custom'>
@@ -241,7 +244,7 @@ class Nav extends Component {
                             <LoginBtn className='custom' onClick={()=>this.disconnect()}>Disconnect</LoginBtn>
                         </WalletModalContent>
                         </WalletModal>}
-                    </LoginBtn>
+                    </LoginBtn>)
                     // <PersonalBody>
                     //     <img src={require('@/assets/nav/personal.png').default}/>
                     //     {showPModal&&<PModal className='modal'>
@@ -385,7 +388,7 @@ ${({ theme }) => theme.mediaQueries.sm}{
     right: 40px;
     border-radius: 16px;
     width: calc(100vw - 80px);
-    min-width: calc(1200px - 80px);
+    min-width: calc(1100px - 80px);
 };
 &.hidden {
 transform: translateY(-150%);
@@ -404,6 +407,11 @@ ${({ theme }) => theme.mediaQueries.sm}{
     border-bottom: none;
 };
 `
+const NavLeft = styled.div`
+${({ theme }) => theme.mediaQueries.sm}{
+min-width: 275px;
+};
+`
 const NavLogo = styled.img`
 cursor: pointer;
 width: 106px;
@@ -420,6 +428,17 @@ align-items: center;
 ${({ theme }) => theme.mediaQueries.sm}{
 display: flex;
 };
+`
+const NavCenterLinkAuto = styled(NavLink)`
+display: none;
+font-size: 18px;
+color: ${({ theme }) => theme.colors.textSubtle};
+&.active {
+    color: ${({ theme }) => theme.colors.text};
+}
+${({ theme }) => theme.mediaQueries.xxl}{
+display: unset;
+}:
 `
 const NavCenterLink = styled(NavLink)`
 font-size: 18px;
@@ -459,13 +478,18 @@ height: 14px;
         display: none;
     }
 }
+${({ theme }) => theme.mediaQueries.xxl}{
+display: none;
+};
 `
 const NavRight = styled.div`
 display: flex;
 align-items: center;
+justify-content: flex-end;
 gap: 10px;
 ${({ theme }) => theme.mediaQueries.sm}{
 gap: 20px;
+min-width: 275px;
 };
 `
 const LoginBtn = styled.div`
@@ -942,6 +966,9 @@ align-items: center;
 &:hover {
     background: ${({theme})=>theme.colors.backgroundAlt};
 };
+&.active {
+    color: ${({ theme }) => theme.colors.text};
+}
 ${({theme})=>theme.mediaQueries.sm} {
     font-size: 16px;
 };

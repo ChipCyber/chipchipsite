@@ -171,6 +171,10 @@ export default function Index() {
     };
     const sureAction = async () => {
         if(address) {
+            if(Number(count)>20) {
+                message.error(t('622'));
+                return;
+            }
             const signMsg = inputAddress;
             const publicKey = await currentWalletInstance.current.getPublicKey();
             currentWalletInstance.current.signMessage(signMsg).then((signature)=>{
@@ -232,7 +236,7 @@ export default function Index() {
         } catch (err) {
             callback&&callback(false);
             if(err.message) {
-                message.error(err.message);
+                message.error('wallet:'+err.message);
             }
         }
     }
@@ -260,7 +264,7 @@ export default function Index() {
                     exchangeCommitHashApi({...registParams,hash:txhash}).then(()=>{});
                 }).catch(err => {
                     if(err.message) {
-                        message.error(err.message);
+                        message.error('wallet transferNft:' + err.message);
                     }
                 }).finally(()=>{
                     hideLoading();
