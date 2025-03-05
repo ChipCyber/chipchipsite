@@ -184,6 +184,7 @@ const Content = styled.div`
   min-height: 100vh;
   margin: 0 auto;
   overflow: auto;
+  background: ${({ theme }) => theme.colors.background};
   ${({ theme }) => theme.mediaQueries.sm}{
     min-width: 1200px;
     max-width: 2600px;

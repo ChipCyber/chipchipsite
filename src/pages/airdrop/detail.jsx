@@ -147,7 +147,7 @@ export default function Index() {
                             {shouldRender&&<InfoTag className={data.isEnd?'end':(data.isBegin?'ing':'')}>{data.isEnd?t('2006'):(data.isBegin?t('2007'):t('2008'))}</InfoTag>}
                         </InfoLeftHeader>
                         <InfoTipList>
-                            {data.slogan&&data.slogan.split('\\n').map((line, index) => (<React.Fragment key={index}>{line&&<InfoTip>{line}</InfoTip>}</React.Fragment>))}
+                            {data.slogan&&data.slogan.split(data.slogan.indexOf('\\n')>=0?'\\n':'\n').map((line, index) => (<React.Fragment key={index}>{line&&<InfoTip>{line}</InfoTip>}</React.Fragment>))}
                         </InfoTipList>
                         <InfoAirdrop>
                             <div>{t('2009')}</div>
