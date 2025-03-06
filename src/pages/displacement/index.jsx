@@ -743,6 +743,7 @@ opacity: 0.8;
 .tip {
 text-align: left;
 margin-top: 10px;
+margin-bottom: 0;
 margin-left: 5px;
 color: #FF8A8A;
 font-size: 12px;
@@ -787,7 +788,7 @@ font-size: 14px;
 };
 `
 const Sure = styled.button`
-margin-top: 28px;
+margin-top: 18px;
 height: 40px;
 font-size: 15px;
 font-weight: 600;
@@ -795,7 +796,7 @@ border-radius: 20px;
 width: 100%;
 background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
 ${({ theme }) => theme.mediaQueries.sm}{
-margin-top: 18px;
+margin-top: 28px;
 height: 53px;
 border-radius: 32px;
 font-size: 18px;
