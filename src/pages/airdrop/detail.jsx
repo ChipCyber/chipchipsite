@@ -86,6 +86,7 @@ export default function Index() {
         setSearchResult(null);
     }
     const searchAirdrop = () => {
+        setSearchResult(null);
         airdropQueryBoxApi({active_id:Number(id),box_id:chipBoxId}).then(({data})=>{
             setSearchResult(data);
         });
