@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components";
-import { message } from 'antd';
+import { message, InputNumber } from 'antd';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DialogOverlay, DialogContent } from "@reach/dialog";
@@ -87,7 +87,7 @@ export default function Index() {
     }
     const searchAirdrop = () => {
         setSearchResult(null);
-        airdropQueryBoxApi({active_id:Number(id),box_id:chipBoxId}).then(({data})=>{
+        airdropQueryBoxApi({active_id:Number(id),box_id:`${chipBoxId}`}).then(({data})=>{
             setSearchResult(data);
         });
     }
@@ -281,11 +281,17 @@ export default function Index() {
                         <img className='close' onClick={()=>closeSearch()} src={require('@/assets/nav/close.png').default}/>
                     </DialogHeader>
                     <DialogTip>{t('2036')}</DialogTip>
-                    <DialogInput>
-                        <input type='text' value={chipBoxId} onChange={(e)=>setChipBoxId(e.target.value)} placeholder={t('2037')}/>
-                    </DialogInput>
+                    <DialogInput
+                        min={1}
+                        max={10000}
+                        value={chipBoxId}
+                        onChange={(value)=>setChipBoxId(value)}
+                        placeholder={t('2037')}
+                        parser={(value) => value.replace(/[^\d]/g, "")}
+                        formatter={(value) => (value ? Number(value).toString() : "")}
+                    />
                     <Btn disabled={!chipBoxId} className='custom' onClick={()=>searchAirdrop()}>{t('2017')}</Btn>
-                    {searchResult&&<DialogResult>{t('335')}： {_saveToTwoWei(searchResult.airdrop_amount,6)} {searchResult.symbol}</DialogResult>}
+                    {searchResult&&<DialogResult>{t('335')}： {formatNumberWithCommas(_saveToTwoWei(searchResult.airdrop_amount,6))} {searchResult.symbol}</DialogResult>}
                 </Dialog>
             </DialogOverlay>
         </Root>
@@ -831,28 +837,22 @@ ${({ theme }) => theme.mediaQueries.sm}{
 font-size: 16px;
 }
 `
-const DialogInput = styled.div`
+const DialogInput = styled(InputNumber)`
 margin-top: 12px;
 border-radius: 4px;
 background: #121212;
-display: flex;
 height: 40px;
 padding: 0 10px;
-input, input[disabled] {
-    width: 100%;
-    height: 100%;
-    color: #FFF;
-    background: none;
-    border: none;
-    border-color: transparent;
-    font-size: 14px;
-    font-weight: 600;
+width: 100%;
+input {
+height: 40px;
 }
 ${({ theme }) => theme.mediaQueries.sm}{
 margin-top: 15px;
 height: 50px;
 input, input[disabled] {
     font-size: 21px;
+    height: 50px;
 }
 }
 `
