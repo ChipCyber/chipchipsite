@@ -357,9 +357,7 @@ class Nav extends Component {
                                         <div className='icon'>
                                             <img src={require(`@/assets/wallet/${`${item}`.toLowerCase()}.png`).default} alt='metamask'/>
                                         </div>
-                                        <div className='name'>
-                                            <p>{item}</p>
-                                        </div>
+                                        <div className='name'>{item}</div>
                                     </DialogCContentRow>
                                 ))
                             }
