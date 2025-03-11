@@ -82,7 +82,7 @@ export default function Index() {
     }
     const handleSearchInputChange = (e) => {
         setSearchResult(null);
-        let val = e.target.value;
+        let val = e.target.value.replace(/[^0-9]/g, "").replace(/^0+/, "");
         if (val === "") {
             setChipBoxId("");
             return;
@@ -294,7 +294,7 @@ export default function Index() {
                     </DialogHeader>
                     <DialogTip>{t('2036')}</DialogTip>
                     <DialogInput>
-                        <input type='number' value={chipBoxId} onChange={handleSearchInputChange} placeholder={t('2037')}/>
+                        <input type="text" pattern="[0-9]*" inputmode="numeric" value={chipBoxId} onChange={handleSearchInputChange} placeholder={t('2037')}/>
                     </DialogInput>
                     <Btn disabled={!chipBoxId} className='custom' onClick={()=>searchAirdrop()}>{t('2017')}</Btn>
                     {searchResult&&<DialogResult>{t('335')}： {formatNumberWithCommas(_saveToTwoWei(searchResult.airdrop_amount,6))} {searchResult.symbol}</DialogResult>}
