@@ -18,8 +18,8 @@ const GlobalStyle = createGlobalStyle`
     }
   }
   ::selection {
-    color: #000;
-    background: ${({ theme }) => theme.colors.primary};
+    color: #000 !important;
+    background: ${({ theme }) => theme.colors.primary} !important;
   }
   div {
     line-height: 1.5;
