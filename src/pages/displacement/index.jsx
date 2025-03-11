@@ -342,7 +342,7 @@ export default function Index() {
                     <Row>
                         <div className='title'>{t('605')}</div>
                         <div className='input'>
-                            <input type='number' min={1} value={count} onChange={handleChange} placeholder={t('605')}/>
+                            <input type='number' inputMode="numeric" min={1} value={count} onChange={handleChange} placeholder={t('605')}/>
                             <span>CHIPCHIPBOX</span>
                         </div>
                     </Row>
@@ -443,7 +443,7 @@ export default function Index() {
                     <Row>
                         <div className='title'>{t('605')}</div>
                         <div className='input'>
-                            <input type='number' min={1} value={count} onChange={handleChange} placeholder={t('605')}/>
+                            <input type='number' inputMode="numeric" min={1} value={count} onChange={handleChange} placeholder={t('605')}/>
                             <span>CHIPCHIPBOX</span>
                         </div>
                     </Row>
