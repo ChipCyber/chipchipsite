@@ -80,6 +80,18 @@ export default function Index() {
             message.error(error.message);
         }
     }
+    const handleSearchInputChange = (e) => {
+        setSearchResult(null);
+        let val = e.target.value;
+        if (val === "") {
+            setChipBoxId("");
+            return;
+        }
+        let num = Number(val);
+        if (num >= 1 && num <= 10000) {
+            setChipBoxId(num);
+        }
+    };
     const closeSearch = () => {
         setShowSearch(false);
         setChipBoxId(null);
@@ -281,15 +293,9 @@ export default function Index() {
                         <img className='close' onClick={()=>closeSearch()} src={require('@/assets/nav/close.png').default}/>
                     </DialogHeader>
                     <DialogTip>{t('2036')}</DialogTip>
-                    <DialogInput
-                        min={1}
-                        max={10000}
-                        value={chipBoxId}
-                        onChange={(value)=>setChipBoxId(value)}
-                        placeholder={t('2037')}
-                        parser={(value) => value.replace(/[^\d]/g, "")}
-                        formatter={(value) => (value ? Number(value).toString() : "")}
-                    />
+                    <DialogInput>
+                        <input type='number' value={chipBoxId} onChange={handleSearchInputChange} placeholder={t('2037')}/>
+                    </DialogInput>
                     <Btn disabled={!chipBoxId} className='custom' onClick={()=>searchAirdrop()}>{t('2017')}</Btn>
                     {searchResult&&<DialogResult>{t('335')}： {formatNumberWithCommas(_saveToTwoWei(searchResult.airdrop_amount,6))} {searchResult.symbol}</DialogResult>}
                 </Dialog>
@@ -837,22 +843,28 @@ ${({ theme }) => theme.mediaQueries.sm}{
 font-size: 16px;
 }
 `
-const DialogInput = styled(InputNumber)`
+const DialogInput = styled.div`
 margin-top: 12px;
 border-radius: 4px;
 background: #121212;
 height: 40px;
 padding: 0 10px;
 width: 100%;
-input {
-height: 40px;
+input, input[disabled] {
+    width: 100%;
+    height: 100%;
+    color: #FFF;
+    background: none;
+    border: none;
+    border-color: transparent;
+    font-size: 14px;
+    font-weight: 600;
 }
 ${({ theme }) => theme.mediaQueries.sm}{
 margin-top: 15px;
 height: 50px;
 input, input[disabled] {
     font-size: 21px;
-    height: 50px;
 }
 }
 `
