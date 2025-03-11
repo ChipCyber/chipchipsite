@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useTranslation } from 'react-i18next';
 import useBreakpointCheck from "../../hooks/useBreakpointCheck";
 import { useHistory } from 'react-router-dom';
-import { _saveToTwoWei,_getValueDivided } from "@/constants/constantsFunction";
+import { _saveToTwoWei,_getValueDivided,_getValueMultip } from "@/constants/constantsFunction";
 import {
     openUrl,
     OKX_BUY_CHIPBOX_URL,
@@ -119,7 +119,7 @@ export default function Index() {
                                         <div>{t('2010')}</div>
                                         <div>{formatNumberWithCommas(_saveToTwoWei(item.airdrop_current,6))} / <span>{formatNumberWithCommas(_saveToTwoWei(item.airdrop_total,6))}</span></div>
                                     </ItemInfo>
-                                    <ItemProgress style={{'--progress': _getValueDivided(item.airdrop_current,item.airdrop_total)+'%'}}></ItemProgress>
+                                    <ItemProgress style={{'--progress': _getValueMultip(_getValueDivided(item.airdrop_current,item.airdrop_total),100)+'%'}}></ItemProgress>
                                     <ItemEndTip>{item.isEnd?t('2011'):(item.isBegin?t('2011'):t('2012'))}</ItemEndTip>
                                     <ItemBottom>
                                         <Time>
@@ -203,7 +203,7 @@ export default function Index() {
                                     <div>{t('2010')}</div>
                                     <div>{formatNumberWithCommas(_saveToTwoWei(item.airdrop_current,6))} / <span>{formatNumberWithCommas(_saveToTwoWei(item.airdrop_total,6))}</span></div>
                                 </ItemInfo>
-                                <ItemProgress style={{'--progress': _getValueDivided(item.airdrop_current,item.airdrop_total)+'%'}}></ItemProgress>
+                                <ItemProgress style={{'--progress': _getValueMultip(_getValueDivided(item.airdrop_current,item.airdrop_total),100)+'%'}}></ItemProgress>
                                 <ItemEndTip>{item.isEnd?t('2011'):(item.isBegin?t('2011'):t('2012'))}</ItemEndTip>
                                 <ItemBottom>
                                     <Time>

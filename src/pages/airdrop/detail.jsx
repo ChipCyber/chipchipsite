@@ -13,7 +13,7 @@ import {
     airdropQueryBoxApi,
     airdropGetRewardApi,
 } from "@/api/mint.js";
-import { _saveToTwoWei,_getValueDivided } from '@/constants/constantsFunction';
+import { _saveToTwoWei,_getValueDivided,_getValueMultip } from '@/constants/constantsFunction';
 import {
     openUrl,
     OKX_BUY_CHIPBOX_URL,
@@ -194,7 +194,7 @@ export default function Index() {
                             <div>{t('2010')}</div>
                             <div>{formatNumberWithCommas(_saveToTwoWei(data.airdrop_current,6))} / <span>{formatNumberWithCommas(_saveToTwoWei(data.airdrop_total,6))}</span></div>
                         </InfoProgressTip>
-                        <InfoProgress style={{'--progress': _getValueDivided(data.airdrop_current,data.airdrop_total)+'%'}}></InfoProgress>
+                        <InfoProgress style={{'--progress': _getValueMultip(_getValueDivided(data.airdrop_current,data.airdrop_total),100)+'%'}}></InfoProgress>
                         <InfoAccountInfo>{t('2015')}：{currentWalletAddress?shortenAddress(currentWalletAddress):'--'}<br/>{walletInfo&&walletInfo.claiming==1?t('215'):t('2016')}：{walletInfo?`${formatNumberWithCommas(_saveToTwoWei(walletInfo.airdrop_amount,6))} ${walletInfo.symbol}`:'--'}<br/>{t('2010')}：{walletInfo?`${formatNumberWithCommas(_saveToTwoWei(walletInfo.claimed_amount,6))} ${walletInfo.symbol}`:'--'}</InfoAccountInfo>
                         <InfoBtnRow>
                             <SmallBtn className='custom' disabled={currentWalletAddress?(!data.isBegin||data.isEnd||!walletInfo||walletInfo.claiming==1||walletInfo.airdrop_amount<=0):false} onClick={()=>{currentWalletAddress?receiveAirdrop():dispatch(setShowConnectWallet())}}>
