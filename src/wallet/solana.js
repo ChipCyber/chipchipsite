@@ -3,8 +3,8 @@ import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID, Token } from "@solana/sp
 import { getWalletProvider } from "./walletProvider";
 
 // const connection = new Connection(clusterApiUrl('mainnet-beta'), 'confirmed');
-// const connection = new Connection('https://solitary-autumn-paper.solana-mainnet.quiknode.pro/5ee4b125b700077bd646a0afb5e8dd0a09b752d2', 'confirmed');
-const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
+const connection = new Connection('https://solitary-autumn-paper.solana-mainnet.quiknode.pro/5ee4b125b700077bd646a0afb5e8dd0a09b752d2', 'confirmed');
+// const connection = new Connection(clusterApiUrl('devnet'), 'confirmed');
 
 /**
  * @returns balance
