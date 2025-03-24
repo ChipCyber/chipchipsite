@@ -336,6 +336,8 @@
     "901":"$NGNF token is the only currency supported by CHIPCHIP platform. CHIPCHIP will use 70% of the platform's revenue for the repurchase and destruction of $NGNF.",
     "902":"For detailed $NGNF content, ",
     "903":"Please read",
+    "904":"Use {{name}} to buy",
+    "905":"Buy",
 
     "":""
 }

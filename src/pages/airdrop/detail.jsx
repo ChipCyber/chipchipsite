@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components";
-import { message, InputNumber } from 'antd';
+import { message } from 'antd';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { DialogOverlay, DialogContent } from "@reach/dialog";
