@@ -175,7 +175,7 @@ export default function Home() {
     }, [shouldRender, inView, language]);
     useEffect(() => {
         articlePageListApi({pageIndex:1,pageSize:4}).then(({data})=>{
-            setArticleList(data);
+            setArticleList(data.list);
         });
         knowledgePageListApi({pageIndex:1,pageSize:5,knowledgeType:1}).then(({data})=>{
             setFaqList(data);

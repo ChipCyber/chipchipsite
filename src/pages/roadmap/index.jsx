@@ -12,20 +12,19 @@ const quarters = [
     { name: '2025 Q2', startDate: new Date('2025-04-01'), endDate: new Date('2025-06-30'), seq: 2 },
     { name: '2025 Q3', startDate: new Date('2025-07-01'), endDate: new Date('2025-07-31'), seq: 3 }
 ];
-const convertToUTC8 = (date) => {
-    const utcDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-    const utc8Date = new Date(utcDate.getTime() - 8 * 60 * 60000);
-    return utc8Date;
-};
+
 const isDateInRange = (date, startDate, endDate) => {
-    return date >= new Date(startDate) && date <= new Date(endDate);
+    const d = date.toISOString().split('T')[0];
+    const s = startDate.toISOString().split('T')[0];
+    const e = endDate.toISOString().split('T')[0];
+    return d >= s && d <= e;
 };
+
 const getCurrentQuarterSeq = (date) => {
-    const utc8Date = convertToUTC8(date);
     const currentQuarter = quarters.find(quarter =>
-        isDateInRange(utc8Date, quarter.startDate, quarter.endDate)
+        isDateInRange(date, quarter.startDate, quarter.endDate)
     );
-    return currentQuarter ? currentQuarter.seq : null;
+    return currentQuarter ? currentQuarter.seq : quarters[quarters.length-1].seq;
 };
 
 export default function Index() {
@@ -449,7 +448,7 @@ filter: blur(80px);
 `
 const Content = styled.div`
 position: relative;
-padding: 318px 30px 440px;
+padding: 318px 30px 300px;
 display: flex;
 align-items: center;
 justify-content: center;

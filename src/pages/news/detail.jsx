@@ -27,7 +27,7 @@ export default function Index() {
     };
     useEffect(() => {
         articlePageListApi({pageIndex:1,pageSize:10}).then(({data})=>{
-            setList(data);
+            setList(data.list);
         });
     }, []);
     useEffect(() => {

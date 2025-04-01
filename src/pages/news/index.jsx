@@ -33,8 +33,8 @@ export default function Index() {
         }
         loading.current = true;
         articlePageListApi({pageIndex,pageSize:10}).then(({data})=>{
-            setList([...list,...data]);
-            if(!data||data.length<10) {
+            setList([...list,...data.list]);
+            if(!data.list||data.list.length<10) {
                 setNoMore(true);
             }
         }).finally(()=>{
