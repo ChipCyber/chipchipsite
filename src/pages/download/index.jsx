@@ -30,20 +30,20 @@ export default function Index() {
                     <div className='title'>{t('500')}</div>
                     <div className='desc'>{t('501')}</div>
                     <List>
-                        <RowLinkDisabled>
+                        <RowLink href='https://t.me/chipchipgame_bot/CHIPCHIPGAME' target='__blank'>
                             <div className='content'>
                                 <img src={require('../../assets/download/telegram.png').default}/>
-                                <span>Telegram Mini-app({t('10')})</span>
+                                <span>Telegram Mini-app</span>
                             </div>
                             <img className='arrow' src={require('../../assets/arrow.png').default}/>
-                        </RowLinkDisabled>
-                        <RowLinkDisabled>
+                        </RowLink>
+                        <RowLink href='https://auth.chipchip.io/' target='__blank'>
                             <div className='content'>
                                 <img src={require('../../assets/download/web.png').default}/>
-                                <span>Web({t('10')})</span>
+                                <span>Web</span>
                             </div>
                             <img className='arrow' src={require('../../assets/arrow.png').default}/>
-                        </RowLinkDisabled>
+                        </RowLink>
                         <Row>
                             <div className='content'>
                                 <img src={require('../../assets/download/ios.png').default}/>
@@ -104,20 +104,20 @@ export default function Index() {
                 <BottomH5>
                     <div className='subTitle'>{t('501')}</div>
                     <List>
-                        <RowLinkDisabled>
+                        <RowLink href='https://t.me/chipchipgame_bot/CHIPCHIPGAME' target='__blank'>
                             <div className='content'>
                                 <img src={require('../../assets/download/telegram.png').default}/>
-                                <span>Telegram Mini-app({t('10')})</span>
+                                <span>Telegram Mini-app</span>
                             </div>
                             <img className='arrow' src={require('../../assets/arrow.png').default}/>
-                        </RowLinkDisabled>
-                        <RowLinkDisabled>
+                        </RowLink>
+                        <RowLink href='https://auth.chipchip.io/' target='__blank'>
                             <div className='content'>
                                 <img src={require('../../assets/download/web.png').default}/>
-                                <span>Web({t('10')})</span>
+                                <span>Web</span>
                             </div>
                             <img className='arrow' src={require('../../assets/arrow.png').default}/>
-                        </RowLinkDisabled>
+                        </RowLink>
                         <RowLinkDisabled>
                             <div className='content'>
                                 <img src={require('../../assets/download/ios.png').default}/>
