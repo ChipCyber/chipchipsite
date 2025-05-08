@@ -38,7 +38,6 @@
     "echarts-for-react": "^3.0.2",
     "eslint": "^7.32.0",
     "events": "^3.3.0",
-    "http-proxy-middleware": "^2.0.1",
     "i18next": "^17.3.1",
     "i18next-browser-languagedetector": "^3.0.1",
     "i18next-xhr-backend": "^2.0.1",
@@ -94,6 +93,7 @@
   "devDependencies": {
     "cross-env": "^7.0.3",
     "file-loader": "6.1.1",
+    "http-proxy-middleware": "^2.0.9",
     "postcss": "^8.4.31",
     "postcss-pxtorem": "^5.1.1",
     "react-cookies": "^0.1.1",
