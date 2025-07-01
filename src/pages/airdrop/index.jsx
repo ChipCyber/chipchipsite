@@ -63,6 +63,20 @@ export default function Index() {
         });
     }
     useLanguageChange(fetchData);
+    const goDetailAction = (item) => {
+        if(item.type==0){
+            history.push('/airdropDetail?id='+item.id);
+        }
+    }
+    const claimAction = (e, item) => {
+        if(item.isEnd) {
+            e.stopPropagation();
+            return;
+        }
+        if(item.type==1){
+            openUrl(item.external_url);
+        }
+    }
     if (shouldRender) {
         return (
             <Root>
@@ -103,7 +117,7 @@ export default function Index() {
                     <img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default}/>
                     {
                         list.map(item=>(
-                            <Item key={item.id} onClick={()=>history.push('/airdropDetail?id='+item.id)}>
+                            <Item key={item.id} onClick={()=>goDetailAction(item)}>
                                 <ItemTag className={item.isEnd?'end':(item.isBegin?'ing':'')}>{item.isEnd?t('2006'):(item.isBegin?t('2007'):t('2008'))}</ItemTag>
                                 <ItemImg src={item.head_image} alt='icon'/>
                                 <ItemContent>
@@ -115,11 +129,13 @@ export default function Index() {
                                         {item.slogan.split(item.slogan.indexOf('\\n')>=0?'\\n':'\n').map((line, index) => (<React.Fragment key={index}>{line&&<ItemTip>{line}</ItemTip>}</React.Fragment>))}
                                     </ItemTipList>
                                     <ItemAirdrop>{t('2009')} {formatNumberWithCommas(_saveToTwoWei(item.airdrop_total,6))} {item.symbol}</ItemAirdrop>
+                                    {item.type==0&&<>
                                     <ItemInfo>
                                         <div>{t('2010')}</div>
                                         <div>{formatNumberWithCommas(_saveToTwoWei(item.airdrop_current,6))} / <span>{formatNumberWithCommas(_saveToTwoWei(item.airdrop_total,6))}</span></div>
                                     </ItemInfo>
                                     <ItemProgress style={{'--progress': _getValueMultip(_getValueDivided(item.airdrop_current,item.airdrop_total),100)+'%'}}></ItemProgress>
+                                    </>}
                                     <ItemEndTip>{item.isEnd?t('2011'):(item.isBegin?t('2011'):t('2012'))}</ItemEndTip>
                                     <ItemBottom>
                                         <Time>
@@ -143,7 +159,7 @@ export default function Index() {
                                                 <span>{item.remaining?.seconds ?? 0}</span>
                                             </TimeItem>
                                         </Time>
-                                        <SmallBtn className='custom'>
+                                        <SmallBtn className='custom' onClick={e=>claimAction(e,item)}>
                                             <span>{item.isEnd?t('2006'):(item.isBegin?t('2013'):t('2014'))}</span>
                                             <img src={require('@/assets/home/arrow_enter.png').default}/>
                                         </SmallBtn>
@@ -187,7 +203,7 @@ export default function Index() {
             <ContentH5>
                 {
                     list.map(item=>(
-                        <Item key={item.id} onClick={()=>history.push('/airdropDetail?id='+item.id)}>
+                        <Item key={item.id} onClick={()=>goDetailAction(item)}>
                             <ItemTag className={item.isEnd?'end':(item.isBegin?'ing':'')}>{item.isEnd?t('2006'):(item.isBegin?t('2007'):t('2008'))}</ItemTag>
                             <ItemImg src={item.head_image} alt='icon'/>
                             <ItemContent>
@@ -199,11 +215,13 @@ export default function Index() {
                                     {item.slogan.split(item.slogan.indexOf('\\n')>=0?'\\n':'\n').map((line, index) => (<React.Fragment key={index}>{line&&<ItemTip>{line}</ItemTip>}</React.Fragment>))}
                                 </ItemTipList>
                                 <ItemAirdrop>{t('2009')} {formatNumberWithCommas(_saveToTwoWei(item.airdrop_total,6))} {item.symbol}</ItemAirdrop>
+                                {item.type==0&&<>
                                 <ItemInfo>
                                     <div>{t('2010')}</div>
                                     <div>{formatNumberWithCommas(_saveToTwoWei(item.airdrop_current,6))} / <span>{formatNumberWithCommas(_saveToTwoWei(item.airdrop_total,6))}</span></div>
                                 </ItemInfo>
                                 <ItemProgress style={{'--progress': _getValueMultip(_getValueDivided(item.airdrop_current,item.airdrop_total),100)+'%'}}></ItemProgress>
+                                </>}
                                 <ItemEndTip>{item.isEnd?t('2011'):(item.isBegin?t('2011'):t('2012'))}</ItemEndTip>
                                 <ItemBottom>
                                     <Time>
@@ -227,7 +245,7 @@ export default function Index() {
                                             <span>{item.remaining?.seconds ?? 0}</span>
                                         </TimeItem>
                                     </Time>
-                                    <SmallBtn className='custom'>
+                                    <SmallBtn className='custom' onClick={e=>claimAction(e,item)}>
                                         <span>{item.isEnd?t('2006'):(item.isBegin?t('2013'):t('2014'))}</span>
                                         <img src={require('@/assets/home/arrow_enter.png').default}/>
                                     </SmallBtn>
