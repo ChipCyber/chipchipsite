@@ -14,16 +14,21 @@ import {
 import { airdropGetHomeApi } from "@/api/mint.js";
 import useLanguageChange from '@/hooks/useLanguageChange.js';
 import { formatNumberWithCommas } from '@/utils';
+import { knowledgePageListApi } from "../../api";
 
 export default function Index() {
     const { t } = useTranslation();
     const history = useHistory();
     const shouldRender = useBreakpointCheck();
+    const [faqList, setFaqList] = useState([]);
     const [list, setList] = useState([]);
     useEffect(() => {
         const timer = setInterval(() => {
             refreshList();
         }, 1000);
+        knowledgePageListApi({pageIndex:1,pageSize:5,knowledgeType:2}).then(({data})=>{
+                    setFaqList(data);
+        });
         return () => clearInterval(timer);
     }, []);
     const refreshList = () => {
@@ -82,7 +87,72 @@ export default function Index() {
             <Root>
                 <Top>
                     <div className='content'>
-                        <div className='left'>
+                        <div className='bgBox'>
+                        <img className='bg' src={require('../../assets/airdrop/top_newBg.png').default}/>
+                        <div className='optionBox1'>
+                            <div  className='optionTagBox'>
+                            <img  className="optionTagImg" src={require('../../assets/airdrop/top_option_icon1.png').default} />
+                            <div className="optionTagText">{t('2006')}</div>
+                            </div>
+                            <div className='optionContent1'>
+                                <img className='imgCss' src={require('../../assets/airdrop/top_option1.png').default}/>
+                                <div className='optionBottom'>
+                                <div className='timeCss'>2025.3.1-2025.6.30</div>
+                                <div className='countCss'>20,000,000 $NGNF</div>
+                                <OptionBottom>
+                                   <SmallBtnOption className='custom' onClick={()=>{}}>
+                                        <span>{t('211')}</span>
+                                    </SmallBtnOption>
+                                </OptionBottom>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div  className='top_linesBox'><img className='top_lines' src={require('../../assets/airdrop/top_lines.png').default}/></div>
+
+                        <div className='optionBox2'>
+                        <div  className='optionTagBox'>
+                            <img  className="optionTagImg" src={require('../../assets/airdrop/top_option_icon2.png').default} />
+                            <div className="optionTagText">{t('2007')}</div>
+                        </div>
+                        <div className='optionContent2'>
+                        <img className='imgCss' src={require('../../assets/airdrop/top_option2.png').default}/>
+                                <div className='optionBottom'>
+                                <div className='timeCss2'>2025.7.1-2025.9.30</div>
+                                <div className='countCss2'>10,000,000 $NGNF</div>
+                                </div>
+                        </div>
+                        </div>
+
+                        <div className='top_linesBox'><img className='top_lines' src={require('../../assets/airdrop/top_lines.png').default}/></div>
+
+                        <div className='optionBox1'>
+                            <div className='optionContent1'>
+                                <img className='imgCss' src={require('../../assets/airdrop/top_option3.png').default}/>
+                                <div className='optionBottom'>
+                                <div className='timeCss3'>2025.10.1-2025.12.31</div>
+                                <div  className='imgIcon3Box'>
+                                <img className='imgIcon3' src={require('../../assets/airdrop/top_option_icon3.png').default}/>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className='top_linesBox'><img className='top_lines' src={require('../../assets/airdrop/top_lines.png').default}/></div>
+
+                        <div className='optionBox1'>
+                            <div className='optionContent1'>
+                                <img className='imgCss' src={require('../../assets/airdrop/top_option4.png').default}/>
+                                <div className='optionBottom'>
+                                <div className='timeCss3'>2026.1.1-2026.2.28</div>
+                                <div  className='imgIcon3Box'>
+                                <img className='imgIcon3' src={require('../../assets/airdrop/top_option_icon3.png').default}/>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        {/* <div className='left'>
                             <div>
                                 <div className='title'>{t('2000')}</div>
                                 <div className='desc'>{t('2001')}</div>
@@ -106,18 +176,54 @@ export default function Index() {
                                 </Btn>
                             </TopBtnRow>
                         </div>
-                        <img className='right' src={require('../../assets/airdrop/top_icon.png').default}/>
+                        <img className='right' src={require('../../assets/airdrop/top_icon.png').default}/> */}
                     </div>
+
+                    <div className='topPart'>
+                        <div className='topPart_title'>{t('2040')}</div>
+                        <div className='topPart_txt'>
+                            <div>{t('2041')}</div>
+                            <div>{t('2042')}</div>
+                            <div>{t('2043')}</div>
+                        </div>
+                    </div>
+
                 </Top>
                 <div style={{overflow:'hidden',height:96}}>
                     <img style={{objectFit:'unset',width:'100%',height:'100%'}} src={require('../../assets/home/logo_row.png').default}/>
                 </div>
                 <Content>
-                    <img className='bg' src={require('../../assets/airdrop/bg.png').default}/>
-                    <img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default}/>
+                    {/* <img className='bg' src={require('../../assets/airdrop/bg.png').default}/>
+                    <img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default}/> */}
                     {
                         list.map(item=>(
-                            <Item key={item.id} onClick={()=>goDetailAction(item)}>
+                            item.type == 1  ?
+                                <ItemNew key={item.id} onClick={()=>goDetailAction(item)}>
+                                <ItemTop>
+                                <ItemImg src={item.head_image} alt='icon'/>
+                                <ItemContent>
+                                    <ItemHeader>
+                                        <ItemName>{item.name}</ItemName>
+                                    </ItemHeader>
+                                    <ItemTipList>
+                                        {item.slogan.split(item.slogan.indexOf('\\n')>=0?'\\n':'\n').map((line, index) => (<React.Fragment key={index}>{line&&<ItemTip>{line}</ItemTip>}</React.Fragment>))}
+                                    </ItemTipList>
+                                    <ItemAirdrop>{t('2009')} {formatNumberWithCommas(_saveToTwoWei(item.airdrop_total,6))} {item.symbol}</ItemAirdrop>
+                                    <ItemBottomNew>
+                                        <SmallBtnNew className='custom' onClick={e=>claimAction(e,item)}>
+                                            <span>{item.isEnd?t('2006'):(item.isBegin?t('211'):t('2014'))}</span>
+                                            <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                        </SmallBtnNew>
+                                    </ItemBottomNew>
+                                </ItemContent>
+                                </ItemTop>
+                                <ItemButton>
+                                    <div style={{fontWeight:500}}>{t('2038')}</div>
+                                    <div style={{color:"#E3E3E5"}}>{t('2039')}</div>
+                                </ItemButton>
+                                </ItemNew>
+                                :
+                                <Item key={item.id} onClick={()=>goDetailAction(item)}>
                                 <ItemTag className={item.isEnd?'end':(item.isBegin?'ing':'')}>{item.isEnd?t('2006'):(item.isBegin?t('2007'):t('2008'))}</ItemTag>
                                 <ItemImg src={item.head_image} alt='icon'/>
                                 <ItemContent>
@@ -169,6 +275,14 @@ export default function Index() {
                         ))
                     }
                 </Content>
+                <FAQ>
+                    <div className='title'>{t('172')}</div>
+                    {
+                        faqList.map((item,idx)=>(
+                            <div className='item' onClick={()=>history.push('/faqDetail?id='+item.id)} key={idx}>{item.title}</div>
+                        ))
+                    }
+                </FAQ>
             </Root>
         )
     }
@@ -342,6 +456,51 @@ height: 52px;
 border-radius: 32px;
 }
 `
+const SmallBtnNew = styled.button`
+line-height: 1.2;
+width: fit-content;
+min-width: 136px;
+padding-left: 55px;
+padding-right: 55px;
+height: 40px;
+border-radius: 20px;
+background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
+font-size: 14px;
+font-weight: 600;
+display: flex;
+align-items: center;
+justify-content: center;
+img {
+margin-left: 10px;
+width: 20px;
+height: 20px;
+}
+${({ theme }) => theme.mediaQueries.sm}{
+font-size: 18px;
+min-width: 154px;
+height: 52px;
+border-radius: 32px;
+}
+`
+const SmallBtnOption= styled.button`
+width: fit-content;
+min-width: 112px;
+padding:6px 26px;
+height: 30px;
+border-radius: 32px;
+background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
+font-size: 15px;
+font-weight: 600;
+display: flex;
+align-items: center;
+justify-content: center;
+${({ theme }) => theme.mediaQueries.sm}{
+font-size: 15px;
+min-width: 112px;
+height: 30px;
+border-radius: 32px;
+}
+`
 const H5Btn = styled.button`
 height: 32px;
 border-radius: 16px;
@@ -387,12 +546,151 @@ position: relative;
 `
 
 const Top = styled.div`
-padding: 160px 60px 0 155px;
-height: 700px;
+padding: 160px 90px 0px;
 position: relative;
 .content {
+padding: 8px 8px 5px;
+border-radius: 18px;
+background: linear-gradient(180deg, #3F007A 0%, #666666 100%);
+.bgBox{
 position: relative;
+aspect-ratio: 1240 / 421;
+border-radius: 16px;
+overflow: hidden;
+padding: 5%;
 display: flex;
+flex-direction: row;
+justify-content: space-between;
+}
+.bg {
+position: absolute;
+left: 0;
+top: 0;
+right:0;
+bottom:0;
+width: 100%;
+height: 100%;
+object-fit: cover;
+z-index: 0;
+}
+.top_lines{
+width:44px;
+height:34px;
+z-index: 2;
+}
+.top_linesBox{
+width:50px;
+height: 100%;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: center;
+}
+.optionBox1{
+cursor: pointer;
+position: relative;
+z-index: 1;
+border-radius: 20px;
+padding: 4px;
+background:conic-gradient(from 102.21deg at 52.75% 38.75%, rgba(249, 249, 249, 0.3) -32.95deg, rgba(64, 64, 64, 0.5) 10.52deg, rgba(64, 64, 64, 0.35) 32.12deg, rgba(255, 255, 255, 0.3) 60.28deg, rgba(255, 255, 255, 0.3) 107.79deg, rgba(64, 64, 64, 0.35) 187.59deg, rgba(249, 249, 249, 0.5) 207.58deg, rgba(255, 255, 255, 0.3) 287.31deg, rgba(249, 249, 249, 0.3) 327.05deg, rgba(64, 64, 64, 0.5) 370.52deg);
+}
+.optionTagBox{
+position: absolute;
+left: 20px;
+top: 0;
+width:69px;
+height:26px;
+z-index: 1;
+}
+.optionTagImg {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+  .optionTagText {
+  position: relative;
+  z-index: 2;
+  color:#241F2D;
+  font-size: 14px;
+  font-weight:600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.optionBox2{
+cursor: pointer;
+position: relative;
+z-index: 1;
+border-radius: 20px;
+padding: 4px;
+background:linear-gradient(180deg, #FFFFFF 0%, #FFF6A6 100%);
+}
+.optionContent1{
+position: relative;
+width:100%;
+height: 100%;
+border-radius: 20px;
+background:#00000087;
+padding:26px 0px 20px;
+}
+.imgCss{
+width:100%;
+z-index: 2;
+}
+.imgIcon3{
+width:32px;
+height:42px;
+z-index: 2;
+}
+.imgIcon3Box{
+position: absolute;
+right:24px;
+bottom:24px;
+}
+.optionBottom{
+width:100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+.timeCss{
+font-size:16px;
+color:#728EB4;
+font-weight:600;
+}
+.timeCss2{
+font-size:16px;
+color:#121212;
+font-weight:400;
+}
+.timeCss3{
+font-size:16px;
+color:#E78B2F;
+font-weight:400;
+}
+.countCss{
+margin-top: 6px;
+font-size:18px;
+color:#7AD4B4;
+font-weight:700;
+}
+.countCss2{
+margin-top: 6px;
+font-size:18px;
+color:#121212;
+font-weight:700;
+}
+.optionContent2{
+width:100%;
+height: 100%;
+border-radius: 20px;
+background: radial-gradient(265.03% 104.21% at 50.53% 100%, #FFE660 0%, #F9A849 19.7%, #A03118 68.74%);
+padding:26px 0px 20px;
+}
 .left {
 padding-top: 20px;
 padding-bottom: 30px;
@@ -414,6 +712,33 @@ pointer-events: none;
 width: 623px;
 height: 525px;
 }
+}
+.topPart{
+margin-top: 20px;
+width: 100%;
+padding:36px 170px 60px;
+display: flex;
+flex-direction: column;
+gap:26px;
+}
+.topPart_title{
+ font-size: 62px;
+  font-weight: 700;
+ background: linear-gradient(90deg, #03DBAA 0%, #FFFFFF 30%, #BF65F8 60%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  background-size: 100% 100%;
+  background-position: center;
+}
+.topPart_txt{
+font-size: 21px;
+lin-height:32px;
+font-weight: 500;
+display: flex;
+flex-direction: column;
+gap:20px;
 }
 `
 const Content = styled.div`
@@ -456,6 +781,30 @@ align-items: center;
 flex-direction: row;
 };
 `
+const ItemNew = styled.div`
+margin-top: 20px;
+cursor: pointer;
+border-radius: 18px;
+background: #241F2D;
+position: relative;
+display: flex;
+gap: 20px;
+flex-direction: column;
+`
+const ItemTop = styled.div`
+display: flex;
+gap: 20px;
+flex-direction: column;
+${({ theme }) => theme.mediaQueries.sm}{
+    margin-top: 0;
+    padding: 20px;
+    width: 1060px;
+    border-radius: 18px;
+    gap: 30px;
+    align-items: center;
+    flex-direction: row;
+    };
+`
 const ItemTag = styled.div`
 position: absolute;
 left: 0;
@@ -494,6 +843,19 @@ ${({ theme }) => theme.mediaQueries.sm}{
 padding: 0;
 flex: 1;
 }
+`
+const ItemButton = styled.div`
+width:100%;
+background: #1B1821;
+border-radius: 0 0 18px 18px;
+padding: 20px 46px;
+display: flex;
+flex-direction: column;
+font-size:16px;
+line-height:24px;
+${({ theme }) => theme.mediaQueries.sm}{
+    width: 1060px;
+    };
 `
 const ItemHeader = styled.div`
 display: flex;
@@ -595,6 +957,24 @@ flex-direction: row;
 justify-content: space-between;
 };
 `
+const ItemBottomNew = styled.div`
+margin-top: 30px;
+margin-left: 10px;
+display: flex;
+flex-direction: column;
+gap: 22px;
+${({ theme }) => theme.mediaQueries.sm}{
+gap: 0;
+align-items: center;
+flex-direction: row;
+justify-content: space-between;
+};
+`
+const OptionBottom = styled.div`
+margin-top: 12px;
+display: flex;
+flex-direction: column;
+`
 const Time = styled.div`
 display: flex;
 align-items: center;
@@ -637,4 +1017,36 @@ height: 35px;
 line-height: 35px;
 font-size: 20px;
 };
+`
+const FAQ = styled.div`
+padding: 80px 140px 104px;
+.title {
+font-size: 38px;
+font-weight: 600;
+line-height: 60px;
+text-transform: uppercase;
+margin-bottom: 30px;
+}
+.item {
+cursor: pointer;
+margin-top: 20px;
+height: 65px;
+border-radius: 8px;
+border: 2px solid #2B292E;
+font-size: 21px;
+font-weight: 500;
+line-height: 65px;
+position: relative;
+padding-left: 38px;
+&:before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 30px;
+    width: 4px;
+    height: 4px;
+    background-color: rgba(255,255,255,0.7);
+    border-radius: 50%;
+}
+}
 `

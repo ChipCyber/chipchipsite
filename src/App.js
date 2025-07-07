@@ -98,7 +98,8 @@ function App() {
               <Route path="/airdrop" exact>
                 <Nav/>
                 <Airdrop/>
-                <Copyright/>
+                {/* <Copyright/> */}
+                <Footer/>
               </Route>
               <Route path="/airdropDetail" exact>
                 <Nav/>
