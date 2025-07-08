@@ -532,6 +532,7 @@ z-index: 0;
 }
 .imgWrapper{
 position: relative;
+aspect-ratio: 229 / 341;
 width: 100%;
 flex: 1;
 }
@@ -539,17 +540,17 @@ flex: 1;
 position: absolute;
 width: 100%;
 height: 100%;
-aspect-ratio: 229 / 341;
 top: 0;
 left: 0;
 z-index: 2;
 }
 .optionTagBox {
 position: absolute;
-left: 1.25rem; 
-top: 0px;
+left: 9%; 
+top: 0;
 width: 4.3125rem;
 height: 1.625rem; 
+aspect-ratio: 69 / 26;
 z-index: 3;
 }
 .optionTagImg {
@@ -557,6 +558,7 @@ z-index: 3;
   height: 100%;
   position: absolute;
   aspect-ratio: 69 / 26;
+  object-fit:cover;
   left: 0;
   top: 0;
   z-index: 1;
@@ -565,7 +567,7 @@ z-index: 3;
   position: relative;
   z-index: 2;
   color: #241F2D;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -574,7 +576,7 @@ z-index: 3;
 }
 .imgIcon3Box {
  position: absolute;
-  right: 6%;  
+  right: 7%;  
   bottom: 5%; 
   width: 10%; 
   aspect-ratio: 32 / 42;
