@@ -89,68 +89,26 @@ export default function Index() {
                     <div className='content'>
                         <div className='bgBox'>
                         <img className='bg' src={require('../../assets/airdrop/top_newBg.png').default}/>
-                        <div className='optionBox1'>
-                            <div  className='optionTagBox'>
-                            <img  className="optionTagImg" src={require('../../assets/airdrop/top_option_icon1.png').default} />
-                            <div className="optionTagText">{t('2006')}</div>
-                            </div>
-                            <div className='optionContent1'>
-                                <img className='imgCss' src={require('../../assets/airdrop/top_option1.png').default}/>
-                                <div className='optionBottom'>
-                                <div className='timeCss'>2025.3.1-2025.6.30</div>
-                                <div className='countCss'>20,000,000 $NGNF</div>
-                                <OptionBottom>
-                                   <SmallBtnOption className='custom' onClick={()=>{}}>
-                                        <span>{t('211')}</span>
-                                    </SmallBtnOption>
-                                </OptionBottom>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div  className='top_linesBox'><img className='top_lines' src={require('../../assets/airdrop/top_lines.png').default}/></div>
-
-                        <div className='optionBox2'>
-                        <div  className='optionTagBox'>
-                            <img  className="optionTagImg" src={require('../../assets/airdrop/top_option_icon2.png').default} />
-                            <div className="optionTagText">{t('2007')}</div>
-                        </div>
-                        <div className='optionContent2'>
-                        <img className='imgCss' src={require('../../assets/airdrop/top_option2.png').default}/>
-                                <div className='optionBottom'>
-                                <div className='timeCss2'>2025.7.1-2025.9.30</div>
-                                <div className='countCss2'>10,000,000 $NGNF</div>
-                                </div>
-                        </div>
-                        </div>
-
-                        <div className='top_linesBox'><img className='top_lines' src={require('../../assets/airdrop/top_lines.png').default}/></div>
-
-                        <div className='optionBox1'>
-                            <div className='optionContent1'>
-                                <img className='imgCss' src={require('../../assets/airdrop/top_option3.png').default}/>
-                                <div className='optionBottom'>
-                                <div className='timeCss3'>2025.10.1-2025.12.31</div>
-                                <div  className='imgIcon3Box'>
-                                <img className='imgIcon3' src={require('../../assets/airdrop/top_option_icon3.png').default}/>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className='top_linesBox'><img className='top_lines' src={require('../../assets/airdrop/top_lines.png').default}/></div>
-
-                        <div className='optionBox1'>
-                            <div className='optionContent1'>
-                                <img className='imgCss' src={require('../../assets/airdrop/top_option4.png').default}/>
-                                <div className='optionBottom'>
-                                <div className='timeCss3'>2026.1.1-2026.2.28</div>
-                                <div  className='imgIcon3Box'>
-                                <img className='imgIcon3' src={require('../../assets/airdrop/top_option_icon3.png').default}/>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
+                        {[1, 2, 3, 4].map((idx) => (
+      <>
+       <div className="imgWrapper">
+       <img className="optionheadImg" src={require(`../../assets/airdrop/head_option${idx}.png`).default} />
+         {(idx === 1 || idx === 2) && (
+            <div className="optionTagBox">
+              <img className="optionTagImg" src={require(`../../assets/airdrop/top_option_icon${idx}.png`).default} />
+              <div className="optionTagText">{t(`200${5 + idx}`)}</div>
+            </div>
+          )}
+          {(idx === 3 || idx === 4) && <img className="imgIcon3Box" src={require('../../assets/airdrop/top_option_icon3.png').default} />}
+       </div>
+       
+       {idx !== 4 && (
+          <div className="top_linesBox">
+            <img className="top_lines" src={require('../../assets/airdrop/top_lines.png').default} />
+          </div>
+        )}
+      </>
+    ))}
                         </div>
                         {/* <div className='left'>
                             <div>
@@ -193,12 +151,13 @@ export default function Index() {
                     <img style={{objectFit:'unset',width:'100%',height:'100%'}} src={require('../../assets/home/logo_row.png').default}/>
                 </div>
                 <Content>
-                    {/* <img className='bg' src={require('../../assets/airdrop/bg.png').default}/>
-                    <img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default}/> */}
+                    <img className='bg' src={require('../../assets/airdrop/bg.png').default}/>
+                    <img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default}/>
                     {
                         list.map(item=>(
                             item.type == 1  ?
                                 <ItemNew key={item.id} onClick={()=>goDetailAction(item)}>
+                                <ItemTag className={item.isEnd?'end':(item.isBegin?'ing':'')}>{item.isEnd?t('2006'):(item.isBegin?t('2007'):t('2008'))}</ItemTag>
                                 <ItemTop>
                                 <ItemImg src={item.head_image} alt='icon'/>
                                 <ItemContent>
@@ -557,139 +516,82 @@ position: relative;
 aspect-ratio: 1240 / 421;
 border-radius: 16px;
 overflow: hidden;
-padding: 5%;
+padding: 50px;
 display: flex;
 flex-direction: row;
 justify-content: space-between;
+gap: 20px;
 }
 .bg {
 position: absolute;
-left: 0;
-top: 0;
-right:0;
-bottom:0;
+inset: 0;
 width: 100%;
 height: 100%;
 object-fit: cover;
 z-index: 0;
 }
-.top_lines{
-width:44px;
-height:34px;
+.imgWrapper{
+position: relative;
+width: 100%;
+flex: 1;
+}
+.optionheadImg{
+position: absolute;
+width: 100%;
+height: 100%;
+aspect-ratio: 229 / 341;
+top: 0;
+left: 0;
 z-index: 2;
 }
-.top_linesBox{
-width:50px;
-height: 100%;
-display: flex;
-flex-direction: row;
-align-items: center;
-justify-content: center;
-}
-.optionBox1{
-cursor: pointer;
-position: relative;
-z-index: 1;
-border-radius: 20px;
-padding: 4px;
-background:conic-gradient(from 102.21deg at 52.75% 38.75%, rgba(249, 249, 249, 0.3) -32.95deg, rgba(64, 64, 64, 0.5) 10.52deg, rgba(64, 64, 64, 0.35) 32.12deg, rgba(255, 255, 255, 0.3) 60.28deg, rgba(255, 255, 255, 0.3) 107.79deg, rgba(64, 64, 64, 0.35) 187.59deg, rgba(249, 249, 249, 0.5) 207.58deg, rgba(255, 255, 255, 0.3) 287.31deg, rgba(249, 249, 249, 0.3) 327.05deg, rgba(64, 64, 64, 0.5) 370.52deg);
-}
-.optionTagBox{
+.optionTagBox {
 position: absolute;
-left: 20px;
-top: 0;
-width:69px;
-height:26px;
-z-index: 1;
+left: 1.25rem; 
+top: 0px;
+width: 4.3125rem;
+height: 1.625rem; 
+z-index: 3;
 }
 .optionTagImg {
   width: 100%;
   height: 100%;
   position: absolute;
+  aspect-ratio: 69 / 26;
   left: 0;
   top: 0;
   z-index: 1;
 }
-  .optionTagText {
+.optionTagText {
   position: relative;
   z-index: 2;
-  color:#241F2D;
+  color: #241F2D;
   font-size: 14px;
-  font-weight:600;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
 }
-.optionBox2{
-cursor: pointer;
-position: relative;
-z-index: 1;
-border-radius: 20px;
-padding: 4px;
-background:linear-gradient(180deg, #FFFFFF 0%, #FFF6A6 100%);
+.imgIcon3Box {
+ position: absolute;
+  right: 6%;  
+  bottom: 5%; 
+  width: 10%; 
+  aspect-ratio: 32 / 42;
+  z-index: 2;
 }
-.optionContent1{
-position: relative;
-width:100%;
-height: 100%;
-border-radius: 20px;
-background:#00000087;
-padding:26px 0px 20px;
+.top_linesBox {
+  width: 3.125rem; /* 50px */
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.imgCss{
-width:100%;
-z-index: 2;
-}
-.imgIcon3{
-width:32px;
-height:42px;
-z-index: 2;
-}
-.imgIcon3Box{
-position: absolute;
-right:24px;
-bottom:24px;
-}
-.optionBottom{
-width:100%;
-display: flex;
-flex-direction: column;
-align-items: center;
-}
-.timeCss{
-font-size:16px;
-color:#728EB4;
-font-weight:600;
-}
-.timeCss2{
-font-size:16px;
-color:#121212;
-font-weight:400;
-}
-.timeCss3{
-font-size:16px;
-color:#E78B2F;
-font-weight:400;
-}
-.countCss{
-margin-top: 6px;
-font-size:18px;
-color:#7AD4B4;
-font-weight:700;
-}
-.countCss2{
-margin-top: 6px;
-font-size:18px;
-color:#121212;
-font-weight:700;
-}
-.optionContent2{
-width:100%;
-height: 100%;
-border-radius: 20px;
-background: radial-gradient(265.03% 104.21% at 50.53% 100%, #FFE660 0%, #F9A849 19.7%, #A03118 68.74%);
-padding:26px 0px 20px;
+
+.top_lines {
+ width: 2.75rem; /* 44px */
+  height: 2.125rem; /* 34px */
+  z-index: 2;
 }
 .left {
 padding-top: 20px;
