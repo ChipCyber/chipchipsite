@@ -83,6 +83,7 @@ export default function Index() {
         }
     }
     if (shouldRender) {
+        const result = list && list.find(item => item.id == 4);
         return (
             <Root>
                 <Top>
@@ -99,6 +100,14 @@ export default function Index() {
               <div className="optionTagText">{t(`200${5 + idx}`)}</div>
             </div>
           )}
+          { idx=== 1 && result && result.isEnd  ==false &&
+          <div className='optioButton'>
+           <SmallBtnOption className='custom' onClick={e=>claimAction(e,result)}>
+           <span>领取空投</span>
+           </SmallBtnOption>
+           </div>
+          }
+
           {(idx === 3 || idx === 4) && <img className="imgIcon3Box" src={require('../../assets/airdrop/top_option_icon3.png').default} />}
        </div>
        
@@ -443,20 +452,22 @@ border-radius: 32px;
 `
 const SmallBtnOption= styled.button`
 width: fit-content;
-min-width: 112px;
-padding:6px 26px;
-height: 30px;
-border-radius: 32px;
-background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
+// min-width: 112px;
+ padding:6px   10%; 
+    font-size: 12px;     
+    border-radius: 32px;  
+    height: 30px; 
+    height: clamp(26px, 2.2vw, 32px);
+  background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
 font-size: 15px;
-font-weight: 600;
-display: flex;
-align-items: center;
-justify-content: center;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 ${({ theme }) => theme.mediaQueries.sm}{
-font-size: 15px;
-min-width: 112px;
-height: 30px;
+ background: #ff00011;
+// min-width: 112px;
+// height: 30px;
 border-radius: 32px;
 }
 `
@@ -595,6 +606,16 @@ z-index: 3;
   height: 2.125rem; /* 34px */
   z-index: 2;
 }
+.optioButton{
+position: absolute;
+width: 100%;
+bottom: 5%;
+left: 0;
+z-index: 2;
+display: flex;
+justify-content: center; 
+}
+
 .left {
 padding-top: 20px;
 padding-bottom: 30px;
