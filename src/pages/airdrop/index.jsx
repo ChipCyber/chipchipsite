@@ -103,7 +103,7 @@ export default function Index() {
           { idx=== 1 && result && result.isEnd  ==false &&
           <div className='optioButton'>
            <SmallBtnOption className='custom' onClick={e=>claimAction(e,result)}>
-           <span>领取空投</span>
+           <span>{t('211')}</span>
            </SmallBtnOption>
            </div>
           }
