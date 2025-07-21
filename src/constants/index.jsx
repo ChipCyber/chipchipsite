@@ -23,7 +23,7 @@ export const ALetterUrl = "https://chipchipgame.medium.com/a-letter-for-all-chip
 export const BuyNowUrl = "https://magiceden.io/marketplace/chipchip";
 export const EnterGameUrl = "/download";
 
-export const QuickyUrl = "https://quicky.lol/";
+export const QuickyUrl = "https://quicky.lol/CXcWiHFDM1J8RHfAuzor1YGSk6BxGKFY5kstjUZjpump";
 
 //下载链接
 export const TelegramMiniAppUrl = "https://t.me/chipchipgame_bot";
