@@ -6,6 +6,11 @@ import useBreakpointCheck from "@/hooks/useBreakpointCheck";
 import copy from "copy-to-clipboard";
 import { message } from 'antd';
 
+import {
+    openUrl,
+    QuickyUrl,
+} from "../../constants";
+
 const Const_CA = "CXcWiHFDM1J8RHfAuzor1YGSk6BxGKFY5kstjUZjpump";
 
 export default function Index() {
@@ -47,7 +52,7 @@ export default function Index() {
                     </GuideContent>
                     <EnterChat>
                         <EnterChatTitle>{t('906')}</EnterChatTitle>
-                        <EnterChatBtn className='custom' onClick={()=>{}}>
+                        <EnterChatBtn className='custom' onClick={()=>openUrl(QuickyUrl)}>
                             <span>{t('907')}</span>
                             {shouldRender&&<img src={require('../../assets/home/arrow_enter.png').default}/>}
                         </EnterChatBtn>

@@ -22,6 +22,9 @@ export const DiscordUrl = "https://discord.gg/h8wHpwVsyh";
 export const ALetterUrl = "https://chipchipgame.medium.com/a-letter-for-all-chipchipgame-box-holders-c471da24636f";
 export const BuyNowUrl = "https://magiceden.io/marketplace/chipchip";
 export const EnterGameUrl = "/download";
+
+export const QuickyUrl = "https://quicky.lol/";
+
 //下载链接
 export const TelegramMiniAppUrl = "https://t.me/chipchipgame_bot";
 export const WebUrl = "";
