@@ -45,6 +45,13 @@ export default function Index() {
                             <span>{t('904',{name:'Raydium'})}</span>
                         </a>
                     </GuideContent>
+                    <EnterChat>
+                        <EnterChatTitle>{t('906')}</EnterChatTitle>
+                        <EnterChatBtn className='custom' onClick={()=>{}}>
+                            <span>{t('907')}</span>
+                            {shouldRender&&<img src={require('../../assets/home/arrow_enter.png').default}/>}
+                        </EnterChatBtn>
+                    </EnterChat>
                 </Guide>
             </Content>
         </Root>
@@ -179,4 +186,51 @@ img {
 }
 }
 };
+`
+const EnterChat = styled.div`
+width: 100%;
+background: radial-gradient(39.83% 15.93% at 50.07% 100%, #2C714D 0%, #000 100%);
+border-radius: 24px;
+padding: 28px;
+margin-top: 10px;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 25px;
+${({ theme }) => theme.mediaQueries.sm}{
+margin-top: 20px;
+border-radius: 60px;
+padding: 35px;
+gap: 32px;
+}
+`
+const EnterChatTitle = styled.div`
+font-size: 18px;
+background: linear-gradient(90deg, #ADFFDF 0%, #F5F5F5 100%);
+background-clip: text;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+${({ theme }) => theme.mediaQueries.sm}{
+font-size: 32px;
+}
+`
+const EnterChatBtn = styled.button`
+border-radius: 20px;
+background: linear-gradient(258deg, #75F6A3 5.58%, #8E52F6 88.85%);
+font-size: 15px;
+font-weight: 600;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 10px 36px;
+img {
+margin-left: 10px;
+width: 20px;
+height: 20px;
+}
+${({ theme }) => theme.mediaQueries.sm}{
+border-radius: 32px;
+font-size: 18px;
+padding: 15px 55px;
+}
 `

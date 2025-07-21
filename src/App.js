@@ -33,7 +33,8 @@ import FAQDetail from "./pages/faq/detail";
 import News from "./pages/news";
 import NewsDetail from "./pages/news/detail";
 import Download from "./pages/download";
-import Displacement from "./pages/displacement";
+import FairDealing from "./pages/fairDealing"
+// import Displacement from "./pages/displacement";
 import Roadmap from "./pages/roadmap";
 // import IDO from "./pages/ido";
 import Mint from "./pages/mint";
@@ -135,9 +136,14 @@ function App() {
                 <Download/>
                 <Footer/>
               </Route>
-              <Route path="/displacement" exact>
+              {/* <Route path="/displacement" exact>
                 <Nav/>
                 <Displacement/>
+                <Footer/>
+              </Route> */}
+              <Route path="/fairDealing" exact>
+                <Nav/>
+                <FairDealing/>
                 <Footer/>
               </Route>
               <Route path="/roadmap" exact>

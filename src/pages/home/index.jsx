@@ -200,7 +200,7 @@ export default function Home() {
                         <Top1TipBtnRow>
                             {/* <Top1TipDisabledBtn disabled>Fair Launch</Top1TipDisabledBtn> */}
                             <Top1TipBorderBtn className='custom' to='/airdrop'>{t('101')}</Top1TipBorderBtn>
-                            <Top1TipBorderBtn className='custom' to='/displacement'>{t('111')}</Top1TipBorderBtn>
+                            {/* <Top1TipBorderBtn className='custom' to='/displacement'>{t('111')}</Top1TipBorderBtn> */}
                             <Top1TipBorderBtn className='custom' to='/download'>
                                 <img src={require('../../assets/home/download.png').default}/>
                                 <span>{t('112')}</span>
@@ -494,7 +494,7 @@ export default function Home() {
                         <Top1TipBorderBtn to='/airdrop'>{t('101')}</Top1TipBorderBtn>
                     </div>
                     <div className='row'>
-                        <Top1TipBorderBtn to='/displacement'>{t('111')}</Top1TipBorderBtn>
+                        {/* <Top1TipBorderBtn to='/displacement'>{t('111')}</Top1TipBorderBtn> */}
                         <Top1TipBorderBtn to='/download'>
                             <img src={require('../../assets/home/download.png').default}/>
                             <span>{t('112')}</span>
