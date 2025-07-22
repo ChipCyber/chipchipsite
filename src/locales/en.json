@@ -348,6 +348,20 @@
     "907":"Enter QUICK",
 
     "1001":"Fair Dealing",
+    "1002":"Exclusive Verifiable Random Dealing Mechanism",
+    "1003": "CHIPCHIP employs an independently developed <1>Verifiable Random Dealing Mechanism</1>. This system guarantees that every card dealt in the game is both random and tamper-proof. Players may verify its fairness using third-party verification tools.​​",
+    "1004":"Process Demo",
+    "1005":"Shuffling",
+    "1006":"Dealing",
+    "1007":"Verification",
+    "1008":"​​Purpose:​​ Thoroughly randomize the deck order.",
+    "1009":"​​Purpose:​​ Lock the card sequence to prevent tampering.",
+    "1010":"​​Purpose:​​ Prove zero tampering during dealing.",
+    "1011":"Executes 100 rounds of hybrid algorithm combining ​​Fisher Yates​​ and ​​random crossover permutation​​​​.",
+    "1012":"Encrypt the shuffled deck to generate a ​​Fairness Code and ​​Ciphertext​​.",
+    "1013":"Decrypt the Ciphertext using the Key derived from the Fairness Code to reveal the complete deck sequence.",
+    "1014":"The table above compares hand probabilities from ​​1 million simulated 9-handed games​​ on CHIPCHIP against mathematical expectations. The observed average probabilities for all hand types closely align with their mathematical expectations. Results confirm that our algorithm meets strict randomness requirements.",
+    "1015":"​​Learn the full workflow",
 
     "":""
 }

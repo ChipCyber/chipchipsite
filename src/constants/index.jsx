@@ -25,6 +25,8 @@ export const EnterGameUrl = "/download";
 
 export const QuickyUrl = "https://quicky.lol/CXcWiHFDM1J8RHfAuzor1YGSk6BxGKFY5kstjUZjpump";
 
+export const FairDealUrl = "https://chipchipgame.medium.com/94a6a8bd0849"
+
 //下载链接
 export const TelegramMiniAppUrl = "https://t.me/chipchipgame_bot";
 export const WebUrl = "";
