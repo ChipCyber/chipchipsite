@@ -210,23 +210,25 @@ class Nav extends Component {
                 </NavLeft>
                 <NavCenter>
                     <NavCenterLink to='/' onClick={this.closeMenu} isActive={()=>pathname==='/'}>{t('100')}</NavCenterLink>
+                    <NavCenterLink to='/fairDealing' onClick={this.closeMenu} isActive={()=>pathname==='/fairDealing'}>{t('1001')}</NavCenterLink>
                     {/* <NavCenterLink to='/displacement' onClick={this.closeMenu} isActive={()=>pathname==='/displacement'}>{t('207')}</NavCenterLink> */}
-                    <NavCenterLink to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLink>
+                    {/* <NavCenterLink to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLink> */}
                     {/* <NavCenterLink to='/ido' onClick={this.closeMenu} isActive={()=>pathname==='/ido'}>IDO</NavCenterLink> */}
                     {/* <NavCenterLinkDisabled>Fair Launch</NavCenterLinkDisabled> */}
                     <NavCenterLinkAuto to='/ngnf' onClick={this.closeMenu} isActive={()=>pathname==='/ngnf'}>$NGNF</NavCenterLinkAuto>
                     {/* <NavCenterLink to='/mint' onClick={this.closeMenu} isActive={()=>pathname==='/mint'}>Fair Launch</NavCenterLink> */}
                     <NavCenterLinkAuto to='/roadmap' onClick={this.closeMenu} isActive={()=>pathname==='/roadmap'}>{t('102')}</NavCenterLinkAuto>
-                    <NavCenterLinkAuto to='/fairDealing' onClick={this.closeMenu} isActive={()=>pathname==='/fairDealing'}>{t('1001')}</NavCenterLinkAuto>
+                    {/* <NavCenterLinkAuto to='/fairDealing' onClick={this.closeMenu} isActive={()=>pathname==='/fairDealing'}>{t('1001')}</NavCenterLinkAuto> */}
                     <NavCenterLinkAuto to='/news' onClick={this.closeMenu} isActive={()=>pathname==='/news'}>{t('103')}</NavCenterLinkAuto>
                     <NavCenterNoLink className='default'>
                         <span>{t('104')}</span>
                         <img src={require('@/assets/arrow_down.png').default}/>
                         {showMore&&<Modal className='modal'>
                             <ModalContent>
+                                <ModalRow to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</ModalRow>
                                 <ModalRow to='/ngnf' onClick={this.closeMore} isActive={()=>pathname==='/ngnf'}>$NGNF</ModalRow>
                                 <ModalRow to='/roadmap' onClick={this.closeMore} isActive={()=>pathname==='/roadmap'}>{t('102')}</ModalRow>
-                                <ModalRow to='/fairDealing' onClick={this.closeMenu} isActive={()=>pathname==='/fairDealing'}>{t('1001')}</ModalRow>
+                                {/* <ModalRow to='/fairDealing' onClick={this.closeMenu} isActive={()=>pathname==='/fairDealing'}>{t('1001')}</ModalRow> */}
                                 <ModalRow to='/news' onClick={this.closeMore} isActive={()=>pathname==='/news'}>{t('103')}</ModalRow>
                             </ModalContent>
                         </Modal>}
@@ -314,12 +316,12 @@ class Nav extends Component {
                     <DialogM aria-label='nav'>
                         <Group>
                             <Row><NavLink to='/' onClick={this.closeMenu}>{t('100')}</NavLink></Row>
+                            <Row><NavLink to='/fairDealing'onClick={this.closeMenu}>{t('1001')}</NavLink></Row>
                             {/* <Row><NavLink to='/displacement' onClick={this.closeMenu}>{t('207')}</NavLink></Row> */}
                             <Row><NavLink to='/airdrop' onClick={this.closeMenu}>{t('101')}</NavLink></Row>
                             <Row><NavLink to='/ngnf' onClick={this.closeMenu}>$NGNF</NavLink></Row>
                             {/* <Row><NavLink to='/ido' onClick={this.closeMenu}>IDO</NavLink></Row> */}
                             <Row><NavLink to='/roadmap' onClick={this.closeMenu}>{t('102')}</NavLink></Row>
-                            <Row><NavLink to='/fairDealing'onClick={this.closeMenu}>{t('1001')}</NavLink></Row>
                             <Row><NavLink to='/news' onClick={this.closeMenu}>{t('103')}</NavLink></Row>
                         </Group>
                         <Group>
