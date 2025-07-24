@@ -215,6 +215,7 @@ class Nav extends Component {
                     {/* <NavCenterLink to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLink> */}
                     {/* <NavCenterLink to='/ido' onClick={this.closeMenu} isActive={()=>pathname==='/ido'}>IDO</NavCenterLink> */}
                     {/* <NavCenterLinkDisabled>Fair Launch</NavCenterLinkDisabled> */}
+                    <NavCenterLinkAuto to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLinkAuto> 
                     <NavCenterLinkAuto to='/ngnf' onClick={this.closeMenu} isActive={()=>pathname==='/ngnf'}>$NGNF</NavCenterLinkAuto>
                     {/* <NavCenterLink to='/mint' onClick={this.closeMenu} isActive={()=>pathname==='/mint'}>Fair Launch</NavCenterLink> */}
                     <NavCenterLinkAuto to='/roadmap' onClick={this.closeMenu} isActive={()=>pathname==='/roadmap'}>{t('102')}</NavCenterLinkAuto>
@@ -492,7 +493,8 @@ justify-content: flex-end;
 gap: 10px;
 ${({ theme }) => theme.mediaQueries.sm}{
 gap: 20px;
-min-width: 275px;
+// min-width: 275px;
+min-width: 180px;
 };
 `
 const LoginBtn = styled.div`
