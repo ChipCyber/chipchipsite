@@ -1888,7 +1888,7 @@ color: ${({theme})=>theme.colors.text};
 const Top6 = styled.div`
 position: relative;
 // padding: 0 188px;
-padding: 109px 188px;
+padding: 55px 188px ;
 height: 730px;
 `
 const Top6Bg = styled.img`
