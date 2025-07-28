@@ -61,6 +61,7 @@ export const SocialMediaMediumUrl = 'https://chipchipgame.medium.com';
 export const SocialMediaDiscordUrl = 'https://discord.com/invite/h8wHpwVsyh'
 export const SocialMediaTwitterUrl = 'https://twitter.com/chipchipgame'
 export const SocialMediaTelegramUrl = 'https://t.me/addlist/Ei0LX7tKt3A0MGZh'
+export const SocialMediaGitHubUrl = 'https://github.com/CHIPCHIPTECH/CHIPCHIPGAME'
 
 export const OfficialEmail = "media@chipchip.io";
 

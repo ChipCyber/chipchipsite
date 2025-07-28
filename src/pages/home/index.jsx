@@ -20,6 +20,7 @@ import {
     SocialMediaTelegramUrl,
     SocialMediaTwitterUrl,
     SocialMediaDiscordUrl,
+    SocialMediaGitHubUrl
 } from "../../constants";
 
 import ItemBg from '../../assets/home/img3_item_bg.png';
@@ -323,7 +324,7 @@ export default function Home() {
                     </Top4Content>
                 </Top4>
                 <ImgRow src={require('../../assets/home/logo_row.png').default}/>
-                <Top5>
+                {/* <Top5>
                     <Top5Content>
                         <div className='title wow animate__animated animate__fadeIn'>
                             <img src={require('../../assets/home/img5_title.png').default}/>
@@ -339,7 +340,7 @@ export default function Home() {
                         <Top5Img src={require('../../assets/box.png').default}/>
                         <Top5ImgShadow src={require('../../assets/home/img5_box_shadow.png').default}/>
                     </Top5Content>
-                </Top5>
+                </Top5> */}
                 <Top6>
                     <Top6Bg src={require('../../assets/home/bg6.png').default}/>
                     <Top6Title>{t('102')}</Top6Title>
@@ -474,6 +475,7 @@ export default function Home() {
                                 <a href={SocialMediaTwitterUrl} target='__blank'><img src={require('../../assets/home/c_twitter.png').default}/></a>
                                 {/* <a href={SocialMediaDiscordUrl} target='__blank'><img src={require('../../assets/home/c_discord.png').default}/></a> */}
                                 <a href={SocialMediaTelegramUrl} target='__blank'><img src={require('../../assets/home/c_telegram.png').default}/></a>
+                                <a href={SocialMediaGitHubUrl} target='__blank'><img src={require('../../assets/home/c_github.png').default}/></a>
                             </div>
                         </div>
                     </Top92>
@@ -589,7 +591,7 @@ export default function Home() {
             <div style={{overflow:'hidden',height:30}}>
                 <img style={{objectFit:'contain',verticalAlign:'top',height:'100%'}} src={require('../../assets/home/h5/logo_row.png').default}/>
             </div>
-            <Top6H5>
+            {/* <Top6H5>
                 <div className='content'>
                     <div className='title'>
                         <img src={require('../../assets/home/h5/img6_title.png').default}/>
@@ -607,7 +609,7 @@ export default function Home() {
                     </div>
                     <img className='box_shadow' src={require('../../assets/home/h5/img6_box_shadow.png').default}/>
                 </div>
-            </Top6H5>
+            </Top6H5> */}
             <Top7H5>
                 <img className='bg' src={require('../../assets/home/h5/bg7.png').default}/>
                 <div className='t_title'>{t('102')}</div>
@@ -743,6 +745,13 @@ export default function Home() {
                     <div className='left'>
                         <img className='icon' src={require('../../assets/home/h5/c_telegram.png').default}/>
                         <span>{t('176')}</span>
+                    </div>
+                    <img className='arrow' src={require('../../assets/nav/login_arrow.png').default}/>
+                </div>
+                <div className='row' onClick={()=>openUrl(SocialMediaGitHubUrl)}>
+                    <div className='left'>
+                        <img className='icon' src={require('../../assets/home/h5/c_github.png').default}/>
+                        <span>{t('171')}</span>
                     </div>
                     <img className='arrow' src={require('../../assets/nav/login_arrow.png').default}/>
                 </div>
@@ -1878,7 +1887,8 @@ color: ${({theme})=>theme.colors.text};
 `
 const Top6 = styled.div`
 position: relative;
-padding: 0 188px;
+// padding: 0 188px;
+padding: 109px 188px;
 height: 730px;
 `
 const Top6Bg = styled.img`
