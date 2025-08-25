@@ -44,7 +44,22 @@ export default function Index() {
                             </div>
                             <img className='arrow' src={require('../../assets/arrow.png').default}/>
                         </RowLink>
-                        <Row>
+                        <Row href={AndroidUrl} target='__blank'>
+                            <div className='content'>
+                                <img src={require('../../assets/download/android.png').default}/>
+                                <span>Android</span>
+                            </div>
+                            <img className='qr' src={require('../../assets/download/qr.png').default}/>
+                            <div className='download_qr'>
+                                <div>{t('505')}</div>
+                                <QRCode
+                                    value={AndroidUrl}
+                                    size={130}
+                                    includeMargin={true}
+                                />
+                            </div>
+                        </Row>
+                        <Row className='disabled'>
                             <div className='content'>
                                 <img src={require('../../assets/download/ios.png').default}/>
                                 <span>iOS({t('10')})</span>
@@ -54,21 +69,6 @@ export default function Index() {
                                 <div>{t('505')}</div>
                                 <QRCode
                                     value={iOSUrl}
-                                    size={130}
-                                    includeMargin={true}
-                                />
-                            </div> */}
-                        </Row>
-                        <Row>
-                            <div className='content'>
-                                <img src={require('../../assets/download/android.png').default}/>
-                                <span>Android({t('10')})</span>
-                            </div>
-                            <img className='qr' src={require('../../assets/download/qr.png').default}/>
-                            {/* <div className='download_qr'>
-                                <div>{t('505')}</div>
-                                <QRCode
-                                    value={AndroidUrl}
                                     size={130}
                                     includeMargin={true}
                                 />
@@ -118,17 +118,17 @@ export default function Index() {
                             </div>
                             <img className='arrow' src={require('../../assets/arrow.png').default}/>
                         </RowLink>
+                        <RowLink href={AndroidUrl} target='__blank'>
+                            <div className='content'>
+                                <img src={require('../../assets/download/android.png').default}/>
+                                <span>Android</span>
+                            </div>
+                            <img className='download' src={require('../../assets/download/download.png').default}/>
+                        </RowLink>
                         <RowLinkDisabled>
                             <div className='content'>
                                 <img src={require('../../assets/download/ios.png').default}/>
                                 <span>iOS({t('10')})</span>
-                            </div>
-                            <img className='download' src={require('../../assets/download/download.png').default}/>
-                        </RowLinkDisabled>
-                        <RowLinkDisabled>
-                            <div className='content'>
-                                <img src={require('../../assets/download/android.png').default}/>
-                                <span>Android({t('10')})</span>
                             </div>
                             <img className='download' src={require('../../assets/download/download.png').default}/>
                         </RowLinkDisabled>
@@ -295,18 +295,25 @@ height: 18px;
 }
 };
 `
-const Row = styled.div`
+const Row = styled.a`
+&:hover {
+color: #666;
+}
 position: relative;
 padding: 0 25px 0 20px;
 height: 60px;
-cursor: no-drop;
 margin-top: 12px;
 display: flex;
 justify-content: space-between;
 align-items: center;
 font-size: 16px;
 font-weight: 700;
+color: #121212;
+&.disabled {
+user-pointer: none;
+cursor: no-drop;
 color: #999;
+}
 border-radius: 15px;
 background: #FFF;
 .content {
@@ -323,7 +330,6 @@ width: 11px;
 height: 18px;
 }
 .qr {
-cursor: pointer;
 width: 30px;
 height: 30px;
 }
@@ -337,7 +343,7 @@ position: absolute;
 left: 102%;
 top: 0;
 padding: 10px 15px 15px;
-font-size: 16px;
+font-size: 14px;
 font-weight: 500;
 line-height: 20px;
 div {
