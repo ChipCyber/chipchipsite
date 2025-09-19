@@ -11,6 +11,9 @@ import { useDispatch, useSelector } from 'react-redux';
 // import { injected, loadCache } from "./sotres/connectors.jsx";
 // import DocumentTitle from 'react-document-title'
 
+import 'moment/locale/zh-cn';
+import 'moment/locale/en-gb';
+import moment from 'moment';
 import zhCN from "antd/es/locale/zh_CN";
 import enUS from "antd/es/locale/en_US";
 
@@ -36,6 +39,7 @@ import Download from "./pages/download";
 import FairDealing from "./pages/fairDealing"
 // import Displacement from "./pages/displacement";
 import Roadmap from "./pages/roadmap";
+import CTO from "./pages/cto";
 // import IDO from "./pages/ido";
 import Mint from "./pages/mint";
 
@@ -78,6 +82,7 @@ function App() {
       let curLanguage = i18n.language;
       setCurLanguage(curLanguage);
       changeLanguage(curLanguage);
+      moment.locale(curLanguage.includes('zh')?'zh-cn' : 'en-gb');
     };
     customChangeLanguage();
     emitter.on(CHANGELANGUAGE, customChangeLanguage);
@@ -149,6 +154,11 @@ function App() {
               <Route path="/roadmap" exact>
                 <Nav/>
                 <Roadmap/>
+                <Footer/>
+              </Route>
+              <Route path="/cto" exact>
+                <Nav/>
+                <CTO/>
                 <Footer/>
               </Route>
               {/* <Route path="/ido" exact>
