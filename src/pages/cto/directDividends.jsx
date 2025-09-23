@@ -26,89 +26,89 @@ export default function Index({show,onClose}) {
         >
             <DialogC aria-label='modal'>
                 <ModalHeader>
-                    <div className='title'>直接分红</div>
+                    <div className='title'>{t('21026')}</div>
                     <img className='close' onClick={onClose} src={require('../../assets/nav/close.png').default}/>
                 </ModalHeader>
                 {shouldRender ? <ModalContent>
-                    <RowTitle>单次分红金额</RowTitle>
+                    <RowTitle>{t('21035')}</RowTitle>
                     <RowColumn>
-                        <Radio title={"固定金额"} checked={true} onChange={val=>{}}/>
-                        <Radio title={"按资金池比例"} checked={false} onChange={val=>{}}/>
+                        <Radio title={t('21036')} checked={true} onChange={val=>{}}/>
+                        <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
                     </RowColumn>
                     <RowInputColumn>
                         <InputNumber value={count} unit="SOL" onChange={handleChange}/>
                         <InputNumber value={count} unit="%" onChange={handleChange}/>
                     </RowInputColumn>
-                    <RowTitle>分红条件</RowTitle>
+                    <RowTitle>{t('21038')}</RowTitle>
                     <RowColumn>
-                        <Radio title={"按持币数量"} checked={true} onChange={val=>{}}/>
-                        <Radio title={"指定地址"} checked={false} onChange={val=>{}}/>
+                        <Radio title={t('21039')} checked={true} onChange={val=>{}}/>
+                        <Radio title={t('21040')} checked={false} onChange={val=>{}}/>
                     </RowColumn>
                     <RowInputColumn>
                         <InputNumber value={count} unit="SOL" onChange={handleChange}/>
                         <RowTextarea>
-                            <textarea placeholder="输入地址,地址间用逗号分开"></textarea>
+                            <textarea placeholder={t('21041')}></textarea>
                         </RowTextarea>
                         <RowText>
-                            <RowImport>批量导入</RowImport>
+                            <RowImport>{t('21042')}</RowImport>
                         </RowText>
                     </RowInputColumn>
-                    <RowTitle>单次分红金额</RowTitle>
+                    <RowTitle>{t('21044')}</RowTitle>
                     <RowColumn>
-                        <Radio title={"即时分红"} checked={true} onChange={val=>{}}/>
-                        <Radio title={"按资金池比例"} checked={false} onChange={val=>{}}/>
+                        <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
+                        <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
                     </RowColumn>
                     <RowInputColumn>
                         <RowInputEmpty/>
                         <Select/>
                     </RowInputColumn>
-                    <RowTitle>开始时间</RowTitle>
+                    <RowTitle>{t('21009')}</RowTitle>
                     <DatePicker onChange={()=>{}} />
                 </ModalContent>:
                 <ModalContentH5>
-                    <RowTitle>单次分红金额</RowTitle>
+                    <RowTitle>{t('21035')}</RowTitle>
                     <RowH5>
                         <RowColumn>
-                            <Radio title={"固定金额"} checked={true} onChange={val=>{}}/>
-                            <Radio title={"按资金池比例"} checked={false} onChange={val=>{}}/>
+                            <Radio title={t('21036')} checked={true} onChange={val=>{}}/>
+                            <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
                         </RowColumn>
                         <RowInputColumn>
                             <InputNumber value={count} unit="SOL" onChange={handleChange}/>
                             <InputNumber value={count} unit="%" onChange={handleChange}/>
                         </RowInputColumn>
                     </RowH5>
-                    <RowTitle>分红条件</RowTitle>
+                    <RowTitle>{t('21038')}</RowTitle>
                     <RowH5>
                         <RowColumn>
-                            <Radio title={"按持币数量"} checked={true} onChange={val=>{}}/>
-                            <Radio title={"指定地址"} checked={false} onChange={val=>{}}/>
+                            <Radio title={t('21039')} checked={true} onChange={val=>{}}/>
+                            <Radio title={t('21040')} checked={false} onChange={val=>{}}/>
                         </RowColumn>
                         <RowInputColumn>
                             <InputNumber value={count} unit="SOL" onChange={handleChange}/>
                             <RowText>
-                                <RowImport>批量导入</RowImport>
+                                <RowImport>{t('21042')}</RowImport>
                             </RowText>
                         </RowInputColumn>
                         <RowTextarea>
-                            <textarea placeholder="输入地址,地址间用逗号分开"></textarea>
+                            <textarea placeholder={t('21041')}></textarea>
                         </RowTextarea>
                     </RowH5>
-                    <RowTitle>单次分红金额</RowTitle>
+                    <RowTitle>{t('21044')}</RowTitle>
                     <RowH5>
                         <RowColumn>
-                            <Radio title={"即时分红"} checked={true} onChange={val=>{}}/>
-                            <Radio title={"按资金池比例"} checked={false} onChange={val=>{}}/>
+                            <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
+                            <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
                         </RowColumn>
                         <RowInputColumn>
                             <RowInputEmpty/>
                             <Select/>
                         </RowInputColumn>
                     </RowH5>
-                    <RowTitle>开始时间</RowTitle>
+                    <RowTitle>{t('21009')}</RowTitle>
                     <DatePicker onChange={()=>{}} />
                 </ModalContentH5>
                 }
-                <LargeBtn className='custom' onClick={()=>{}}>确定</LargeBtn>
+                <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
             </DialogC>
         </DialogOverlay>
     )

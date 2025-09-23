@@ -11,6 +11,7 @@ import Checkbox from "@/components/checkbox";
 import InputNumber from '@/components/inputNumber';
 
 export default function Index({type=0,show,onClose}) {
+    const { t } = useTranslation();
     const shouldRender = useBreakpointCheck();
     const [checked, setChecked] = useState(false);
     const [curIdx, setCurIdx] = useState(type==undefined?0:type);
@@ -22,245 +23,244 @@ export default function Index({type=0,show,onClose}) {
         }
     };
     const renderBuyback = () => {
-        return shouldRender?
-        <>
-            <ModalContent>
-                <RowTitle>设置回购周期</RowTitle>
-                <RowColumn>
-                    <RowColumnRow>
-                        <Radio title={"持续回购"} checked={false} onChange={val=>{}}/>
-                        <RowTip>持续执行回购策略,回购资金池余额不足时终止回购</RowTip>
-                    </RowColumnRow>
-                    <RowColumnRow>
-                        <Radio title={"限时回购"} checked={false} onChange={val=>{}}/>
-                        <RowTip>在指定时间内执行回购策略,达到指定时间或余额不足时终止执行</RowTip>
-                    </RowColumnRow>
-                    <RowColumnRow>
-                        <RowText>选择截止日期</RowText>
-                        <DatePicker onChange={()=>{}} />
-                    </RowColumnRow>
-                </RowColumn>
-                <RowTitle>选择回购策略</RowTitle>
-                <RowColumn>
-                    <GradientSwitch title={"随机时间赎回"} checked={checked} onChange={val=>setChecked(val)}/>
-                    <RowColumnRow>
-                        <RowText>随机赎回一次</RowText>
-                        <Select/>
-                    </RowColumnRow>
-                    <RowColumnRow>
-                        <RowText>单次回购金额</RowText>
-                        <Select/>
-                        <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
-                    </RowColumnRow>
-                    <GradientSwitch title={"技术指标回购"} checked={checked} onChange={val=>setChecked(val)}/>
-                    <RowColumnGrid>
-                        <Checkbox title={"多头趋势"} checked={checked} onChange={val=>setChecked(val)}/>
-                        <RowColumn>
-                            <RowTip>{"当价格突破MA30且MA30>MA60时,回购"}</RowTip>
-                            <RowColumnRow>
-                                <Select/>
-                                <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
-                            </RowColumnRow>
-                        </RowColumn>
-                        <Checkbox title={"空头趋势"} checked={checked} onChange={val=>setChecked(val)}/>
-                        <RowColumn>
-                            <RowTip>{"当价格跌破MA30且MA30<MA60时, 回购"}</RowTip>
-                            <RowColumnRow>
-                                <Select/>
-                                <MyInputNumber value={count} unit="%" onChange={handleChange}/>
-                            </RowColumnRow>
-                        </RowColumn>
-                        <Checkbox title={"特殊行情"} checked={checked} onChange={val=>setChecked(val)}/>
-                        <RowColumn>
-                            <RowTip>{"当24小时跌幅>20%时,回购"}</RowTip>
-                            <RowColumnRow>
-                                <Select/>
-                                <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
-                            </RowColumnRow>
-                        </RowColumn>
-                        <Checkbox title={"空头趋势"} checked={checked} onChange={val=>setChecked(val)}/>
-                        <RowColumn>
-                            <RowTip>{"当RSI<20时,回购"}</RowTip>
-                            <RowColumnRow>
-                                <Select/>
-                                <MyInputNumber value={count} unit="%" onChange={handleChange}/>
-                            </RowColumnRow>
-                        </RowColumn>
-                    </RowColumnGrid>
-                </RowColumn>
-            </ModalContent>
-            <LargeBtn className='custom' onClick={()=>{}}>确定</LargeBtn>
-        </>:<ModalContentH5>
-            <RowTitle>设置回购周期</RowTitle>
+        return <>
+        {shouldRender?<ModalContent>
+            <RowTitle>{t('21048')}</RowTitle>
+            <RowColumn>
+                <RowColumnRow>
+                    <Radio title={t('21049')} checked={false} onChange={val=>{}}/>
+                    <RowTip>{t('21050')}</RowTip>
+                </RowColumnRow>
+                <RowColumnRow>
+                    <Radio title={t('21051')} checked={false} onChange={val=>{}}/>
+                    <RowTip>{t('21052')}</RowTip>
+                </RowColumnRow>
+                <RowColumnRow>
+                    <RowText>{t('21053')}</RowText>
+                    <DatePicker onChange={()=>{}} />
+                </RowColumnRow>
+            </RowColumn>
+            <RowTitle>{t('21054')}</RowTitle>
+            <RowColumn>
+                <GradientSwitch title={t('21055')} checked={checked} onChange={val=>setChecked(val)}/>
+                <RowColumnRow>
+                    <RowText>{t('21056')}</RowText>
+                    <Select/>
+                </RowColumnRow>
+                <RowColumnRow>
+                    <RowText>{t('21057')}</RowText>
+                    <Select/>
+                    <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
+                </RowColumnRow>
+                <GradientSwitch title={t('21058')} checked={checked} onChange={val=>setChecked(val)}/>
+                <RowColumnGrid>
+                    <Checkbox title={t('21059')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <RowColumn>
+                        <RowTip>{t('21060')}</RowTip>
+                        <RowColumnRow>
+                            <Select/>
+                            <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
+                        </RowColumnRow>
+                    </RowColumn>
+                    <Checkbox title={t('21061')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <RowColumn>
+                        <RowTip>{t('21062')}</RowTip>
+                        <RowColumnRow>
+                            <Select/>
+                            <MyInputNumber value={count} unit="%" onChange={handleChange}/>
+                        </RowColumnRow>
+                    </RowColumn>
+                    <Checkbox title={t('21063')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <RowColumn>
+                        <RowTip>{t('21064')}</RowTip>
+                        <RowColumnRow>
+                            <Select/>
+                            <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
+                        </RowColumnRow>
+                    </RowColumn>
+                    <Checkbox title={t('21061')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <RowColumn>
+                        <RowTip>{t('21065')}</RowTip>
+                        <RowColumnRow>
+                            <Select/>
+                            <MyInputNumber value={count} unit="%" onChange={handleChange}/>
+                        </RowColumnRow>
+                    </RowColumn>
+                </RowColumnGrid>
+            </RowColumn>
+        </ModalContent>
+        :<ModalContentH5>
+            <RowTitle>{t('21048')}</RowTitle>
             <RowContent>
                 <div>
-                    <Radio title={"持续回购"} checked={false} onChange={val=>{}}/>
-                    <RowTip>持续执行回购策略,回购资金池余额不足时终止回购</RowTip>
+                    <Radio title={t('21049')} checked={false} onChange={val=>{}}/>
+                    <RowTip>{t('21050')}</RowTip>
                 </div>
                 <div>
-                    <Radio title={"限时回购"} checked={false} onChange={val=>{}}/>
-                    <RowTip>在指定时间内执行回购策略,达到指定时间或余额不足时终止执行</RowTip>
+                    <Radio title={t('21051')} checked={false} onChange={val=>{}}/>
+                    <RowTip>{t('21052')}</RowTip>
                 </div>
-                <RowText>选择截止日期</RowText>
+                <RowText>{t('21053')}</RowText>
                 <DatePicker onChange={()=>{}} />
             </RowContent>
-            <RowTitle>选择回购策略</RowTitle>
+            <RowTitle>{t('21054')}</RowTitle>
             <RowContent>
-                <GradientSwitch title={"随机时间赎回"} checked={checked} onChange={val=>setChecked(val)}/>
-                <RowText>随机赎回一次</RowText>
+                <GradientSwitch title={t('21055')} checked={checked} onChange={val=>setChecked(val)}/>
+                <RowText>{t('21056')}</RowText>
                 <Select/>
-                <RowText>单次回购金额</RowText>
+                <RowText>{t('21057')}</RowText>
                 <RowContentColumn>
                     <Select/>
                     <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
                 </RowContentColumn>
             </RowContent>
             <RowContent>
-                <GradientSwitch title={"技术指标回购"} checked={checked} onChange={val=>setChecked(val)}/>
+                <GradientSwitch title={t('21058')} checked={checked} onChange={val=>setChecked(val)}/>
                 <div>
-                    <Checkbox title={"多头趋势"} checked={checked} onChange={val=>setChecked(val)}/>
-                    <RowTip>{"当价格突破MA30且MA30>MA60时,回购"}</RowTip>
+                    <Checkbox title={t('21059')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <RowTip>{t('21060')}</RowTip>
                 </div>
                 <RowContentColumn>
                     <Select/>
                     <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
                 </RowContentColumn>
                 <div>
-                    <Checkbox title={"空头趋势"} checked={checked} onChange={val=>setChecked(val)}/>
-                    <RowTip>{"当价格跌破MA30且MA30<MA60时, 回购"}</RowTip>
+                    <Checkbox title={t('21061')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <RowTip>{t('21062')}</RowTip>
                 </div>
                 <RowContentColumn>
                     <Select/>
                     <MyInputNumber value={count} unit="%" onChange={handleChange}/>
                 </RowContentColumn>
                 <div>
-                    <Checkbox title={"特殊行情"} checked={checked} onChange={val=>setChecked(val)}/>
-                    <RowTip>{"当24小时跌幅>20%时,回购"}</RowTip>
+                    <Checkbox title={t('21063')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <RowTip>{t('21064')}</RowTip>
                 </div>
                 <RowContentColumn>
                     <Select/>
                     <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
                 </RowContentColumn>
                 <div>
-                    <Checkbox title={"空头趋势"} checked={checked} onChange={val=>setChecked(val)}/>
-                    <RowTip>{"当RSI<20时,回购"}</RowTip>
+                    <Checkbox title={t('21061')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <RowTip>{t('21065')}</RowTip>
                 </div>
                 <RowContentColumn>
                     <Select/>
                     <MyInputNumber value={count} unit="%" onChange={handleChange}/>
                 </RowContentColumn>
             </RowContent>
-            <LargeBtn className='custom' onClick={()=>{}}>确定</LargeBtn>
-        </ModalContentH5>
+        </ModalContentH5>}
+        <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
+        </>
     }
     const renderDividends = () => {
         return <>
             {shouldRender?<ModalContentDividends>
-                <RowHTitle>分红比例</RowHTitle>
+                <RowHTitle>{t('21011')}</RowHTitle>
                 <InputNumber value={count} unit="%" onChange={handleChange}/>
-                <RowHTitle>分红条件</RowHTitle>
+                <RowHTitle>{t('21038')}</RowHTitle>
                 <RowHColumn>
-                    <Radio title={"按持币数量"} checked={true} onChange={val=>{}}/>
-                    <Radio title={"指定地址"} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21039')} checked={true} onChange={val=>{}}/>
+                    <Radio title={t('21040')} checked={false} onChange={val=>{}}/>
                 </RowHColumn>
                 <RowInputColumn>
                     <InputNumber value={count} unit="SOL" onChange={handleChange}/>
                     <RowTextarea>
-                        <textarea placeholder="输入地址,地址间用逗号分开"></textarea>
+                        <textarea placeholder={t('21041')}></textarea>
                     </RowTextarea>
                     <RowEnd>
-                        <RowImport>批量导入</RowImport>
+                        <RowImport>{t('21042')}</RowImport>
                     </RowEnd>
                 </RowInputColumn>
-                <RowHTitle>单次分红金额</RowHTitle>
+                <RowHTitle>{t('21044')}</RowHTitle>
                 <RowHColumn>
-                    <Radio title={"即时分红"} checked={true} onChange={val=>{}}/>
-                    <Radio title={"按资金池比例"} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
+                    <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
                 </RowHColumn>
                 <RowInputColumn>
                     <RowInputEmpty/>
                     <Select/>
                 </RowInputColumn>
-                <RowHTitle>开始时间</RowHTitle>
+                <RowHTitle>{t('21009')}</RowHTitle>
                 <DatePicker onChange={()=>{}} />
             </ModalContentDividends>
         :<ModalContentH5>
-            <RowHTitle>单次分红金额</RowHTitle>
+            <RowHTitle>{t('21035')}</RowHTitle>
             <RowH5>
                 <RowHColumn>
-                    <Radio title={"固定金额"} checked={true} onChange={val=>{}}/>
-                    <Radio title={"按资金池比例"} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21036')} checked={true} onChange={val=>{}}/>
+                    <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
                 </RowHColumn>
                 <RowInputColumn>
                     <InputNumber value={count} unit="SOL" onChange={handleChange}/>
                     <InputNumber value={count} unit="%" onChange={handleChange}/>
                 </RowInputColumn>
             </RowH5>
-            <RowHTitle>分红条件</RowHTitle>
+            <RowHTitle>{t('21038')}</RowHTitle>
             <RowH5>
                 <RowHColumn>
-                    <Radio title={"按持币数量"} checked={true} onChange={val=>{}}/>
-                    <Radio title={"指定地址"} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21039')} checked={true} onChange={val=>{}}/>
+                    <Radio title={t('21040')} checked={false} onChange={val=>{}}/>
                 </RowHColumn>
                 <RowInputColumn>
                     <InputNumber value={count} unit="SOL" onChange={handleChange}/>
                     <RowEnd>
-                        <RowImport>批量导入</RowImport>
+                        <RowImport>{t('21042')}</RowImport>
                     </RowEnd>
                 </RowInputColumn>
                 <RowTextarea>
-                    <textarea placeholder="输入地址,地址间用逗号分开"></textarea>
+                    <textarea placeholder={t('21041')}></textarea>
                 </RowTextarea>
             </RowH5>
-            <RowHTitle>单次分红金额</RowHTitle>
+            <RowHTitle>{t('21044')}</RowHTitle>
             <RowH5>
                 <RowHColumn>
-                    <Radio title={"即时分红"} checked={true} onChange={val=>{}}/>
-                    <Radio title={"按资金池比例"} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
+                    <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
                 </RowHColumn>
                 <RowInputColumn>
                     <RowInputEmpty/>
                     <Select/>
                 </RowInputColumn>
             </RowH5>
-            <RowHTitle>开始时间</RowHTitle>
+            <RowHTitle>{t('21009')}</RowHTitle>
             <DatePicker onChange={()=>{}} />
         </ModalContentH5>}
-        <LargeBtn className='custom' onClick={()=>{}}>确定</LargeBtn>
+        <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
         </>
     }
     const renderDestroy = () => {
         return <>
             {shouldRender?<ModalContentDestroy>
-                <RowHTitle>销毁比例</RowHTitle>
+                <RowHTitle>{t('21012')}</RowHTitle>
                 <InputNumber value={count} unit="%" onChange={handleChange}/>
-                <RowHTitle>销毁时间</RowHTitle>
+                <RowHTitle>{t('21066')}</RowHTitle>
                 <RowHColumn>
-                    <Radio title={"即时分红"} checked={true} onChange={val=>{}}/>
-                    <Radio title={"按资金池比例"} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
+                    <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
                 </RowHColumn>
                 <RowInputColumn>
                     <RowInputEmpty/>
                     <Select/>
                 </RowInputColumn>
-                <RowHTitle>开始时间</RowHTitle>
+                <RowHTitle>{t('21009')}</RowHTitle>
                 <DatePicker onChange={()=>{}} />
             </ModalContentDestroy>
             :<ModalContentH5>
-                <RowHTitle>销毁比例</RowHTitle>
+                <RowHTitle>{t('21012')}</RowHTitle>
                 <InputNumber value={count} unit="%" onChange={handleChange}/>
-                <RowHTitle>销毁时间</RowHTitle>
+                <RowHTitle>{t('21066')}</RowHTitle>
                 <RowContentColumn>
-                    <Radio title={"即时分红"} checked={true} onChange={val=>{}}/>
+                    <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
                 </RowContentColumn>
                 <RowContentColumn>
-                    <Radio title={"按资金池比例"} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
                     <Select/>
                 </RowContentColumn>
-                <RowHTitle>开始时间</RowHTitle>
+                <RowHTitle>{t('21009')}</RowHTitle>
                 <DatePicker onChange={()=>{}} />
             </ModalContentH5>}
-            <LargeBtn className='custom' onClick={()=>{}}>确定</LargeBtn>
+            <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
         </>
     }
     return (
@@ -272,9 +272,9 @@ export default function Index({type=0,show,onClose}) {
             <DialogC aria-label='modal'>
                 <ModalHeader>
                     <div className='title'>
-                        <ModelTitle className={curIdx==0?'selected':''} onClick={()=>setCurIdx(0)}><span>回购</span></ModelTitle>
-                        <ModelTitle className={curIdx==1?'selected':''} onClick={()=>setCurIdx(1)}><span>分红</span></ModelTitle>
-                        <ModelTitle className={curIdx==2?'selected':''} onClick={()=>setCurIdx(2)}><span>销毁</span></ModelTitle>
+                        <ModelTitle className={curIdx==0?'selected':''} onClick={()=>setCurIdx(0)}><span>{t('21045')}</span></ModelTitle>
+                        <ModelTitle className={curIdx==1?'selected':''} onClick={()=>setCurIdx(1)}><span>{t('21046')}</span></ModelTitle>
+                        <ModelTitle className={curIdx==2?'selected':''} onClick={()=>setCurIdx(2)}><span>{t('21047')}</span></ModelTitle>
                     </div>
                     <img className='close' onClick={onClose} src={require('../../assets/nav/close.png').default}/>
                 </ModalHeader>

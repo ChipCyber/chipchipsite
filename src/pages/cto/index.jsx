@@ -18,8 +18,8 @@ export default function Index() {
             <Top>
                 <img className='topImg' src={require('../../assets/cto/top.png').default} />
                 <div className='topCenter'>
-                    <div className='topTitle'>{t('2100').split('\n').map((line, index) => (<React.Fragment key={index}>{line&&<div className='desc'>{line}</div>}</React.Fragment>))}</div>
-                    <div className="topTxt">{t('2101')}</div>
+                    <div className='topTitle'>{t('21000').split('\n').map((line, index) => (<React.Fragment key={index}>{line&&<div className='desc'>{line}</div>}</React.Fragment>))}</div>
+                    <div className="topTxt">{t('21001')}</div>
                 </div>
             </Top>
             <div style={{ overflow: 'hidden', height: 96 }}>
@@ -28,22 +28,22 @@ export default function Index() {
             <Why>
                 <img className='bg' src={require('../../assets/cto/why_bg.png').default} />
                 <WhyContent>
-                    <WhyTitle>为什么选择CTO协议?</WhyTitle>
+                    <WhyTitle>{t('21002')}</WhyTitle>
                     <WhyRow>
                         <WhyItem>
                             <img className='icon' src={require('../../assets/cto/why_1.png').default} />
-                            <div className='title'>每个社区都可以加入</div>
-                            <div className='desc'>任何社区都可无缝接入CTO协议,部署专属的代币管理策略。</div>
+                            <div className='title'>{t('21003')}</div>
+                            <div className='desc'>{t('21004')}</div>
                         </WhyItem>
                         <WhyItem>
                             <img className='icon' src={require('../../assets/cto/why_2.png').default} />
-                            <div className='title'>定制化需求</div>
-                            <div className='desc'>CTO协议提供灵活的策略模块,也可以根据社区需求进行个性化定制。</div>
+                            <div className='title'>{t('21005')}</div>
+                            <div className='desc'>{t('21006')}</div>
                         </WhyItem>
                         <WhyItem>
                             <img className='icon' src={require('../../assets/cto/why_3.png').default} />
-                            <div className='title'>完全链上透明</div>
-                            <div className='desc'>CTO协议的所有操作均通过智能合约在链上完成,每一笔资金流向都公开可查,杜绝暗箱操作。</div>
+                            <div className='title'>{t('21007')}</div>
+                            <div className='desc'>{t('21008')}</div>
                         </WhyItem>
                     </WhyRow>
                 </WhyContent>
@@ -57,37 +57,37 @@ export default function Index() {
                     <InfoTitle src={require('../../assets/cto/info_title.png').default} alt='title'/>
                     <InfoRow>
                         <InfoItem>
-                            <div className='title'>开始时间</div>
+                            <div className='title'>{t('21009')}</div>
                             <div className='desc'>2025-09-10</div>
                         </InfoItem>
                         <InfoItem>
-                            <div className='title'>创建者</div>
+                            <div className='title'>{t('21010')}</div>
                             <div className='desc'>0xeo687......0485</div>
                         </InfoItem>
                         <InfoItem>
-                            <div className='title'>分红比例</div>
+                            <div className='title'>{t('21011')}</div>
                             <div className='desc'>80%</div>
                         </InfoItem>
                         <InfoItem>
-                            <div className='title'>销毁比例</div>
+                            <div className='title'>{t('21012')}</div>
                             <div className='desc'>20%</div>
                         </InfoItem>
                     </InfoRow>
                     <InfoRow>
                         <InfoItem>
-                            <div className='title'>累计回购</div>
+                            <div className='title'>{t('21013')}</div>
                             <div className='desc'>10M</div>
                         </InfoItem>
                         <InfoItem>
-                            <div className='title'>累计分红</div>
+                            <div className='title'>{t('21014')}</div>
                             <div className='desc'>8M</div>
                         </InfoItem>
                         <InfoItem>
-                            <div className='title'>累计销毁</div>
+                            <div className='title'>{t('21015')}</div>
                             <div className='desc'>2M</div>
                         </InfoItem>
                         <InfoItem>
-                            <div className='title'>代币涨幅</div>
+                            <div className='title'>{t('21016')}</div>
                             <div className='desc' style={{ color: '#FEAD1D' }}>1000%</div>
                         </InfoItem>
                     </InfoRow>
@@ -97,14 +97,14 @@ export default function Index() {
                 <img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default}/>
                 <NoConnect>
                     <SmallBtn className='custom' onClick={()=>{}}>
-                        <span>Connect wallet</span>
+                        <span>{t('602')}</span>
                         <img src={require('../../assets/home/arrow_enter.png').default}/>
                     </SmallBtn>
                 </NoConnect>
                 <Item>
                     <ItemStatus>
                         <img className='bg' src={require('../../assets/cto/icon_status_bg.png').default}/>
-                        <div>进行中</div>
+                        <div>{t('2007')}</div>
                     </ItemStatus>
                     <ItemTopIcon src={require('../../assets/cto/icon_item.png').default}/>
                     <ItemTop>
@@ -113,64 +113,64 @@ export default function Index() {
                             <div className='tag'>NGNF</div>
                         </ItemTopTitle>
                         <ItemTopAddress>
-                            <div>合约地址</div>
+                            <div>{t('21017')}</div>
                             <div>0xsfjo00uj40504jg0jgj0uyrgjpjrphjprtehjpjp</div>
                         </ItemTopAddress>
                         <ItemTopBalance>
-                            <div>回购资金池余额</div>
+                            <div>{t('21018')}</div>
                             <div>989.09 SOL</div>
                         </ItemTopBalance>
                         <ItemTopRow>
                             <SmallBtn className='custom' onClick={()=>{}}>
-                                <span>转入</span>
+                                <span>{t('21019')}</span>
                                 <img src={require('../../assets/home/arrow_enter.png').default}/>
                             </SmallBtn>
-                            <SmallBorderBtn className='custom' onClick={()=>{}}>转出</SmallBorderBtn>
+                            <SmallBorderBtn className='custom' onClick={()=>{}}>{t('21020')}</SmallBorderBtn>
                         </ItemTopRow>
                     </ItemTop>
                     <ItemBottom>
                         <ItemBottomLeft>
                             <ItemBottomTitle>
                                 <img src={require('../../assets/cto/icon_overview.png').default}/>
-                                <span>回购概况</span>
+                                <span>{t('21021')}</span>
                             </ItemBottomTitle>
                             <ItemBottomLeftRow>
                                 <ItemBottomLeftItem>
-                                    <div>代币名称</div>
+                                    <div>{t('21022')}</div>
                                     <div>NGNF</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
-                                    <div>累计回购</div>
+                                    <div>{t('21023')}</div>
                                     <div>1M</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
-                                    <div>累计分红</div>
+                                    <div>{t('21024')}</div>
                                     <div>1M</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
-                                    <div>销毁比例</div>
+                                    <div>{t('21025')}</div>
                                     <div>1M</div>
                                 </ItemBottomLeftItem>
                             </ItemBottomLeftRow>
                             <ItemBottomLeftBtnRow>
-                                <SmallBgBtn className='custom' onClick={()=>{}}>直接分红</SmallBgBtn>
-                                <SmallBgBtn className='custom' onClick={()=>{}}>回购分红销毁</SmallBgBtn>
+                                <SmallBgBtn className='custom' onClick={()=>{}}>{t('21026')}</SmallBgBtn>
+                                <SmallBgBtn className='custom' onClick={()=>{}}>{t('21027')}</SmallBgBtn>
                             </ItemBottomLeftBtnRow>
                         </ItemBottomLeft>
                         <ItemBottomLine/>
                         <ItemBottomRight>
                             <ItemBottomTitle>
                                 <img src={require('../../assets/cto/icon_treasury.png').default}/>
-                                <span>社区金库</span>
+                                <span>{t('21028')}</span>
                             </ItemBottomTitle>
                             <ItemBottomRightItem>
-                                <div>可用</div>
+                                <div>{t('21029')}</div>
                                 <div>9999 NGNF</div>
                             </ItemBottomRightItem>
-                            <SmallBorderBtn className='custom' onClick={()=>{}}>转出</SmallBorderBtn>
+                            <SmallBorderBtn className='custom' onClick={()=>{}}>{t('21020')}</SmallBorderBtn>
                             <ItemBottomRightInfo>
                                 <img src={require('../../assets/cto/icon_info.png').default}/>
-                                <span>未进行分红或销毁的代币将全部转入社区金库</span>
+                                <span>{t('21030')}</span>
                             </ItemBottomRightInfo>
                         </ItemBottomRight>
                     </ItemBottom>
@@ -183,8 +183,8 @@ export default function Index() {
             <TopH5>
                 <img className='topImg' src={require('../../assets/cto/h5/top.png').default} />
                 <div className='topCenter'>
-                    <div className='topTitle'>{t('2100').split('\n').map((line, index) => (<React.Fragment key={index}>{line&&<div className='desc'>{line}</div>}</React.Fragment>))}</div>
-                    <div className="topTxt">{t('2101')}</div>
+                    <div className='topTitle'>{t('21000').split('\n').map((line, index) => (<React.Fragment key={index}>{line&&<div className='desc'>{line}</div>}</React.Fragment>))}</div>
+                    <div className="topTxt">{t('21001')}</div>
                 </div>
                 <div style={{ overflow: 'hidden', height: 30, width: '100%', }}>
                     <img style={{ objectFit: 'cover', verticalAlign: 'top', height: '100%', width: '100%', }} src={require('../../assets/home/h5/logo_row.png').default} />
@@ -193,27 +193,27 @@ export default function Index() {
             <WhyH5>
                 <img className='bg' src={require('../../assets/cto/h5/why_bg.png').default} />
                 <WhyH5Content>
-                    <WhyTitle>为什么选择CTO协议?</WhyTitle>
+                    <WhyTitle>{t('21002')}</WhyTitle>
                     <WhyRow>
                         <WhyItemH5>
                             <img className='icon' src={require('../../assets/cto/why_1.png').default} />
                             <div>
-                                <div className='title'>每个社区都可以加入</div>
-                                <div className='desc'>任何社区都可无缝接入CTO协议,部署专属的代币管理策略。</div>
+                                <div className='title'>{t('21003')}</div>
+                                <div className='desc'>{t('21004')}</div>
                             </div>
                         </WhyItemH5>
                         <WhyItemH5>
                             <img className='icon' src={require('../../assets/cto/why_2.png').default} />
                             <div>
-                                <div className='title'>定制化需求</div>
-                                <div className='desc'>CTO协议提供灵活的策略模块,也可以根据社区需求进行个性化定制。</div>
+                                <div className='title'>{t('21005')}</div>
+                                <div className='desc'>{t('21006')}</div>
                             </div>
                         </WhyItemH5>
                         <WhyItemH5>
                             <img className='icon' src={require('../../assets/cto/why_3.png').default} />
                             <div>
-                                <div className='title'>完全链上透明</div>
-                                <div className='desc'>CTO协议的所有操作均通过智能合约在链上完成,每一笔资金流向都公开可查,杜绝暗箱操作。</div>
+                                <div className='title'>{t('21007')}</div>
+                                <div className='desc'>{t('21008')}</div>
                             </div>
                         </WhyItemH5>
                     </WhyRow>
@@ -228,35 +228,35 @@ export default function Index() {
                     <InfoTitle src={require('../../assets/cto/h5/info_title.png').default} alt='title'/>
                     <InfoRow>
                         <InfoItem>
-                            <div className='title'>开始时间</div>
+                            <div className='title'>{t('21009')}</div>
                             <div className='desc'>2025-09-10</div>
                         </InfoItem>
                         <InfoItem>
-                            <div className='title'>创建者</div>
+                            <div className='title'>{t('21010')}</div>
                             <div className='desc'>0xeo687......0485</div>
                         </InfoItem>
                         <InfoItem>
-                            <div className='title'>分红比例</div>
+                            <div className='title'>{t('21011')}</div>
                             <div className='desc'>80%</div>
                         </InfoItem>
                         <InfoItem>
-                            <div className='title'>销毁比例</div>
+                            <div className='title'>{t('21012')}</div>
                             <div className='desc'>20%</div>
                         </InfoItem>
                         <InfoItem>
-                            <div className='title'>累计回购</div>
+                            <div className='title'>{t('21013')}</div>
                             <div className='desc'>10M</div>
                         </InfoItem>
                         <InfoItem>
-                            <div className='title'>累计分红</div>
+                            <div className='title'>{t('21014')}</div>
                             <div className='desc'>8M</div>
                         </InfoItem>
                         <InfoItem>
-                            <div className='title'>累计销毁</div>
+                            <div className='title'>{t('21015')}</div>
                             <div className='desc'>2M</div>
                         </InfoItem>
                         <InfoItem>
-                            <div className='title'>代币涨幅</div>
+                            <div className='title'>{t('21016')}</div>
                             <div className='desc' style={{ color: '#FEAD1D' }}>1000%</div>
                         </InfoItem>
                     </InfoRow>
@@ -265,14 +265,14 @@ export default function Index() {
             <ContentH5>
                 <NoConnect>
                     <SmallBtn className='custom' onClick={()=>{}}>
-                        <span>Connect wallet</span>
+                        <span>{t('602')}</span>
                         <img src={require('../../assets/home/arrow_enter.png').default}/>
                     </SmallBtn>
                 </NoConnect>
                 <Item>
                     <ItemStatus>
                         <img className='bg' src={require('../../assets/cto/icon_status_bg.png').default}/>
-                        <div>进行中</div>
+                        <div>{t('2007')}</div>
                     </ItemStatus>
                     <ItemTopIcon src={require('../../assets/cto/h5/icon_item.png').default}/>
                     <ItemTop>
@@ -281,63 +281,63 @@ export default function Index() {
                             <div className='tag'>NGNF</div>
                         </ItemTopTitle>
                         <ItemTopAddress>
-                            <div>合约地址</div>
+                            <div>{t('21017')}</div>
                             <div>0xsfjo00uj40504jg0jgj0uyrgjpjrphjprtehjpjp</div>
                         </ItemTopAddress>
                         <ItemTopBalance>
-                            <div>回购资金池余额</div>
+                            <div>{t('21018')}</div>
                             <div>989.09 SOL</div>
                         </ItemTopBalance>
                         <ItemTopRow>
                             <SmallBtn className='custom' onClick={()=>{}}>
-                                <span>转入</span>
+                                <span>{t('21019')}</span>
                                 <img src={require('../../assets/nav/login_arrow.png').default}/>
                             </SmallBtn>
-                            <SmallBorderBtn className='custom' onClick={()=>{}}>转出</SmallBorderBtn>
+                            <SmallBorderBtn className='custom' onClick={()=>{}}>{t('21020')}</SmallBorderBtn>
                         </ItemTopRow>
                     </ItemTop>
                     <ItemBottom>
                         <ItemBottomLeft>
                             <ItemBottomTitle>
                                 <img src={require('../../assets/cto/icon_overview.png').default}/>
-                                <span>回购概况</span>
+                                <span>{t('21021')}</span>
                             </ItemBottomTitle>
                             <ItemBottomLeftRow>
                                 <ItemBottomLeftItem>
-                                    <div>代币名称</div>
+                                    <div>{t('21022')}</div>
                                     <div>NGNF</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
-                                    <div>累计回购</div>
+                                    <div>{t('21023')}</div>
                                     <div>1M</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
-                                    <div>累计分红</div>
+                                    <div>{t('21024')}</div>
                                     <div>1M</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
-                                    <div>销毁比例</div>
+                                    <div>{t('21025')}</div>
                                     <div>1M</div>
                                 </ItemBottomLeftItem>
                             </ItemBottomLeftRow>
                             <ItemBottomLeftBtnRow>
-                                <SmallBgBtn className='custom' onClick={()=>{}}>直接分红</SmallBgBtn>
-                                <SmallBgBtn className='custom' onClick={()=>{}}>回购分红销毁</SmallBgBtn>
+                                <SmallBgBtn className='custom' onClick={()=>{}}>{t('21026')}</SmallBgBtn>
+                                <SmallBgBtn className='custom' onClick={()=>{}}>{t('21027')}</SmallBgBtn>
                             </ItemBottomLeftBtnRow>
                         </ItemBottomLeft>
                         <ItemBottomRight>
                             <ItemBottomTitle>
                                 <img src={require('../../assets/cto/icon_treasury.png').default}/>
-                                <span>社区金库</span>
+                                <span>{t('21028')}</span>
                             </ItemBottomTitle>
                             <ItemBottomRightItem>
-                                <div>可用</div>
+                                <div>{t('21029')}</div>
                                 <div>9999 NGNF</div>
                             </ItemBottomRightItem>
-                            <SmallBorderBtn className='custom' onClick={()=>{}}>转出</SmallBorderBtn>
+                            <SmallBorderBtn className='custom' onClick={()=>{}}>{t('21020')}</SmallBorderBtn>
                             <ItemBottomRightInfo>
                                 <img src={require('../../assets/cto/icon_info.png').default}/>
-                                <span>未进行分红或销毁的代币将全部转入社区金库</span>
+                                <span>{t('21030')}</span>
                             </ItemBottomRightInfo>
                         </ItemBottomRight>
                     </ItemBottom>
@@ -354,17 +354,17 @@ export default function Index() {
         >
             <DialogC aria-label='modal'>
                 <ModalHeader>
-                    <div className='title'>绑定</div>
+                    <div className='title'>{t('21031')}</div>
                     <img className='close' onClick={()=>setShowBind(false)} src={require('../../assets/nav/close.png').default}/>
                 </ModalHeader>
                 <ModalContent>
                     <Row>
-                        <div className='title'>项目合约地址</div>
+                        <div className='title'>{t('21032')}</div>
                         <div className='input'>
-                            <input type='text' value={address} onChange={e=>setAddress(e.target.value)} placeholder="输入项目合约地址"/>
+                            <input type='text' value={address} onChange={e=>setAddress(e.target.value)} placeholder={t('21033')}/>
                         </div>
                     </Row>
-                    <LargeBtn className='custom' onClick={()=>{}}>确定</LargeBtn>
+                    <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
                 </ModalContent>
             </DialogC>
         </DialogOverlay>
@@ -379,22 +379,19 @@ overflow: hidden;
 width: 100%;   
 `
 const Top = styled.div`
-padding: 50px 0px;
+padding: 208px 0px 50px;
 position: relative;
 min-height: 700px;
 .topImg {
 position: absolute;
 top: 0;
 right: 0;
-height: 100%;
+height: 700px;
 }
 .topCenter {
-  position: absolute;
-  top: 30%;
-  left:155px;
-  z-index: 2;
+  margin-left: 155px;
   .topTitle {
-    width: 46%;   
+    width: 50%;   
     font-size: 62px;
     font-weight: 700;
     .desc {
@@ -403,7 +400,7 @@ height: 100%;
   }
   .topTxt {
     margin-top: 20px;
-    width: 40%;
+    width: 43%;
     font-size: 24px; 
     line-height:28px;
     opacity: 0.6;
@@ -521,9 +518,6 @@ top: 0;
 width: 100%;
 height: 100%;
 background: radial-gradient(63.77% 63.26% at 51.84% 122.51%, #75F6A3 0%, #8E52F6 100%);
-${({ theme }) => theme.mediaQueries.sm}{
-width: 210px;
-};
 `
 const InfoBg2 = styled.div`
 position: absolute;
@@ -757,7 +751,6 @@ flex-direction: column;
 gap: 22px;
 border-radius: 0 0 12px 12px;
 ${({ theme }) => theme.mediaQueries.sm}{
-height: 308px;
 flex-direction: row;
 gap: 66px;
 padding-top: 25px;
@@ -828,7 +821,6 @@ gap: 20px;
 };
 `
 const ItemBottomLine = styled.div`
-height: 100%;
 width: 1px;
 opacity: 0.2;
 background: #FFF;
