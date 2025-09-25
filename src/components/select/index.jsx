@@ -2,16 +2,21 @@ import React, { useEffect, useState } from 'react'
 import styled from "styled-components";
 import arrowIcon from '../../assets/arrow_down.png';
 
-export default function Index({  }) {
+export default function Index({ options = [], value, onChange }) {
     return (
         <Root>
             <select
+                value={value}
+                onChange={(e) => onChange && onChange(e.target.value)}
                 style={{
                     background: `url(${arrowIcon}) no-repeat right 0 center / 1em auto`,
                 }}
             >
-                <option>每周</option>
-                <option>每月</option>
+                {options.map((opt, i) => (
+                    <option key={i} value={opt.value}>
+                        {opt.label}
+                    </option>
+                ))}
             </select>
         </Root>
     )

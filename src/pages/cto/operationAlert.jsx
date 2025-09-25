@@ -45,11 +45,11 @@ export default function Index({type=0,show,onClose}) {
                 <GradientSwitch title={t('21055')} checked={checked} onChange={val=>setChecked(val)}/>
                 <RowColumnRow>
                     <RowText>{t('21056')}</RowText>
-                    <Select/>
+                    <Select options={[{label: t('21072'), value: ''},{label: t('21073'), value: ''}]}/>
                 </RowColumnRow>
                 <RowColumnRow>
                     <RowText>{t('21057')}</RowText>
-                    <Select/>
+                    <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
                     <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
                 </RowColumnRow>
                 <GradientSwitch title={t('21058')} checked={checked} onChange={val=>setChecked(val)}/>
@@ -58,7 +58,7 @@ export default function Index({type=0,show,onClose}) {
                     <RowColumn>
                         <RowTip>{t('21060')}</RowTip>
                         <RowColumnRow>
-                            <Select/>
+                            <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
                             <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
                         </RowColumnRow>
                     </RowColumn>
@@ -66,7 +66,7 @@ export default function Index({type=0,show,onClose}) {
                     <RowColumn>
                         <RowTip>{t('21062')}</RowTip>
                         <RowColumnRow>
-                            <Select/>
+                            <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
                             <MyInputNumber value={count} unit="%" onChange={handleChange}/>
                         </RowColumnRow>
                     </RowColumn>
@@ -74,7 +74,7 @@ export default function Index({type=0,show,onClose}) {
                     <RowColumn>
                         <RowTip>{t('21064')}</RowTip>
                         <RowColumnRow>
-                            <Select/>
+                            <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
                             <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
                         </RowColumnRow>
                     </RowColumn>
@@ -82,7 +82,7 @@ export default function Index({type=0,show,onClose}) {
                     <RowColumn>
                         <RowTip>{t('21065')}</RowTip>
                         <RowColumnRow>
-                            <Select/>
+                            <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
                             <MyInputNumber value={count} unit="%" onChange={handleChange}/>
                         </RowColumnRow>
                     </RowColumn>
@@ -107,10 +107,10 @@ export default function Index({type=0,show,onClose}) {
             <RowContent>
                 <GradientSwitch title={t('21055')} checked={checked} onChange={val=>setChecked(val)}/>
                 <RowText>{t('21056')}</RowText>
-                <Select/>
+                <Select options={[{label: t('21072'), value: ''},{label: t('21073'), value: ''}]}/>
                 <RowText>{t('21057')}</RowText>
                 <RowContentColumn>
-                    <Select/>
+                    <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
                     <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
                 </RowContentColumn>
             </RowContent>
@@ -121,7 +121,7 @@ export default function Index({type=0,show,onClose}) {
                     <RowTip>{t('21060')}</RowTip>
                 </div>
                 <RowContentColumn>
-                    <Select/>
+                    <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
                     <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
                 </RowContentColumn>
                 <div>
@@ -129,7 +129,7 @@ export default function Index({type=0,show,onClose}) {
                     <RowTip>{t('21062')}</RowTip>
                 </div>
                 <RowContentColumn>
-                    <Select/>
+                    <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
                     <MyInputNumber value={count} unit="%" onChange={handleChange}/>
                 </RowContentColumn>
                 <div>
@@ -137,7 +137,7 @@ export default function Index({type=0,show,onClose}) {
                     <RowTip>{t('21064')}</RowTip>
                 </div>
                 <RowContentColumn>
-                    <Select/>
+                    <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
                     <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
                 </RowContentColumn>
                 <div>
@@ -145,7 +145,7 @@ export default function Index({type=0,show,onClose}) {
                     <RowTip>{t('21065')}</RowTip>
                 </div>
                 <RowContentColumn>
-                    <Select/>
+                    <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
                     <MyInputNumber value={count} unit="%" onChange={handleChange}/>
                 </RowContentColumn>
             </RowContent>
@@ -175,11 +175,11 @@ export default function Index({type=0,show,onClose}) {
                 <RowHTitle>{t('21044')}</RowHTitle>
                 <RowHColumn>
                     <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
-                    <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21024')} checked={false} onChange={val=>{}}/>
                 </RowHColumn>
                 <RowInputColumn>
                     <RowInputEmpty/>
-                    <Select/>
+                    <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
                 </RowInputColumn>
                 <RowHTitle>{t('21009')}</RowHTitle>
                 <DatePicker onChange={()=>{}} />
@@ -216,11 +216,11 @@ export default function Index({type=0,show,onClose}) {
             <RowH5>
                 <RowHColumn>
                     <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
-                    <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21024')} checked={false} onChange={val=>{}}/>
                 </RowHColumn>
                 <RowInputColumn>
                     <RowInputEmpty/>
-                    <Select/>
+                    <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
                 </RowInputColumn>
             </RowH5>
             <RowHTitle>{t('21009')}</RowHTitle>
@@ -236,12 +236,12 @@ export default function Index({type=0,show,onClose}) {
                 <InputNumber value={count} unit="%" onChange={handleChange}/>
                 <RowHTitle>{t('21066')}</RowHTitle>
                 <RowHColumn>
-                    <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
-                    <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21067')} checked={true} onChange={val=>{}}/>
+                    <Radio title={t('21068')} checked={false} onChange={val=>{}}/>
                 </RowHColumn>
                 <RowInputColumn>
                     <RowInputEmpty/>
-                    <Select/>
+                    <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
                 </RowInputColumn>
                 <RowHTitle>{t('21009')}</RowHTitle>
                 <DatePicker onChange={()=>{}} />
@@ -251,11 +251,11 @@ export default function Index({type=0,show,onClose}) {
                 <InputNumber value={count} unit="%" onChange={handleChange}/>
                 <RowHTitle>{t('21066')}</RowHTitle>
                 <RowContentColumn>
-                    <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
+                    <Radio title={t('21067')} checked={true} onChange={val=>{}}/>
                 </RowContentColumn>
                 <RowContentColumn>
-                    <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
-                    <Select/>
+                    <Radio title={t('21068')} checked={false} onChange={val=>{}}/>
+                    <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
                 </RowContentColumn>
                 <RowHTitle>{t('21009')}</RowHTitle>
                 <DatePicker onChange={()=>{}} />

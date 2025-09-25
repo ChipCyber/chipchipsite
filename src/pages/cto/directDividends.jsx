@@ -56,11 +56,11 @@ export default function Index({show,onClose}) {
                     <RowTitle>{t('21044')}</RowTitle>
                     <RowColumn>
                         <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
-                        <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
+                        <Radio title={t('21024')} checked={false} onChange={val=>{}}/>
                     </RowColumn>
                     <RowInputColumn>
                         <RowInputEmpty/>
-                        <Select/>
+                        <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
                     </RowInputColumn>
                     <RowTitle>{t('21009')}</RowTitle>
                     <DatePicker onChange={()=>{}} />
@@ -97,11 +97,11 @@ export default function Index({show,onClose}) {
                     <RowH5>
                         <RowColumn>
                             <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
-                            <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
+                            <Radio title={t('21024')} checked={false} onChange={val=>{}}/>
                         </RowColumn>
                         <RowInputColumn>
                             <RowInputEmpty/>
-                            <Select/>
+                            <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
                         </RowInputColumn>
                     </RowH5>
                     <RowTitle>{t('21009')}</RowTitle>

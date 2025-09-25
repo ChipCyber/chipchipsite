@@ -5,14 +5,24 @@ import { DialogOverlay, DialogContent } from "@reach/dialog";
 import useBreakpointCheck from "../../hooks/useBreakpointCheck";
 import DirectDividends from "./directDividends";
 import OperationAlert from "./operationAlert";
+import InputNumber from "@/components/inputNumber";
 
 export default function Index() {
     const { t } = useTranslation();
+    const shouldRender = useBreakpointCheck();
     const [showBind, setShowBind] = useState(false);
+    const [showTransferIn, setShowTransferIn] = useState(false);
+    const [showTransferOut, setShowTransferOut] = useState(false);
     const [showDirect, setShowDirect] = useState(false);
     const [showOperation, setShowOperation] = useState(false);
     const [address, setAddress] = useState('');
-    const shouldRender = useBreakpointCheck();
+    const [count, setCount] = useState(0);
+    const handleChange = (event) => {
+        const newValue = event.target.value;
+        if (newValue === '' || /^[1-9]\d*$/.test(newValue)) {
+            setCount(newValue);
+        }
+    };
     const renderWeb = () => (
         <Root>
             <Top>
@@ -121,11 +131,11 @@ export default function Index() {
                             <div>989.09 SOL</div>
                         </ItemTopBalance>
                         <ItemTopRow>
-                            <SmallBtn className='custom' onClick={()=>{}}>
+                            <SmallBtn className='custom' onClick={()=>setShowTransferIn(true)}>
                                 <span>{t('21019')}</span>
                                 <img src={require('../../assets/home/arrow_enter.png').default}/>
                             </SmallBtn>
-                            <SmallBorderBtn className='custom' onClick={()=>{}}>{t('21020')}</SmallBorderBtn>
+                            <SmallBorderBtn className='custom' onClick={()=>setShowTransferOut(true)}>{t('21020')}</SmallBorderBtn>
                         </ItemTopRow>
                     </ItemTop>
                     <ItemBottom>
@@ -140,11 +150,11 @@ export default function Index() {
                                     <div>NGNF</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
-                                    <div>{t('21023')}</div>
+                                    <div>{t('21013')}</div>
                                     <div>1M</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
-                                    <div>{t('21024')}</div>
+                                    <div>{t('21014')}</div>
                                     <div>1M</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
@@ -153,8 +163,8 @@ export default function Index() {
                                 </ItemBottomLeftItem>
                             </ItemBottomLeftRow>
                             <ItemBottomLeftBtnRow>
-                                <SmallBgBtn className='custom' onClick={()=>{}}>{t('21026')}</SmallBgBtn>
-                                <SmallBgBtn className='custom' onClick={()=>{}}>{t('21027')}</SmallBgBtn>
+                                <SmallBgBtn className='custom' onClick={()=>setShowDirect(true)}>{t('21026')}</SmallBgBtn>
+                                <SmallBgBtn className='custom' onClick={()=>setShowOperation(true)}>{t('21027')}</SmallBgBtn>
                             </ItemBottomLeftBtnRow>
                         </ItemBottomLeft>
                         <ItemBottomLine/>
@@ -167,7 +177,7 @@ export default function Index() {
                                 <div>{t('21029')}</div>
                                 <div>9999 NGNF</div>
                             </ItemBottomRightItem>
-                            <SmallBorderBtn className='custom' onClick={()=>{}}>{t('21020')}</SmallBorderBtn>
+                            <SmallBorderBtn className='custom' onClick={()=>setShowTransferOut(true)}>{t('21020')}</SmallBorderBtn>
                             <ItemBottomRightInfo>
                                 <img src={require('../../assets/cto/icon_info.png').default}/>
                                 <span>{t('21030')}</span>
@@ -289,11 +299,11 @@ export default function Index() {
                             <div>989.09 SOL</div>
                         </ItemTopBalance>
                         <ItemTopRow>
-                            <SmallBtn className='custom' onClick={()=>{}}>
+                            <SmallBtn className='custom' onClick={()=>setShowTransferIn(true)}>
                                 <span>{t('21019')}</span>
                                 <img src={require('../../assets/nav/login_arrow.png').default}/>
                             </SmallBtn>
-                            <SmallBorderBtn className='custom' onClick={()=>{}}>{t('21020')}</SmallBorderBtn>
+                            <SmallBorderBtn className='custom' onClick={()=>setShowTransferOut(true)}>{t('21020')}</SmallBorderBtn>
                         </ItemTopRow>
                     </ItemTop>
                     <ItemBottom>
@@ -308,11 +318,11 @@ export default function Index() {
                                     <div>NGNF</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
-                                    <div>{t('21023')}</div>
+                                    <div>{t('21013')}</div>
                                     <div>1M</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
-                                    <div>{t('21024')}</div>
+                                    <div>{t('21014')}</div>
                                     <div>1M</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
@@ -321,8 +331,8 @@ export default function Index() {
                                 </ItemBottomLeftItem>
                             </ItemBottomLeftRow>
                             <ItemBottomLeftBtnRow>
-                                <SmallBgBtn className='custom' onClick={()=>{}}>{t('21026')}</SmallBgBtn>
-                                <SmallBgBtn className='custom' onClick={()=>{}}>{t('21027')}</SmallBgBtn>
+                                <SmallBgBtn className='custom' onClick={()=>setShowDirect(true)}>{t('21026')}</SmallBgBtn>
+                                <SmallBgBtn className='custom' onClick={()=>setShowOperation(true)}>{t('21027')}</SmallBgBtn>
                             </ItemBottomLeftBtnRow>
                         </ItemBottomLeft>
                         <ItemBottomRight>
@@ -334,7 +344,7 @@ export default function Index() {
                                 <div>{t('21029')}</div>
                                 <div>9999 NGNF</div>
                             </ItemBottomRightItem>
-                            <SmallBorderBtn className='custom' onClick={()=>{}}>{t('21020')}</SmallBorderBtn>
+                            <SmallBorderBtn className='custom' onClick={()=>setShowTransferOut(true)}>{t('21020')}</SmallBorderBtn>
                             <ItemBottomRightInfo>
                                 <img src={require('../../assets/cto/icon_info.png').default}/>
                                 <span>{t('21030')}</span>
@@ -363,6 +373,44 @@ export default function Index() {
                         <div className='input'>
                             <input type='text' value={address} onChange={e=>setAddress(e.target.value)} placeholder={t('21033')}/>
                         </div>
+                    </Row>
+                    <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
+                </ModalContent>
+            </DialogC>
+        </DialogOverlay>
+        <DialogOverlay
+            style={{ height: '100vh', zIndex: 99, background: 'hsla(0, 0%, 0%, 0.6)' }}
+            isOpen={showTransferIn}
+            onDismiss={()=>setShowTransferIn(false)}
+        >
+            <DialogC aria-label='modal'>
+                <ModalHeader>
+                    <div className='title'>{t('21019')}</div>
+                    <img className='close' onClick={()=>setShowTransferIn(false)} src={require('../../assets/nav/close.png').default}/>
+                </ModalHeader>
+                <ModalContent>
+                    <Row>
+                        <div className='title'>{t('605')}</div>
+                        <InputNumber value={count} unit="SOL" onChange={handleChange} placeholder={t('21023')}/>
+                    </Row>
+                    <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
+                </ModalContent>
+            </DialogC>
+        </DialogOverlay>
+        <DialogOverlay
+            style={{ height: '100vh', zIndex: 99, background: 'hsla(0, 0%, 0%, 0.6)' }}
+            isOpen={showTransferOut}
+            onDismiss={()=>setShowTransferOut(false)}
+        >
+            <DialogC aria-label='modal'>
+                <ModalHeader>
+                    <div className='title'>{t('21020')}</div>
+                    <img className='close' onClick={()=>setShowTransferOut(false)} src={require('../../assets/nav/close.png').default}/>
+                </ModalHeader>
+                <ModalContent>
+                    <Row>
+                        <div className='title'>{t('605')}</div>
+                        <InputNumber value={count} unit="SOL" onChange={handleChange} placeholder={t('21023')}/>
                     </Row>
                     <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
                 </ModalContent>

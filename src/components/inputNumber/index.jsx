@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import styled from "styled-components";
 
-export default function Index({ value, unit, onChange, className }) {
+export default function Index({ value, unit, onChange, placeholder, className }) {
     return (
         <Root className={className}>
-            <input type='number' inputMode="numeric" min={1} value={value} onChange={onChange}/>
+            <input type='number' placeholder={placeholder} inputMode="numeric" min={1} value={value} onChange={onChange}/>
             <span>{unit}</span>
         </Root>
     );

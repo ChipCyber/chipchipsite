@@ -386,8 +386,8 @@
     "21020": "Withdraw",
     "21021": "Buyback Overview",
     "21022": "Token Name",
-    "21023": "Cumulative Buyback",
-    "21024": "Cumulative Dividends",
+    "21023": "Input quantity",
+    "21024": "Regular dividends",
     "21025": "Burn Ratio",
     "21026": "Direct Dividend",
     "21027": "Buyback, Dividend, Burn",
@@ -430,6 +430,13 @@
     "21064": "Buy back when the 24h price drop > 20%",
     "21065": "Buy back when RSI < 20",
     "21066": "Burn Time",
+    "21067": "Immediate destruction",
+    "21068": "Scheduled destruction",
+    "21069": "Weekly",
+    "21070": "Monthly",
+    "21071": "Quarterly",
+    "21072": "24 hours/per day",
+    "21073": "48 hours/per day",
 
     "":""
 }
