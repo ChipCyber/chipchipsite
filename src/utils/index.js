@@ -42,6 +42,13 @@ export const toDateStr = (timestamp) => {
   const date = new Date(timestamp);
   return date.toLocaleString();
 }
+export const toDateStrWithSeconds = (timestamp) => {
+  const date = new Date(timestamp * 1000);
+  const formatted = date.getFullYear() + "-" +
+    String(date.getMonth() + 1).padStart(2, "0") + "-" +
+    String(date.getDate()).padStart(2, "0");
+  return formatted;
+}
 export function formatTimeDiff(targetTimestamp, currentTimestamp=(Date.now())) {
   if(isEmpty(targetTimestamp)||targetTimestamp==0) {
     return {};

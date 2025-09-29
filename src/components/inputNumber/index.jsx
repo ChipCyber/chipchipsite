@@ -4,7 +4,7 @@ import styled from "styled-components";
 export default function Index({ value, unit, onChange, placeholder, className }) {
     return (
         <Root className={className}>
-            <input type='number' placeholder={placeholder} inputMode="numeric" min={1} value={value} onChange={onChange}/>
+            <input type='number' placeholder={placeholder} inputMode="numeric" value={value} onChange={onChange}/>
             <span>{unit}</span>
         </Root>
     );

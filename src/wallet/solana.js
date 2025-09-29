@@ -22,6 +22,18 @@ export async function solana_getBalance(publicKey) {
     }
 }
 
+export async function solana_signMsg(msg) {
+    try {
+        const provider = getWalletProvider();
+        const encodedMessage = new TextEncoder().encode(msg);
+        const signedMessage = await provider.signMessage(encodedMessage, "utf8");
+        const signatureBase64 = btoa(String.fromCharCode(...new Uint8Array(signedMessage.signature)));
+        return signatureBase64;
+    } catch (error) {
+        return Promise.reject(error.message);
+    }
+}
+
 export async function solana_sendSOL(fromAddress, toAddress, amount) {
     try {
         const provider = getWalletProvider();

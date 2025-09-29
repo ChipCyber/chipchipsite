@@ -1,28 +1,106 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from "styled-components";
 import { useTranslation } from 'react-i18next';
+import { message } from 'antd';
 import { DialogOverlay, DialogContent } from "@reach/dialog";
+import { setShowConnectWallet } from '@/store/userSlice';
+import { useSelector, useDispatch } from 'react-redux';
 import useBreakpointCheck from "../../hooks/useBreakpointCheck";
 import DirectDividends from "./directDividends";
 import OperationAlert from "./operationAlert";
 import InputNumber from "@/components/inputNumber";
+import { solana_sendSOL, solana_signMsg } from '@/wallet/solana.js';
+import { getProjectApi, bindContractAddressApi } from "@/api/cto.js";
+import { toDateStrWithSeconds, shortenString } from "@/utils";
+import { mul, div, formatLargeNumber } from '@/utils/number.js';
 
 export default function Index() {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const currentWalletAddress = useSelector((state) => state.user.currentWalletAddress);
     const shouldRender = useBreakpointCheck();
+    const [data, setData] = useState(null);
     const [showBind, setShowBind] = useState(false);
     const [showTransferIn, setShowTransferIn] = useState(false);
     const [showTransferOut, setShowTransferOut] = useState(false);
     const [showDirect, setShowDirect] = useState(false);
     const [showOperation, setShowOperation] = useState(false);
     const [address, setAddress] = useState('');
-    const [count, setCount] = useState(0);
-    const handleChange = (event) => {
+    const [signLoading, setSignLoading] = useState(false);
+    const [transferInCount, setTransferInCount] = useState("");
+    const [transferInLoading, setTransferInLoading] = useState(false);
+    const [transferOutCount, setTransferOutCount] = useState("");
+    const [transferOutLoading, setTransferOutLoading] = useState(false);
+    const handleInChange = (event) => {
         const newValue = event.target.value;
-        if (newValue === '' || /^[1-9]\d*$/.test(newValue)) {
-            setCount(newValue);
+        if (/^(?:0(\.\d+)?|[1-9]\d*(\.\d+)?)$/.test(newValue) || newValue === '') {
+            setTransferInCount(newValue);
         }
-    };
+    }
+    const handleOutChange = (event) => {
+        const newValue = event.target.value;
+        if (/^(?:0(\.\d+)?|[1-9]\d*(\.\d+)?)$/.test(newValue) || newValue === '') {
+            setTransferOutCount(newValue);
+        }
+    }
+    const connectWallet = () => {
+        dispatch(setShowConnectWallet());
+    }
+    const transferIn = async () => {
+        if(data?.buybackPoolAddr) {
+            setTransferInLoading(true);
+            try {
+                await solana_sendSOL(currentWalletAddress, data.buybackPoolAddr, transferInCount);
+            } catch (error) {
+                message.error(error);
+            } finally {
+                setTransferInLoading(false);
+            }
+        }
+    }
+    const transferOut = async () => {
+        
+    }
+    const bindAddress = async () => {
+        try {
+            setSignLoading(true);
+            const sign = await solana_signMsg(currentWalletAddress);
+            bindContractAddressApi({creatorAddr:currentWalletAddress,tokenContractAddr:address,sign}).then(()=>{
+                message.success(t('616'));
+            });
+        } catch (error) {
+            message.error(error);
+        } finally {
+            setSignLoading(false);
+        }
+    }
+    useEffect(()=>{
+        if(currentWalletAddress) {
+            getProjectApi({currentWalletAddress}).then(data=>{
+                setData(data.data);
+            });
+        }else{
+            setData(null);
+        }
+    },[currentWalletAddress]);
+    const statusText = useMemo(()=>{
+        if(data) {
+            if(data.status==='not_started') {
+                return t('2008');
+            }else if(data.status==='in_progress') {
+                return t('2007');
+            }else if(data.status==='closed') {
+                return t('21075');
+            }else if(data.status==='completed') {
+                return t('21074');
+            }
+            return data.status;
+        }
+        return '--';
+    },[data]);
+    const isBind = useMemo(()=>{
+        return !!data?.tokenContractAddr;
+    },[data]);
     const renderWeb = () => (
         <Root>
             <Top>
@@ -64,79 +142,85 @@ export default function Index() {
                 <InfoBg2/>
                 <InfoBg3/>
                 <InfoContent>
-                    <InfoTitle src={require('../../assets/cto/info_title.png').default} alt='title'/>
+                    <InfoTitle>{data?.name ?? '--'}</InfoTitle>
                     <InfoRow>
                         <InfoItem>
                             <div className='title'>{t('21009')}</div>
-                            <div className='desc'>2025-09-10</div>
+                            <div className='desc'>{data?toDateStrWithSeconds(data.startTime):'--'}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21010')}</div>
-                            <div className='desc'>0xeo687......0485</div>
+                            <div className='desc'>{data?shortenString(data.creatorAddr):'--'}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21011')}</div>
-                            <div className='desc'>80%</div>
+                            <div className='desc'>{data?mul(div(data.totalDividend,data.totalRepurchase),100):'--'}%</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21012')}</div>
-                            <div className='desc'>20%</div>
+                            <div className='desc'>{data?mul(div(data.totalBurn,data.totalRepurchase),100):'--'}%</div>
                         </InfoItem>
                     </InfoRow>
                     <InfoRow>
                         <InfoItem>
                             <div className='title'>{t('21013')}</div>
-                            <div className='desc'>10M</div>
+                            <div className='desc'>{data?formatLargeNumber(data.totalRepurchase):'--'}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21014')}</div>
-                            <div className='desc'>8M</div>
+                            <div className='desc'>{data?formatLargeNumber(data.totalDividend):'--'}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21015')}</div>
-                            <div className='desc'>2M</div>
+                            <div className='desc'>{data?formatLargeNumber(data.totalBurn):'--'}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21016')}</div>
-                            <div className='desc' style={{ color: '#FEAD1D' }}>1000%</div>
+                            <div className='desc' style={{ color: '#FEAD1D' }}>{data?mul(data.tokenPriceGrowth,100):'--'}%</div>
                         </InfoItem>
                     </InfoRow>
                 </InfoContent>
             </Info>
             <Content>
                 <img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default}/>
-                <NoConnect>
-                    <SmallBtn className='custom' onClick={()=>{}}>
+                {!currentWalletAddress?<NoConnect>
+                    <SmallBtn className='custom' onClick={connectWallet}>
                         <span>{t('602')}</span>
                         <img src={require('../../assets/home/arrow_enter.png').default}/>
                     </SmallBtn>
-                </NoConnect>
+                </NoConnect>:
                 <Item>
                     <ItemStatus>
                         <img className='bg' src={require('../../assets/cto/icon_status_bg.png').default}/>
-                        <div>{t('2007')}</div>
+                        <div>{statusText}</div>
                     </ItemStatus>
                     <ItemTopIcon src={require('../../assets/cto/icon_item.png').default}/>
                     <ItemTop>
                         <ItemTopTitle>
-                            <div>No Gambel No Future</div>
-                            <div className='tag'>NGNF</div>
+                            <div>{data?.name ?? '--'}</div>
+                            <div className='tag'>{data?.symbol ?? '--'}</div>
                         </ItemTopTitle>
                         <ItemTopAddress>
                             <div>{t('21017')}</div>
-                            <div>0xsfjo00uj40504jg0jgj0uyrgjpjrphjprtehjpjp</div>
+                            <div>{data?.tokenContractAddr ?? '--'}</div>
                         </ItemTopAddress>
                         <ItemTopBalance>
                             <div>{t('21018')}</div>
-                            <div>989.09 SOL</div>
+                            <div>{data?formatLargeNumber(data.baseTokenBalance):'--'} SOL</div>
                         </ItemTopBalance>
-                        <ItemTopRow>
+                        {isBind?<ItemTopRow>
                             <SmallBtn className='custom' onClick={()=>setShowTransferIn(true)}>
                                 <span>{t('21019')}</span>
                                 <img src={require('../../assets/home/arrow_enter.png').default}/>
                             </SmallBtn>
                             <SmallBorderBtn className='custom' onClick={()=>setShowTransferOut(true)}>{t('21020')}</SmallBorderBtn>
-                        </ItemTopRow>
+                        </ItemTopRow>:
+                        <ItemTopRow>
+                            <SmallBtn className='custom' onClick={()=>setShowBind(true)}>
+                                <span>{t('21031')}</span>
+                                <img src={require('../../assets/home/arrow_enter.png').default}/>
+                            </SmallBtn>
+                        </ItemTopRow>}
                     </ItemTop>
                     <ItemBottom>
                         <ItemBottomLeft>
@@ -147,25 +231,28 @@ export default function Index() {
                             <ItemBottomLeftRow>
                                 <ItemBottomLeftItem>
                                     <div>{t('21022')}</div>
-                                    <div>NGNF</div>
+                                    <div>{data?.symbol ?? '--'}</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
                                     <div>{t('21013')}</div>
-                                    <div>1M</div>
+                                    <div>{data?formatLargeNumber(data.totalRepurchase):'--'}</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
                                     <div>{t('21014')}</div>
-                                    <div>1M</div>
+                                    <div>{data?formatLargeNumber(data.totalDividend):'--'}</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
-                                    <div>{t('21025')}</div>
-                                    <div>1M</div>
+                                    <div>{t('21015')}</div>
+                                    <div>{data?formatLargeNumber(data.totalBurn):'--'}</div>
                                 </ItemBottomLeftItem>
                             </ItemBottomLeftRow>
-                            <ItemBottomLeftBtnRow>
+                            {isBind?<ItemBottomLeftBtnRow>
                                 <SmallBgBtn className='custom' onClick={()=>setShowDirect(true)}>{t('21026')}</SmallBgBtn>
                                 <SmallBgBtn className='custom' onClick={()=>setShowOperation(true)}>{t('21027')}</SmallBgBtn>
-                            </ItemBottomLeftBtnRow>
+                            </ItemBottomLeftBtnRow>:
+                            <ItemBottomLeftBtnRow>
+                                <SmallBgBtn className='custom' onClick={()=>setShowBind(true)}>{t('21031')}</SmallBgBtn>
+                            </ItemBottomLeftBtnRow>}
                         </ItemBottomLeft>
                         <ItemBottomLine/>
                         <ItemBottomRight>
@@ -175,16 +262,17 @@ export default function Index() {
                             </ItemBottomTitle>
                             <ItemBottomRightItem>
                                 <div>{t('21029')}</div>
-                                <div>9999 NGNF</div>
+                                <div>{data?formatLargeNumber(data.availableBalance):'--'} {data?.symbol ?? '--'}</div>
                             </ItemBottomRightItem>
-                            <SmallBorderBtn className='custom' onClick={()=>setShowTransferOut(true)}>{t('21020')}</SmallBorderBtn>
+                            {isBind?<SmallBorderBtn className='custom' onClick={()=>setShowTransferOut(true)}>{t('21020')}</SmallBorderBtn>:
+                            <SmallBorderBtn className='custom' onClick={()=>setShowBind(true)}>{t('21031')}</SmallBorderBtn>}
                             <ItemBottomRightInfo>
                                 <img src={require('../../assets/cto/icon_info.png').default}/>
                                 <span>{t('21030')}</span>
                             </ItemBottomRightInfo>
                         </ItemBottomRight>
                     </ItemBottom>
-                </Item>
+                </Item>}
             </Content>
         </Root>
     )
@@ -235,76 +323,82 @@ export default function Index() {
                 <InfoBg2/>
                 <InfoBg3/>
                 <InfoContent>
-                    <InfoTitle src={require('../../assets/cto/h5/info_title.png').default} alt='title'/>
+                    <InfoTitle>{data?.name ?? '--'}</InfoTitle>
                     <InfoRow>
                         <InfoItem>
                             <div className='title'>{t('21009')}</div>
-                            <div className='desc'>2025-09-10</div>
+                            <div className='desc'>{data?toDateStrWithSeconds(data.startTime):'--'}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21010')}</div>
-                            <div className='desc'>0xeo687......0485</div>
+                            <div className='desc'>{data?shortenString(data.creatorAddr):'--'}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21011')}</div>
-                            <div className='desc'>80%</div>
+                            <div className='desc'>{data?mul(div(data.totalDividend,data.totalRepurchase),100):'--'}%</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21012')}</div>
-                            <div className='desc'>20%</div>
+                            <div className='desc'>{data?mul(div(data.totalBurn,data.totalRepurchase),100):'--'}%</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21013')}</div>
-                            <div className='desc'>10M</div>
+                            <div className='desc'>{data?formatLargeNumber(data.totalRepurchase):'--'}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21014')}</div>
-                            <div className='desc'>8M</div>
+                            <div className='desc'>{data?formatLargeNumber(data.totalDividend):'--'}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21015')}</div>
-                            <div className='desc'>2M</div>
+                            <div className='desc'>{data?formatLargeNumber(data.totalBurn):'--'}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21016')}</div>
-                            <div className='desc' style={{ color: '#FEAD1D' }}>1000%</div>
+                            <div className='desc' style={{ color: '#FEAD1D' }}>{data?mul(data.tokenPriceGrowth,100):'--'}%</div>
                         </InfoItem>
                     </InfoRow>
                 </InfoContent>
             </Info>
             <ContentH5>
-                <NoConnect>
-                    <SmallBtn className='custom' onClick={()=>{}}>
+                {!currentWalletAddress?<NoConnect>
+                    <SmallBtn className='custom' onClick={connectWallet}>
                         <span>{t('602')}</span>
                         <img src={require('../../assets/home/arrow_enter.png').default}/>
                     </SmallBtn>
-                </NoConnect>
+                </NoConnect>:
                 <Item>
                     <ItemStatus>
                         <img className='bg' src={require('../../assets/cto/icon_status_bg.png').default}/>
-                        <div>{t('2007')}</div>
+                        <div>{statusText}</div>
                     </ItemStatus>
                     <ItemTopIcon src={require('../../assets/cto/h5/icon_item.png').default}/>
                     <ItemTop>
                         <ItemTopTitle>
-                            <div>No Gambel No Future</div>
-                            <div className='tag'>NGNF</div>
+                            <div>{data?.name ?? '--'}</div>
+                            <div className='tag'>{data?.symbol ?? '--'}</div>
                         </ItemTopTitle>
                         <ItemTopAddress>
                             <div>{t('21017')}</div>
-                            <div>0xsfjo00uj40504jg0jgj0uyrgjpjrphjprtehjpjp</div>
+                            <div>{data?.tokenContractAddr ?? '--'}</div>
                         </ItemTopAddress>
                         <ItemTopBalance>
                             <div>{t('21018')}</div>
-                            <div>989.09 SOL</div>
+                            <div>{data?formatLargeNumber(data.baseTokenBalance):'--'} SOL</div>
                         </ItemTopBalance>
-                        <ItemTopRow>
+                        {isBind?<ItemTopRow>
                             <SmallBtn className='custom' onClick={()=>setShowTransferIn(true)}>
                                 <span>{t('21019')}</span>
                                 <img src={require('../../assets/nav/login_arrow.png').default}/>
                             </SmallBtn>
                             <SmallBorderBtn className='custom' onClick={()=>setShowTransferOut(true)}>{t('21020')}</SmallBorderBtn>
-                        </ItemTopRow>
+                        </ItemTopRow>:
+                        <ItemTopRow>
+                            <SmallBtn className='custom' onClick={()=>setShowBind(true)}>
+                                <span>{t('21031')}</span>
+                                <img src={require('../../assets/nav/login_arrow.png').default}/>
+                            </SmallBtn>
+                        </ItemTopRow>}
                     </ItemTop>
                     <ItemBottom>
                         <ItemBottomLeft>
@@ -315,25 +409,28 @@ export default function Index() {
                             <ItemBottomLeftRow>
                                 <ItemBottomLeftItem>
                                     <div>{t('21022')}</div>
-                                    <div>NGNF</div>
+                                    <div>{data?.symbol ?? '--'}</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
                                     <div>{t('21013')}</div>
-                                    <div>1M</div>
+                                    <div>{data?formatLargeNumber(data.totalRepurchase):'--'}</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
                                     <div>{t('21014')}</div>
-                                    <div>1M</div>
+                                    <div>{data?formatLargeNumber(data.totalDividend):'--'}</div>
                                 </ItemBottomLeftItem>
                                 <ItemBottomLeftItem>
-                                    <div>{t('21025')}</div>
-                                    <div>1M</div>
+                                    <div>{t('21015')}</div>
+                                    <div>{data?formatLargeNumber(data.totalBurn):'--'}</div>
                                 </ItemBottomLeftItem>
                             </ItemBottomLeftRow>
-                            <ItemBottomLeftBtnRow>
+                            {isBind?<ItemBottomLeftBtnRow>
                                 <SmallBgBtn className='custom' onClick={()=>setShowDirect(true)}>{t('21026')}</SmallBgBtn>
                                 <SmallBgBtn className='custom' onClick={()=>setShowOperation(true)}>{t('21027')}</SmallBgBtn>
-                            </ItemBottomLeftBtnRow>
+                            </ItemBottomLeftBtnRow>:
+                            <ItemBottomLeftBtnRow>
+                                <SmallBgBtn className='custom' onClick={()=>setShowBind(true)}>{t('21031')}</SmallBgBtn>
+                            </ItemBottomLeftBtnRow>}
                         </ItemBottomLeft>
                         <ItemBottomRight>
                             <ItemBottomTitle>
@@ -342,16 +439,17 @@ export default function Index() {
                             </ItemBottomTitle>
                             <ItemBottomRightItem>
                                 <div>{t('21029')}</div>
-                                <div>9999 NGNF</div>
+                                <div>{data?formatLargeNumber(data.availableBalance):'--'} {data?.symbol ?? '--'}</div>
                             </ItemBottomRightItem>
-                            <SmallBorderBtn className='custom' onClick={()=>setShowTransferOut(true)}>{t('21020')}</SmallBorderBtn>
+                            {isBind?<SmallBorderBtn className='custom' onClick={()=>setShowTransferOut(true)}>{t('21020')}</SmallBorderBtn>:
+                            <SmallBorderBtn className='custom' onClick={()=>setShowBind(true)}>{t('21031')}</SmallBorderBtn>}
                             <ItemBottomRightInfo>
                                 <img src={require('../../assets/cto/icon_info.png').default}/>
                                 <span>{t('21030')}</span>
                             </ItemBottomRightInfo>
                         </ItemBottomRight>
                     </ItemBottom>
-                </Item>
+                </Item>}
             </ContentH5>
         </Root>
     )
@@ -374,7 +472,7 @@ export default function Index() {
                             <input type='text' value={address} onChange={e=>setAddress(e.target.value)} placeholder={t('21033')}/>
                         </div>
                     </Row>
-                    <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
+                    <LargeBtn disabled={signLoading||!address} className='custom' onClick={bindAddress}>{t('21034')}</LargeBtn>
                 </ModalContent>
             </DialogC>
         </DialogOverlay>
@@ -391,9 +489,9 @@ export default function Index() {
                 <ModalContent>
                     <Row>
                         <div className='title'>{t('605')}</div>
-                        <InputNumber value={count} unit="SOL" onChange={handleChange} placeholder={t('21023')}/>
+                        <InputNumber value={transferInCount} unit="SOL" onChange={handleInChange} placeholder={t('21023')}/>
                     </Row>
-                    <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
+                    <LargeBtn disabled={transferInCount<=0||transferInLoading||!data?.buybackPoolAddr} className='custom' onClick={transferIn}>{t('21034')}</LargeBtn>
                 </ModalContent>
             </DialogC>
         </DialogOverlay>
@@ -410,9 +508,9 @@ export default function Index() {
                 <ModalContent>
                     <Row>
                         <div className='title'>{t('605')}</div>
-                        <InputNumber value={count} unit="SOL" onChange={handleChange} placeholder={t('21023')}/>
+                        <InputNumber value={transferOutCount} unit="SOL" onChange={handleOutChange} placeholder={t('21023')}/>
                     </Row>
-                    <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
+                    <LargeBtn disabled={transferOutCount<=0||transferOutLoading||!data?.buybackPoolAddr} className='custom' onClick={transferOut}>{t('21034')}</LargeBtn>
                 </ModalContent>
             </DialogC>
         </DialogOverlay>
@@ -431,6 +529,7 @@ padding: 208px 0px 50px;
 position: relative;
 min-height: 700px;
 .topImg {
+pointer-events: none;
 position: absolute;
 top: 0;
 right: 0;
@@ -458,6 +557,7 @@ height: 700px;
 const TopH5 = styled.div`
 position: relative;
 .topImg {
+pointer-events: none;
 width: 100%;
 }
 .topCenter {
@@ -551,6 +651,7 @@ const Info = styled.div`
 background: #8D52F6;
 position: relative;
 .bg {
+pointer-events: none;
 position: absolute;
 z-index: 1;
 top: 0;
@@ -598,12 +699,15 @@ ${({ theme }) => theme.mediaQueries.sm}{
 padding: 42px 10px 68px 140px;
 };
 `
-const InfoTitle = styled.img`
-height: 66px;
+const InfoTitle = styled.div`
+font-size: 42px;
+font-weight: 600;
+line-height: 32px;
 margin-bottom: 42px;
 ${({ theme }) => theme.mediaQueries.sm}{
-height: 30px;
 margin-bottom: 60px;
+font-size: 56px;
+line-height: 60px;
 };
 `
 const InfoRow = styled.div`
@@ -656,6 +760,8 @@ display: flex;
 align-items: center;
 justify-content: center;
 padding-bottom: 100px;
+position: relative;
+z-index: 1;
 `
 const Item = styled.div`
 position: relative;
@@ -691,6 +797,7 @@ ${({ theme }) => theme.mediaQueries.sm}{
 width: 125px;
 height: 65px;
 top: -10px;
+left: unset;
 right: 57px;
 font-size: 21px;
 font-weight: 800;
@@ -707,6 +814,7 @@ border-radius: 22px 22px 0 0;
 };
 `
 const ItemTopIcon = styled.img`
+pointer-events: none;
 position: absolute;
 z-index: 1;
 top: 0;

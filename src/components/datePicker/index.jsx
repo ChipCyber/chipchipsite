@@ -5,7 +5,7 @@ import { DatePicker } from "antd"
 export default function Index({  }) {
     return (
         <Root>
-            <DatePicker onChange={()=>{}} />
+            <DatePicker inputReadOnly onChange={()=>{}} />
         </Root>
     )
 }

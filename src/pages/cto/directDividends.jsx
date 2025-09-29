@@ -2,20 +2,31 @@ import React, { useEffect, useState } from 'react'
 import styled from "styled-components";
 import { useTranslation } from 'react-i18next';
 import { DialogOverlay, DialogContent } from "@reach/dialog";
+import { message } from 'antd';
 import useBreakpointCheck from "../../hooks/useBreakpointCheck";
 import Radio from "@/components/radio";
 import DatePicker from "@/components/datePicker";
 import Select from "@/components/select";
 import InputNumber from "@/components/inputNumber";
+import { importWalletsFromExcel } from "@/utils/excel.js";
 
 export default function Index({show,onClose}) {
     const { t } = useTranslation();
     const shouldRender = useBreakpointCheck();
     const [count, setCount] = useState(0);
+    const [addressListStr, setAddressListStr] = useState("");
     const handleChange = (event) => {
         const newValue = event.target.value;
         if (newValue === '' || /^[1-9]\d*$/.test(newValue)) {
             setCount(newValue);
+        }
+    };
+    const handleImport = async () => {
+        try {
+            const list = await importWalletsFromExcel();
+            setAddressListStr(list.join(','));
+        } catch (err) {
+            message.error(err.message);
         }
     };
     return (
@@ -47,10 +58,10 @@ export default function Index({show,onClose}) {
                     <RowInputColumn>
                         <InputNumber value={count} unit="SOL" onChange={handleChange}/>
                         <RowTextarea>
-                            <textarea placeholder={t('21041')}></textarea>
+                            <textarea placeholder={t('21041')} value={addressListStr} onChange={e=>setAddressListStr(e.target.value)}></textarea>
                         </RowTextarea>
                         <RowText>
-                            <RowImport>{t('21042')}</RowImport>
+                            <RowImport onClick={handleImport}>{t('21042')}</RowImport>
                         </RowText>
                     </RowInputColumn>
                     <RowTitle>{t('21044')}</RowTitle>
@@ -86,11 +97,11 @@ export default function Index({show,onClose}) {
                         <RowInputColumn>
                             <InputNumber value={count} unit="SOL" onChange={handleChange}/>
                             <RowText>
-                                <RowImport>{t('21042')}</RowImport>
+                                <RowImport onClick={handleImport}>{t('21042')}</RowImport>
                             </RowText>
                         </RowInputColumn>
                         <RowTextarea>
-                            <textarea placeholder={t('21041')}></textarea>
+                            <textarea placeholder={t('21041')} value={addressListStr} onChange={e=>setAddressListStr(e.target.value)}></textarea>
                         </RowTextarea>
                     </RowH5>
                     <RowTitle>{t('21044')}</RowTitle>

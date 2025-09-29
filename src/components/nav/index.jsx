@@ -215,11 +215,11 @@ class Nav extends Component {
                     {/* <NavCenterLink to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLink> */}
                     {/* <NavCenterLink to='/ido' onClick={this.closeMenu} isActive={()=>pathname==='/ido'}>IDO</NavCenterLink> */}
                     {/* <NavCenterLinkDisabled>Fair Launch</NavCenterLinkDisabled> */}
+                    <NavCenterLink to='/cto' onClick={this.closeMenu} isActive={()=>pathname==='/cto'}>CTO</NavCenterLink>
                     <NavCenterLinkAuto to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLinkAuto> 
                     <NavCenterLinkAuto to='/ngnf' onClick={this.closeMenu} isActive={()=>pathname==='/ngnf'}>$NGNF</NavCenterLinkAuto>
                     {/* <NavCenterLink to='/mint' onClick={this.closeMenu} isActive={()=>pathname==='/mint'}>Fair Launch</NavCenterLink> */}
                     <NavCenterLinkAuto to='/roadmap' onClick={this.closeMenu} isActive={()=>pathname==='/roadmap'}>{t('102')}</NavCenterLinkAuto>
-                    <NavCenterLinkAuto to='/cto' onClick={this.closeMenu} isActive={()=>pathname==='/cto'}>CTO</NavCenterLinkAuto>
                     {/* <NavCenterLinkAuto to='/fairDealing' onClick={this.closeMenu} isActive={()=>pathname==='/fairDealing'}>{t('1001')}</NavCenterLinkAuto> */}
                     <NavCenterLinkAuto to='/news' onClick={this.closeMenu} isActive={()=>pathname==='/news'}>{t('103')}</NavCenterLinkAuto>
                     <NavCenterNoLink className='default'>
@@ -230,7 +230,6 @@ class Nav extends Component {
                                 <ModalRow to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</ModalRow>
                                 <ModalRow to='/ngnf' onClick={this.closeMore} isActive={()=>pathname==='/ngnf'}>$NGNF</ModalRow>
                                 <ModalRow to='/roadmap' onClick={this.closeMore} isActive={()=>pathname==='/roadmap'}>{t('102')}</ModalRow>
-                                <ModalRow to='/cto' onClick={this.closeMore} isActive={()=>pathname==='/cto'}>CTO</ModalRow>
                                 {/* <ModalRow to='/fairDealing' onClick={this.closeMenu} isActive={()=>pathname==='/fairDealing'}>{t('1001')}</ModalRow> */}
                                 <ModalRow to='/news' onClick={this.closeMore} isActive={()=>pathname==='/news'}>{t('103')}</ModalRow>
                             </ModalContent>

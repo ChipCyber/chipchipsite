@@ -437,6 +437,8 @@
     "21071": "Quarterly",
     "21072": "24 hours/per day",
     "21073": "48 hours/per day",
+    "21074":"Completed",
+    "21075":"Closed",
 
     "":""
 }
