@@ -6,6 +6,7 @@ import { setShowLogin, setCloseLogin } from '@/store/configSlice';
 import { withTranslation } from 'react-i18next'
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { message } from 'antd';
+import Store from '@/store'
 import { withRouter,NavLink } from "react-router-dom"
 import LanguageButton from './languageButton'
 import { sendEmailApi, loginEmailApi, loginGoogleAuthApi } from '@/api';
@@ -176,7 +177,7 @@ class Nav extends Component {
         }, 200);
     }
     connectChooseWallet = (type) => {
-        runConnectWallet(type, NetworkType.Solana).then(data=>{
+        runConnectWallet(type, NetworkType.Solana, Store.dispatch).then(data=>{
             this.props.setWalletInfo({
                 address: data.address,
                 walletType: type,

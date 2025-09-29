@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { setData, removeData, getData } from "../utils/user";
-import { removeLocalReConnect, disConnectWallet } from "@/wallet";
 import { getBalance }  from "@/wallet/methods";
 const data = getData() ?? {};
 
@@ -18,7 +17,7 @@ export const refreshWalletBalance = createAsyncThunk(
         }
     }
 );
-export const removeWalletInfo = () => async (dispatch) => {
+export const removeWalletInfo = () => (dispatch) => {
     dispatch(removeWalletData());
 };
 export const userSlice = createSlice({
@@ -42,8 +41,6 @@ export const userSlice = createSlice({
             state.currentWalletBalance = null;
             state.walletType = null;
             state.networkType = null;
-            removeLocalReConnect();
-            disConnectWallet();
         },
         setUserInfo: (state, action) => {
             state.userInfo = action.payload;

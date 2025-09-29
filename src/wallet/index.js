@@ -19,7 +19,7 @@ const saveLocalKey = "recentConnectorId";
 export function removeLocalReConnect() {
     localStorage.removeItem(saveLocalKey);
 }
-export function recentConnector() {
+export function recentConnector(dispatch) {
     const value = localStorage.getItem(saveLocalKey);
     if(value) {
         const valueArr = `${value}`.split('_');
@@ -27,16 +27,18 @@ export function recentConnector() {
             const wallet = valueArr[0];
             const network = valueArr[1];
             if(AllNetworkType.indexOf(network)>=0) {
-                return runConnectWallet(wallet, network);
+                return runConnectWallet(wallet, network, dispatch);
             }
         }
     }
     return Promise.resolve(null);
 }
-export function runConnectWallet(wallet, network) {
+let c_dispatch = null;
+export function runConnectWallet(wallet, network, dispatch) {
     return new Promise((resolve, reject) => {
         getProviderAddress(wallet, network).then(res=>{
             res.provider.on("disconnect", handleDisconnect);
+            c_dispatch = dispatch;
             setWalletProvider(res.provider);
             localStorage.setItem(saveLocalKey, `${wallet}_${network}`);
             resolve({...res, wallet, network, provider: undefined});
@@ -46,7 +48,9 @@ export function runConnectWallet(wallet, network) {
     });
 }
 const handleDisconnect = () => {
-    store.dispatch(removeWalletInfo());
+    c_dispatch(removeWalletInfo());
+    removeLocalReConnect();
+    setWalletProvider(undefined);
 };
 export function disConnectWallet() {
     console.log("disconnected!");
@@ -54,7 +58,8 @@ export function disConnectWallet() {
     if(provider) {
         provider.off("disconnect", handleDisconnect);
         provider.disconnect();
-        setWalletProvider(undefined);
+        provider.disconnect && provider.disconnect();
+        handleDisconnect();
     }
 }
 async function getProviderAddress(wallet, network) {

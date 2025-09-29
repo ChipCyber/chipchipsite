@@ -1,27 +1,34 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import styled from "styled-components";
 import { useTranslation } from 'react-i18next';
-import { message } from 'antd';
+import { message, Pagination } from 'antd';
 import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { setShowConnectWallet } from '@/store/userSlice';
+import { disConnectWallet } from "@/wallet/index.js";
 import { useSelector, useDispatch } from 'react-redux';
 import useBreakpointCheck from "../../hooks/useBreakpointCheck";
 import DirectDividends from "./directDividends";
 import OperationAlert from "./operationAlert";
 import InputNumber from "@/components/inputNumber";
 import { solana_sendSOL, solana_signMsg } from '@/wallet/solana.js';
-import { getProjectApi, bindContractAddressApi } from "@/api/cto.js";
+import { getProjectListApi, getProjectApi, bindContractAddressApi } from "@/api/cto.js";
 import { toDateStrWithSeconds, shortenString } from "@/utils";
-import { mul, div, formatLargeNumber } from '@/utils/number.js';
+import { sub, mul, div, formatLargeNumber } from '@/utils/number.js';
+import { showLoading, hideLoading } from '@/utils/loading.js';
 
 export default function Index() {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     const currentWalletAddress = useSelector((state) => state.user.currentWalletAddress);
     const shouldRender = useBreakpointCheck();
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [total, setTotal] = useState(0);
+    const [list, setList] = useState([]);
     const [data, setData] = useState(null);
     const [showBind, setShowBind] = useState(false);
     const [showTransferIn, setShowTransferIn] = useState(false);
+    const [transferInAddress, setTransferInAddress] = useState(null);
     const [showTransferOut, setShowTransferOut] = useState(false);
     const [showDirect, setShowDirect] = useState(false);
     const [showOperation, setShowOperation] = useState(false);
@@ -44,18 +51,28 @@ export default function Index() {
         }
     }
     const connectWallet = () => {
-        dispatch(setShowConnectWallet());
+        if(currentWalletAddress) {
+            disConnectWallet();
+        }else{
+            dispatch(setShowConnectWallet());
+        }
+    }
+    const showTransferInFunc = (address) => {
+        setShowTransferIn(true);
+        setTransferInAddress(address);
     }
     const transferIn = async () => {
-        if(data?.buybackPoolAddr) {
-            setTransferInLoading(true);
-            try {
-                await solana_sendSOL(currentWalletAddress, data.buybackPoolAddr, transferInCount);
-            } catch (error) {
-                message.error(error);
-            } finally {
-                setTransferInLoading(false);
-            }
+        setTransferInLoading(true);
+        showLoading();
+        try {
+            await solana_sendSOL(currentWalletAddress, transferInAddress, transferInCount);
+            message.success(t('616'));
+            setShowTransferIn(false);
+        } catch (error) {
+            message.error(error);
+        } finally {
+            setTransferInLoading(false);
+            hideLoading();
         }
     }
     const transferOut = async () => {
@@ -64,9 +81,13 @@ export default function Index() {
     const bindAddress = async () => {
         try {
             setSignLoading(true);
+            showLoading();
             const sign = await solana_signMsg(currentWalletAddress);
+            hideLoading();
             bindContractAddressApi({creatorAddr:currentWalletAddress,tokenContractAddr:address,sign}).then(()=>{
                 message.success(t('616'));
+                setShowBind(false);
+                refreshData();
             });
         } catch (error) {
             message.error(error);
@@ -74,15 +95,27 @@ export default function Index() {
             setSignLoading(false);
         }
     }
-    useEffect(()=>{
+    const refreshData = () => {
         if(currentWalletAddress) {
-            getProjectApi({currentWalletAddress}).then(data=>{
+            getProjectApi({creatorAddr:currentWalletAddress}).then(data=>{
                 setData(data.data);
             });
         }else{
             setData(null);
         }
+    }
+    useEffect(()=>{
+        refreshData();
     },[currentWalletAddress]);
+    useEffect(()=>{
+        getProjectListApi({page, pageSize}).then(data=>{
+            setList(data.data);
+            setTotal(data.total);
+        });
+    },[page, pageSize]);
+    const loadMore = (page) => {
+        setPage(page);
+    }
     const statusText = useMemo(()=>{
         if(data) {
             if(data.status==='not_started') {
@@ -136,59 +169,74 @@ export default function Index() {
                     </WhyRow>
                 </WhyContent>
             </Why>
-            <Info>
+            {list&&list.map((item)=><Info key={item.id}>
                 <img className='bg' src={require('../../assets/cto/info_icon.png').default} />
                 <InfoBg1/>
                 <InfoBg2/>
                 <InfoBg3/>
                 <InfoContent>
-                    <InfoTitle>{data?.name ?? '--'}</InfoTitle>
+                    <InfoTitle>{item.name}<SmallBgBtn className='custom' onClick={()=>showTransferInFunc(item.buybackPoolAddr)}>{t('21019')}</SmallBgBtn></InfoTitle>
                     <InfoRow>
                         <InfoItem>
                             <div className='title'>{t('21009')}</div>
-                            <div className='desc'>{data?toDateStrWithSeconds(data.startTime):'--'}</div>
+                            <div className='desc'>{toDateStrWithSeconds(item.startTime)}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21010')}</div>
-                            <div className='desc'>{data?shortenString(data.creatorAddr):'--'}</div>
+                            <div className='desc'>{shortenString(item.creatorAddr)}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21011')}</div>
-                            <div className='desc'>{data?mul(div(data.totalDividend,data.totalRepurchase),100):'--'}%</div>
+                            <div className='desc'>{mul(div(item.totalDividend,item.totalRepurchase),100)}%</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21012')}</div>
-                            <div className='desc'>{data?mul(div(data.totalBurn,data.totalRepurchase),100):'--'}%</div>
+                            <div className='desc'>{mul(div(item.totalBurn,item.totalRepurchase),100)}%</div>
+                        </InfoItem>
+                        <InfoItem>
+                            <div className='title'>{t('21018')}</div>
+                            <div className='desc'>{formatLargeNumber(item.baseTokenBalance)}</div>
                         </InfoItem>
                     </InfoRow>
                     <InfoRow>
                         <InfoItem>
                             <div className='title'>{t('21013')}</div>
-                            <div className='desc'>{data?formatLargeNumber(data.totalRepurchase):'--'}</div>
+                            <div className='desc'>{formatLargeNumber(item.totalRepurchase)}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21014')}</div>
-                            <div className='desc'>{data?formatLargeNumber(data.totalDividend):'--'}</div>
+                            <div className='desc'>{formatLargeNumber(item.totalDividend)}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21015')}</div>
-                            <div className='desc'>{data?formatLargeNumber(data.totalBurn):'--'}</div>
+                            <div className='desc'>{formatLargeNumber(item.totalBurn)}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21016')}</div>
-                            <div className='desc' style={{ color: '#FEAD1D' }}>{data?mul(data.tokenPriceGrowth,100):'--'}%</div>
+                            <div className='desc' style={{ color: '#FEAD1D' }}>{mul(div(sub(0,item.startPrice,6),item.startPrice,6),100)}%</div>
+                        </InfoItem>
+                        <InfoItem>
+                            <div className='title'>{t('21028')}</div>
+                            <div className='desc'>{formatLargeNumber(item.availableBalance)} {item.symbol}</div>
                         </InfoItem>
                     </InfoRow>
                 </InfoContent>
-            </Info>
+            </Info>)}
+            {list&&list.length>0&&<Pagination
+                total={total}
+                onChange={(page)=>loadMore(page)}
+                current={page}
+                pageSize={pageSize}
+                showQuickJumper
+            />}
             <Content>
                 <img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default}/>
-                {!currentWalletAddress?<NoConnect>
+                <NoConnect>
                     <SmallBtn className='custom' onClick={connectWallet}>
-                        <span>{t('602')}</span>
+                        <span>{currentWalletAddress?shortenString(currentWalletAddress):t('602')}</span>
                         <img src={require('../../assets/home/arrow_enter.png').default}/>
                     </SmallBtn>
-                </NoConnect>:
+                </NoConnect>
                 <Item>
                     <ItemStatus>
                         <img className='bg' src={require('../../assets/cto/icon_status_bg.png').default}/>
@@ -209,7 +257,7 @@ export default function Index() {
                             <div>{data?formatLargeNumber(data.baseTokenBalance):'--'} SOL</div>
                         </ItemTopBalance>
                         {isBind?<ItemTopRow>
-                            <SmallBtn className='custom' onClick={()=>setShowTransferIn(true)}>
+                            <SmallBtn className='custom' onClick={()=>showTransferInFunc(data?.buybackPoolAddr)}>
                                 <span>{t('21019')}</span>
                                 <img src={require('../../assets/home/arrow_enter.png').default}/>
                             </SmallBtn>
@@ -272,7 +320,7 @@ export default function Index() {
                             </ItemBottomRightInfo>
                         </ItemBottomRight>
                     </ItemBottom>
-                </Item>}
+                </Item>
             </Content>
         </Root>
     )
@@ -317,56 +365,71 @@ export default function Index() {
                     </WhyRow>
                 </WhyH5Content>
             </WhyH5>
-            <Info>
+            {list&&list.map((item)=><Info key={item.id}>
                 <img className='bg' src={require('../../assets/cto/info_icon.png').default} />
                 <InfoBg1/>
                 <InfoBg2/>
                 <InfoBg3/>
                 <InfoContent>
-                    <InfoTitle>{data?.name ?? '--'}</InfoTitle>
+                    <InfoTitle>{item.name}<SmallBgBtn className='custom' onClick={()=>showTransferInFunc(item.buybackPoolAddr)}>{t('21019')}</SmallBgBtn></InfoTitle>
                     <InfoRow>
                         <InfoItem>
                             <div className='title'>{t('21009')}</div>
-                            <div className='desc'>{data?toDateStrWithSeconds(data.startTime):'--'}</div>
+                            <div className='desc'>{toDateStrWithSeconds(item.startTime)}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21010')}</div>
-                            <div className='desc'>{data?shortenString(data.creatorAddr):'--'}</div>
+                            <div className='desc'>{shortenString(item.creatorAddr)}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21011')}</div>
-                            <div className='desc'>{data?mul(div(data.totalDividend,data.totalRepurchase),100):'--'}%</div>
+                            <div className='desc'>{mul(div(item.totalDividend,item.totalRepurchase),100)}%</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21012')}</div>
-                            <div className='desc'>{data?mul(div(data.totalBurn,data.totalRepurchase),100):'--'}%</div>
+                            <div className='desc'>{mul(div(item.totalBurn,item.totalRepurchase),100)}%</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21013')}</div>
-                            <div className='desc'>{data?formatLargeNumber(data.totalRepurchase):'--'}</div>
+                            <div className='desc'>{formatLargeNumber(item.totalRepurchase)}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21014')}</div>
-                            <div className='desc'>{data?formatLargeNumber(data.totalDividend):'--'}</div>
+                            <div className='desc'>{formatLargeNumber(item.totalDividend)}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21015')}</div>
-                            <div className='desc'>{data?formatLargeNumber(data.totalBurn):'--'}</div>
+                            <div className='desc'>{formatLargeNumber(item.totalBurn)}</div>
                         </InfoItem>
                         <InfoItem>
                             <div className='title'>{t('21016')}</div>
-                            <div className='desc' style={{ color: '#FEAD1D' }}>{data?mul(data.tokenPriceGrowth,100):'--'}%</div>
+                            <div className='desc' style={{ color: '#FEAD1D' }}>{mul(div(sub(0,item.startPrice,6),item.startPrice,6),100)}%</div>
+                        </InfoItem>
+                        <InfoItem>
+                            <div className='title'>{t('21018')}</div>
+                            <div className='desc'>{formatLargeNumber(item.baseTokenBalance)}</div>
+                        </InfoItem>
+                        <InfoItem>
+                            <div className='title'>{t('21028')}</div>
+                            <div className='desc'>{formatLargeNumber(item.availableBalance)} {item.symbol}</div>
                         </InfoItem>
                     </InfoRow>
                 </InfoContent>
-            </Info>
+            </Info>)}
+            {list&&list.length>0&&<Pagination
+                total={total}
+                onChange={(page)=>loadMore(page)}
+                current={page}
+                pageSize={pageSize}
+                showQuickJumper
+            />}
             <ContentH5>
-                {!currentWalletAddress?<NoConnect>
+                <NoConnect>
                     <SmallBtn className='custom' onClick={connectWallet}>
-                        <span>{t('602')}</span>
+                        <span>{currentWalletAddress?shortenString(currentWalletAddress):t('602')}</span>
                         <img src={require('../../assets/home/arrow_enter.png').default}/>
                     </SmallBtn>
-                </NoConnect>:
+                </NoConnect>
                 <Item>
                     <ItemStatus>
                         <img className='bg' src={require('../../assets/cto/icon_status_bg.png').default}/>
@@ -387,7 +450,7 @@ export default function Index() {
                             <div>{data?formatLargeNumber(data.baseTokenBalance):'--'} SOL</div>
                         </ItemTopBalance>
                         {isBind?<ItemTopRow>
-                            <SmallBtn className='custom' onClick={()=>setShowTransferIn(true)}>
+                            <SmallBtn className='custom' onClick={()=>showTransferInFunc(data?.buybackPoolAddr)}>
                                 <span>{t('21019')}</span>
                                 <img src={require('../../assets/nav/login_arrow.png').default}/>
                             </SmallBtn>
@@ -449,7 +512,7 @@ export default function Index() {
                             </ItemBottomRightInfo>
                         </ItemBottomRight>
                     </ItemBottom>
-                </Item>}
+                </Item>
             </ContentH5>
         </Root>
     )
@@ -648,6 +711,7 @@ margin-top: 30px;
 }
 `
 const Info = styled.div`
+margin-bottom: 20px;
 background: #8D52F6;
 position: relative;
 .bg {
@@ -704,6 +768,9 @@ font-size: 42px;
 font-weight: 600;
 line-height: 32px;
 margin-bottom: 42px;
+display: flex;
+align-items: center;
+gap: 20px;
 ${({ theme }) => theme.mediaQueries.sm}{
 margin-bottom: 60px;
 font-size: 56px;
@@ -759,7 +826,7 @@ const NoConnect = styled.div`
 display: flex;
 align-items: center;
 justify-content: center;
-padding-bottom: 100px;
+padding-bottom: 30px;
 position: relative;
 z-index: 1;
 `
@@ -1085,6 +1152,7 @@ padding-right: 55px;
 }
 `
 const SmallBgBtn = styled.button`
+flex-shrink: 0;
 width: fit-content;
 padding-left: 25px;
 padding-right: 25px;

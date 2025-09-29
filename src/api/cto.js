@@ -11,11 +11,25 @@ export function getProjectApi(data={}) {
 /**
  * @param 
  * {
+    * page: 1
+    * pageSize: 10
+} data 
+ */
+export function getProjectListApi(data={}) {
+    return request({
+        url: '/cto/v1/projectlist',
+        method: 'get',
+        params: {...data,t:new Date().getTime()},
+        loading: true,
+    })
+}
+/**
+ * @param 
+ * {
     * creatorAddr: string
     * tokenContractAddr: string
     * sign: string
 } data 
- * @returns 
  */
 export function bindContractAddressApi(data) {
     return request({

@@ -59,17 +59,17 @@ function App() {
       dispatch(refreshWalletBalance(currentWalletAddress));
     }
   }, [currentWalletAddress, dispatch]);
-  useEffect(() => {
-    recentConnector().then(data=>{
-      if(data) {
-        dispatch(setWalletInfo({
-          address: data.address,
-          walletType: data.wallet,
-          networkType: data.network,
-        }));
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   recentConnector(dispatch).then(data=>{
+  //     if(data) {
+  //       dispatch(setWalletInfo({
+  //         address: data.address,
+  //         walletType: data.wallet,
+  //         networkType: data.network,
+  //       }));
+  //     }
+  //   });
+  // }, []);
   const { i18n } = useTranslation();
   const [curLanguage, setCurLanguage] = useState('');
   useEffect(()=>{
