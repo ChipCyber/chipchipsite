@@ -83,7 +83,7 @@ export default function Index() {
         }
     }
     if (shouldRender) {
-        const result = list && list.find(item => item.id == 4);
+        const result = list && list.find(item => item.id == 5);
         return (
             <Root>
                 <Top>
@@ -94,13 +94,13 @@ export default function Index() {
       <>
        <div className="imgWrapper">
        <img className="optionheadImg" src={require(`../../assets/airdrop/head_option${idx}.png`).default} />
-         {(idx === 1 || idx === 2) && (
+         {(idx === 1 || idx === 2 || idx === 3) && (
             <div className="optionTagBox">
               <img className="optionTagImg" src={require(`../../assets/airdrop/top_option_icon${idx}.png`).default} />
-              <div className="optionTagText">{t(`200${5 + idx}`)}</div>
+              <div className="optionTagText">{idx === 3 ? t('2007') : t('2006')}</div>
             </div>
           )}
-          { idx=== 1 && result && result.isEnd  ==false &&
+          { idx=== 2 && result && result.isEnd  ==false &&
           <div className='optioButton'>
            <SmallBtnOption className='custom' onClick={e=>claimAction(e,result)}>
            <span>{t('211')}</span>
@@ -108,7 +108,7 @@ export default function Index() {
            </div>
           }
 
-          {(idx === 3 || idx === 4) && <img className="imgIcon3Box" src={require('../../assets/airdrop/top_option_icon3.png').default} />}
+          {(idx === 4) && <img className="imgIcon3Box" src={require('../../assets/airdrop/top_option_icon4.png').default} />}
        </div>
        
        {idx !== 4 && (
