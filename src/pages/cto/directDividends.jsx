@@ -71,9 +71,14 @@ export default function Index({show,onClose}) {
                     </RowColumn>
                     <RowInputColumn>
                         <RowInputEmpty/>
-                        <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
+                        <Row>
+                            <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
+                            <InputNumber value={count} unit={t('21077')} onChange={handleChange}/>
+                        </Row>
                     </RowInputColumn>
                     <RowTitle>{t('21009')}</RowTitle>
+                    <DatePicker onChange={()=>{}} />
+                    <RowTitle>{t('21076')}</RowTitle>
                     <DatePicker onChange={()=>{}} />
                 </ModalContent>:
                 <ModalContentH5>
@@ -114,8 +119,11 @@ export default function Index({show,onClose}) {
                             <RowInputEmpty/>
                             <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
                         </RowInputColumn>
+                        <InputNumber value={count} unit={t('21077')} onChange={handleChange}/>
                     </RowH5>
                     <RowTitle>{t('21009')}</RowTitle>
+                    <DatePicker onChange={()=>{}} />
+                    <RowTitle>{t('21076')}</RowTitle>
                     <DatePicker onChange={()=>{}} />
                 </ModalContentH5>
                 }
@@ -165,6 +173,9 @@ width: calc(100% - 50px) !important;
 padding: 16px 20px 32px !important;
 border-radius: 12px !important;
 background: #362F42 !important;
+margin: 2.5vh auto;
+max-height: 95vh;
+overflow: auto;
 color: ${({ theme }) => theme.colors.text} !important;
 ${({ theme }) => theme.mediaQueries.sm}{
     width: 750px !important;
@@ -196,7 +207,7 @@ const ModalContent = styled.div`
 display: grid;
 grid-template-columns: auto auto 1fr 1fr;
 grid-column-gap: 20px;
-grid-row-gap: 35px;
+grid-row-gap: 25px;
 
 & > :nth-child(1) { grid-area: 1 / 1 / 2 / 2; }
 & > :nth-child(2) { grid-area: 1 / 2 / 2 / 3; }
@@ -212,6 +223,9 @@ grid-row-gap: 35px;
 
 & > :nth-child(10) { grid-area: 4 / 1 / 5 / 2; }
 & > :nth-child(11) { grid-area: 4 / 2 / 5 / 4; }
+
+& > :nth-child(12) { grid-area: 5 / 1 / 6 / 2; }
+& > :nth-child(13) { grid-area: 5 / 2 / 6 / 4; }
 `
 const RowTitle = styled.div`
 font-size: 14px;
@@ -239,6 +253,14 @@ ${({ theme }) => theme.mediaQueries.sm}{
 height: 40px;
 }
 };
+`
+const Row = styled.div`
+display: flex;
+gap: 15px;
+align-items: center;
+> div {
+flex: 1;
+}
 `
 const RowInputColumn = styled.div`
 display: flex;
@@ -307,4 +329,5 @@ grid-column-gap: 20px;
 grid-row-gap: 12px;
 & > :nth-child(1) { grid-area: 1 / 1 / 2 / 2; }
 & > :nth-child(2) { min-width: 100px; grid-area: 1 / 2 / 2 / 3; }
+& > :nth-child(3) { grid-area: 2 / 1 / 2 / 3; }
 `

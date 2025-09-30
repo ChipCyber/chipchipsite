@@ -237,7 +237,7 @@ export default function Index() {
                         <img src={require('../../assets/home/arrow_enter.png').default}/>
                     </SmallBtn>
                 </NoConnect>
-                <Item>
+                {currentWalletAddress&&<Item>
                     <ItemStatus>
                         <img className='bg' src={require('../../assets/cto/icon_status_bg.png').default}/>
                         <div>{statusText}</div>
@@ -320,7 +320,7 @@ export default function Index() {
                             </ItemBottomRightInfo>
                         </ItemBottomRight>
                     </ItemBottom>
-                </Item>
+                </Item>}
             </Content>
         </Root>
     )
@@ -430,7 +430,7 @@ export default function Index() {
                         <img src={require('../../assets/home/arrow_enter.png').default}/>
                     </SmallBtn>
                 </NoConnect>
-                <Item>
+                {currentWalletAddress&&<Item>
                     <ItemStatus>
                         <img className='bg' src={require('../../assets/cto/icon_status_bg.png').default}/>
                         <div>{statusText}</div>
@@ -512,7 +512,7 @@ export default function Index() {
                             </ItemBottomRightInfo>
                         </ItemBottomRight>
                     </ItemBottom>
-                </Item>
+                </Item>}
             </ContentH5>
         </Root>
     )

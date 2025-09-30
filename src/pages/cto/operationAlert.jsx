@@ -190,9 +190,14 @@ export default function Index({type=0,show,onClose}) {
                 </RowHColumn>
                 <RowInputColumn>
                     <RowInputEmpty/>
-                    <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
+                    <Row>
+                        <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
+                        <InputNumber value={count} unit={t('21077')} onChange={handleChange}/>
+                    </Row>
                 </RowInputColumn>
                 <RowHTitle>{t('21009')}</RowHTitle>
+                <DatePicker onChange={()=>{}} />
+                <RowHTitle>{t('21076')}</RowHTitle>
                 <DatePicker onChange={()=>{}} />
             </ModalContentDividends>
         :<ModalContentH5>
@@ -233,8 +238,11 @@ export default function Index({type=0,show,onClose}) {
                     <RowInputEmpty/>
                     <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
                 </RowInputColumn>
+                <InputNumber value={count} unit={t('21077')} onChange={handleChange}/>
             </RowH5>
             <RowHTitle>{t('21009')}</RowHTitle>
+            <DatePicker onChange={()=>{}} />
+            <RowHTitle>{t('21076')}</RowHTitle>
             <DatePicker onChange={()=>{}} />
         </ModalContentH5>}
         <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
@@ -252,23 +260,34 @@ export default function Index({type=0,show,onClose}) {
                 </RowHColumn>
                 <RowInputColumn>
                     <RowInputEmpty/>
-                    <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
+                    <Row>
+                        <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
+                        <InputNumber value={count} unit={t('21077')} onChange={handleChange}/>
+                    </Row>
                 </RowInputColumn>
                 <RowHTitle>{t('21009')}</RowHTitle>
+                <DatePicker onChange={()=>{}} />
+                <RowHTitle>{t('21076')}</RowHTitle>
                 <DatePicker onChange={()=>{}} />
             </ModalContentDestroy>
             :<ModalContentH5>
                 <RowHTitle>{t('21012')}</RowHTitle>
                 <InputNumber value={count} unit="%" onChange={handleChange}/>
                 <RowHTitle>{t('21066')}</RowHTitle>
-                <RowContentColumn>
-                    <Radio title={t('21067')} checked={true} onChange={val=>{}}/>
-                </RowContentColumn>
-                <RowContentColumn>
-                    <Radio title={t('21068')} checked={false} onChange={val=>{}}/>
-                    <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
-                </RowContentColumn>
+                <RowH5>
+                    <RowHColumn>
+                        <Radio title={t('21067')} checked={true} onChange={val=>{}}/>
+                        <Radio title={t('21068')} checked={false} onChange={val=>{}}/>
+                    </RowHColumn>
+                    <RowInputColumn>
+                        <RowInputEmpty/>
+                        <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
+                    </RowInputColumn>
+                    <InputNumber value={count} unit={t('21077')} onChange={handleChange}/>
+                </RowH5>
                 <RowHTitle>{t('21009')}</RowHTitle>
+                <DatePicker onChange={()=>{}} />
+                <RowHTitle>{t('21076')}</RowHTitle>
                 <DatePicker onChange={()=>{}} />
             </ModalContentH5>}
             <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
@@ -401,7 +420,7 @@ const ModalContent = styled.div`
 display: grid;
 grid-template-columns: auto 1fr;
 grid-column-gap: 40px;
-grid-row-gap: 35px;
+grid-row-gap: 25px;
 & > :nth-child(1) { grid-area: 1 / 1 / 2 / 2; }
 & > :nth-child(2) { grid-area: 1 / 2 / 2 / 3; }
 `
@@ -413,6 +432,7 @@ grid-column-gap: 20px;
 grid-row-gap: 12px;
 & > :nth-child(1) { grid-area: 1 / 1 / 2 / 2; }
 & > :nth-child(2) { min-width: 100px; grid-area: 1 / 2 / 2 / 3; }
+& > :nth-child(3) { grid-area: 2 / 1 / 2 / 3; }
 `
 const RowTitle = styled.div`
 word-break: keep-all;
@@ -421,7 +441,7 @@ font-weight: 600;
 font-weight: 400;
 opacity: 0.4;
 &:not(:first-child) {
-    margin-top: 30px;
+    margin-top: 20px;
 }
 ${({ theme }) => theme.mediaQueries.sm}{
 font-size: 18px;
@@ -508,7 +528,7 @@ const ModalContentDividends = styled.div`
 display: grid;
 grid-template-columns: auto auto 1fr 1fr;
 grid-column-gap: 20px;
-grid-row-gap: 35px;
+grid-row-gap: 25px;
 
 & > :nth-child(1) { grid-area: 1 / 1 / 2 / 2; }
 & > :nth-child(2) { grid-area: 1 / 2 / 2 / 4; }
@@ -520,10 +540,20 @@ grid-row-gap: 35px;
 & > :nth-child(8) { grid-area: 3 / 3 / 4 / 5; }
 & > :nth-child(9) { grid-area: 4 / 1 / 5 / 2; }
 & > :nth-child(10) { grid-area: 4 / 2 / 5 / 4; }
+& > :nth-child(11) { grid-area: 5 / 1 / 6 / 2; }
+& > :nth-child(12) { grid-area: 5 / 2 / 6 / 4; }
 `
 const RowEnd = styled.div`
 display: flex;
 justify-content: flex-end;
+`
+const Row = styled.div`
+display: flex;
+gap: 15px;
+align-items: center;
+> div {
+flex: 1;
+}
 `
 const RowInputColumn = styled.div`
 display: flex;
@@ -584,7 +614,7 @@ const ModalContentDestroy = styled.div`
 display: grid;
 grid-template-columns: auto auto 1fr 1fr;
 grid-column-gap: 20px;
-grid-row-gap: 35px;
+grid-row-gap: 25px;
 
 & > :nth-child(1) { grid-area: 1 / 1 / 2 / 2; }
 & > :nth-child(2) { grid-area: 1 / 2 / 2 / 4; }
@@ -593,4 +623,6 @@ grid-row-gap: 35px;
 & > :nth-child(5) { grid-area: 2 / 3 / 3 / 5; }
 & > :nth-child(6) { grid-area: 3 / 1 / 4 / 2; }
 & > :nth-child(7) { grid-area: 3 / 2 / 4 / 4; }
+& > :nth-child(8) { grid-area: 4 / 1 / 5 / 2; }
+& > :nth-child(9) { grid-area: 4 / 2 / 5 / 4; }
 `
