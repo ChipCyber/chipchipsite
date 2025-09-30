@@ -63,7 +63,8 @@ export default function Index() {
     },[]);
     const fetchData = () => {
         airdropGetHomeApi({}).then(({data})=>{
-            setList(data.active);
+            const resList = data.active;
+            setList(resList.sort((a, b) => b.start_time - a.start_time));
             refreshList();
         });
     }
@@ -186,7 +187,7 @@ export default function Index() {
                                 </ItemContent>
                                 </ItemTop>
                                 <ItemButton>
-                                    <div style={{fontWeight:500}}>{t('2038')}</div>
+                                    <div style={{fontWeight:500}}>{t('2038',{name:item.id==result.id?'SS2':'SS1'})}</div>
                                     <div style={{color:"#E3E3E5"}}>{t('2039')}</div>
                                 </ItemButton>
                                 </ItemNew>
