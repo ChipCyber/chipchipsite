@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import styled from "styled-components";
 import { DatePicker } from "antd"
 
-export default function Index({  }) {
+export default function Index({ value, onChange }) {
     return (
         <Root>
-            <DatePicker inputReadOnly onChange={()=>{}} />
+            <DatePicker autoFocus={false} inputReadOnly value={value} onChange={onChange} />
         </Root>
     )
 }

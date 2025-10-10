@@ -39,3 +39,20 @@ export function bindContractAddressApi(data) {
         loading: true,
     })
 }
+
+export function repurchaseSetApi(data) {
+    return request({
+        url: '/cto/v1/repurchase/set',
+        method: 'post',
+        data,
+        loading: true,
+    })
+}
+export function repurchaseSetListApi(data) {
+    return request({
+        url: '/cto/v1/repurchase/set/list',
+        method: 'post',
+        data,
+        loading: true,
+    })
+}

@@ -11,20 +11,44 @@ import Select from '@/components/select';
 import Checkbox from "@/components/checkbox";
 import InputNumber from '@/components/inputNumber';
 import { importWalletsFromExcel } from "@/utils/excel.js";
+import { repurchaseSetApi, repurchaseSetListApi } from "@/api/cto.js";
+import { mul, div } from "@/utils/number.js";
+import moment from 'moment';
 
-export default function Index({type=0,show,onClose}) {
+export default function Index({type=0,ctoProjId,tokenContractAddr,show,onClose}) {
     const { t } = useTranslation();
     const shouldRender = useBreakpointCheck();
-    const [checked, setChecked] = useState(false);
     const [curIdx, setCurIdx] = useState(type==undefined?0:type);
     const [count, setCount] = useState(0);
     const [addressListStr, setAddressListStr] = useState("");
-    const handleChange = (event) => {
-        const newValue = event.target.value;
-        if (newValue === '' || /^[1-9]\d*$/.test(newValue)) {
-            setCount(newValue);
+    const handleChange = (newValue,fixed,onResult) => {
+        if (newValue === '' || /^(?:0|[1-9]\d*)(?:\.\d*)?$/.test(newValue) || newValue === '.') {
+            if(fixed) {
+                onResult && onResult(newValue);
+            }else{
+                if (newValue === '') {
+                    onResult && onResult(newValue);
+                }else{
+                    if(newValue<=0) {
+                        onResult && onResult(newValue);
+                    }else{
+                        onResult && onResult(div(newValue,100,6));
+                    }
+                }
+            }
         }
-    };
+    }
+    const updateSetObj = (obj,val) => {
+        if(!obj) return obj;
+        if(obj.amountType=='fixed') {
+            return {...obj,...{fixedAmount:val}};
+        }else{
+            return {...obj,...{poolRatio:val}};
+        }
+    }
+    const showPoolRatio = (ratio) => {
+        return ratio==0?ratio:mul(ratio,100,6);
+    }
     const handleImport = async () => {
         try {
             const list = await importWalletsFromExcel();
@@ -33,135 +57,236 @@ export default function Index({type=0,show,onClose}) {
             message.error(err.message);
         }
     };
+
+    const [buybackStatus, setBuybackStatus] = useState('in_progress');// 'in_progress' | 'completed'
+    const [buybackCycleType,setBuybackCycleType] = useState('continuous');// 'continuous' | 'limited'
+    const [buybackEndTime,setBuybackEndTime] = useState(null);
+    const [buybackRandomStrategyEnabled,setBuybackRandomStrategyEnabled] = useState(false);
+    const [buybackRandomCycleHour,setBuybackRandomCycleHour] = useState(24);// 24 ｜ 48
+    const [buybackRandomOnceSet,setBuybackRandomOnceSet] = useState({
+        amountType: "fixed",// fixed/pool_ratio
+        fixedAmount: '',
+        poolRatio: '',
+    });
+    const [buybackIndicatorStrategyEnabled,setBuybackIndicatorStrategyEnabled] = useState(false);
+    const [buybackBullTrendEnabled,setBuybackBullTrendEnabled] = useState(false);
+    const [buybackBullOnceSet,setBuybackBullOnceSet] = useState({
+        amountType: "fixed",
+        fixedAmount: '',
+        poolRatio: '',
+    });
+    const [buybackBearTrendEnabled,setBuybackBearTrendEnabled] = useState(false);
+    const [buybackBearOnceSet,setBuybackBearOnceSet] = useState({
+        amountType: "fixed",
+        fixedAmount: '',
+        poolRatio: '',
+    });
+    const [buybackSpecialMarketEnabled,setBuybackSpecialMarketEnabled] = useState(false);
+    const [buybackSpecialMarketOnceSet,setBuybackSpecialMarketOnceSet] = useState({
+        amountType: "fixed",
+        fixedAmount: '',
+        poolRatio: '',
+    });
+    const [buybackOversoldEnabled,setBuybackOversoldEnabled] = useState(false);
+    const [buybackOversoldOnceSet,setBuybackOversoldOnceSet] = useState({
+        amountType: "fixed",
+        fixedAmount: '',
+        poolRatio: '',
+    });
+    const refreshBuybackSet = () => {
+        if(ctoProjId) {
+            repurchaseSetListApi({ctoProjId,tokenContractAddr,status:"",page:1,pageSize:10}).then(({data})=>{
+                if(data&&Array.isArray(data)) {
+                    const item = data[0];
+                    setBuybackStatus(item.status);
+                    setBuybackCycleType(item.cycleType);
+                    setBuybackEndTime(item.endTime?moment.unix(item.endTime):null);
+                    setBuybackRandomStrategyEnabled(item.randomStrategyEnabled);
+                    setBuybackRandomCycleHour(item.randomCycleHour);
+                    setBuybackRandomOnceSet(item.randomOnceSet);
+                    setBuybackIndicatorStrategyEnabled(item.indicatorStrategyEnabled);
+                    setBuybackBullTrendEnabled(item.bullTrendEnabled);
+                    setBuybackBullOnceSet(item.bullOnceSet);
+                    setBuybackBearTrendEnabled(item.bearTrendEnabled);
+                    setBuybackBearOnceSet(item.bearOnceSet);
+                    setBuybackSpecialMarketEnabled(item.specialMarketEnabled);
+                    setBuybackSpecialMarketOnceSet(item.specialMarketOnceSet);
+                    setBuybackOversoldEnabled(item.oversoldEnabled);
+                    setBuybackOversoldOnceSet(item.oversoldOnceSet);
+                }
+            });
+        }
+    }
+    useEffect(()=>{
+        if(show) {
+            if(curIdx==0) {
+                refreshBuybackSet();
+            }
+        }
+    },[ctoProjId,show,curIdx]);
+    const saveBuyback = () => {
+        repurchaseSetApi({
+            id:0,
+            ctoProjId,
+            tokenContractAddr,
+            baseTokenContractAddr:'sol',
+            status:buybackStatus,
+            cycleType:buybackCycleType,
+            endTime:buybackEndTime?buybackEndTime.unix():'',
+            randomStrategyEnabled:buybackRandomStrategyEnabled,
+            randomCycleHour:Number(buybackRandomCycleHour),
+            randomOnceSet:buybackRandomOnceSet,
+            indicatorStrategyEnabled:buybackIndicatorStrategyEnabled,
+            bullTrendEnabled:buybackBullTrendEnabled,
+            bullOnceSet:buybackBullOnceSet,
+            bearTrendEnabled:buybackBearTrendEnabled,
+            bearOnceSet:buybackBearOnceSet,
+            specialMarketEnabled:buybackSpecialMarketEnabled,
+            specialMarketOnceSet:buybackSpecialMarketOnceSet,
+            oversoldEnabled:buybackOversoldEnabled,
+            oversoldOnceSet:buybackOversoldOnceSet,
+        }).then(()=>{
+            message.success(t('616'));
+            refreshBuybackSet();
+        });
+    }
     const renderBuyback = () => {
         return <>
         {shouldRender?<ModalContent>
+            <RowTitle>{t('309')}</RowTitle>
+            <RowColumn>
+                <GradientSwitch disabled={buybackStatus=='closed'} checked={buybackStatus=='in_progress'} onChange={val=>setBuybackStatus(val?'in_progress':'completed')}/>
+            </RowColumn>
             <RowTitle>{t('21048')}</RowTitle>
             <RowColumn>
                 <RowColumnRow>
-                    <Radio title={t('21049')} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21049')} checked={buybackCycleType=='continuous'} onChange={val=>setBuybackCycleType('continuous')}/>
                     <RowTip>{t('21050')}</RowTip>
                 </RowColumnRow>
                 <RowColumnRow>
-                    <Radio title={t('21051')} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21051')} checked={buybackCycleType=='limited'} onChange={val=>setBuybackCycleType('limited')}/>
                     <RowTip>{t('21052')}</RowTip>
                 </RowColumnRow>
                 <RowColumnRow>
                     <RowText>{t('21053')}</RowText>
-                    <DatePicker onChange={()=>{}} />
+                    <DatePicker value={buybackEndTime} onChange={val=>setBuybackEndTime(val)} />
                 </RowColumnRow>
             </RowColumn>
             <RowTitle>{t('21054')}</RowTitle>
             <RowColumn>
-                <GradientSwitch title={t('21055')} checked={checked} onChange={val=>setChecked(val)}/>
+                <GradientSwitch title={t('21055')} checked={buybackRandomStrategyEnabled} onChange={val=>setBuybackRandomStrategyEnabled(val)}/>
                 <RowColumnRow>
                     <RowText>{t('21056')}</RowText>
-                    <Select options={[{label: t('21072'), value: ''},{label: t('21073'), value: ''}]}/>
+                    <Select value={buybackRandomCycleHour} onChange={val=>setBuybackRandomCycleHour(val)} options={[{label: t('21072'), value: 24},{label: t('21073'), value: 48}]}/>
                 </RowColumnRow>
                 <RowColumnRow>
                     <RowText>{t('21057')}</RowText>
-                    <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
-                    <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
+                    <Select value={buybackRandomOnceSet.amountType} onChange={val=>setBuybackRandomOnceSet({...buybackRandomOnceSet,amountType:val})} options={[{label: t('21036'), value: 'fixed'},{label: t('21037'), value: 'pool_ratio'}]}/>
+                    <MyInputNumber value={buybackRandomOnceSet.amountType=='fixed'?buybackRandomOnceSet.fixedAmount:showPoolRatio(buybackRandomOnceSet.poolRatio)} unit={buybackRandomOnceSet.amountType=='fixed'?"SOL":"%"} onChange={e=>handleChange(e.target.value,buybackRandomOnceSet.amountType=='fixed',val=>setBuybackRandomOnceSet(updateSetObj(buybackRandomOnceSet,val)))}/>
                 </RowColumnRow>
-                <GradientSwitch title={t('21058')} checked={checked} onChange={val=>setChecked(val)}/>
+                <GradientSwitch title={t('21058')} checked={buybackIndicatorStrategyEnabled} onChange={val=>setBuybackIndicatorStrategyEnabled(val)}/>
                 <RowColumnGrid>
-                    <Checkbox title={t('21059')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <Checkbox title={t('21059')} checked={buybackBullTrendEnabled} onChange={val=>setBuybackBullTrendEnabled(val)}/>
                     <RowColumn>
                         <RowTip>{t('21060')}</RowTip>
                         <RowColumnRow>
-                            <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
-                            <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
+                            <Select value={buybackBullOnceSet.amountType} onChange={val=>setBuybackBullOnceSet({...buybackBullOnceSet,amountType:val})} options={[{label: t('21036'), value: 'fixed'},{label: t('21037'), value: 'pool_ratio'}]}/>
+                            <MyInputNumber value={buybackBullOnceSet.amountType=='fixed'?buybackBullOnceSet.fixedAmount:showPoolRatio(buybackBullOnceSet.poolRatio)} unit={buybackBullOnceSet.amountType=='fixed'?"SOL":"%"} onChange={e=>handleChange(e.target.value,buybackBullOnceSet.amountType=='fixed',val=>setBuybackBullOnceSet(updateSetObj(buybackBullOnceSet,val)))}/>
                         </RowColumnRow>
                     </RowColumn>
-                    <Checkbox title={t('21061')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <Checkbox title={t('21061')} checked={buybackBearTrendEnabled} onChange={val=>setBuybackBearTrendEnabled(val)}/>
                     <RowColumn>
                         <RowTip>{t('21062')}</RowTip>
                         <RowColumnRow>
-                            <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
-                            <MyInputNumber value={count} unit="%" onChange={handleChange}/>
+                            <Select value={buybackBearOnceSet.amountType} onChange={val=>setBuybackBearOnceSet({...buybackBearOnceSet,amountType:val})} options={[{label: t('21036'), value: 'fixed'},{label: t('21037'), value: 'pool_ratio'}]}/>
+                            <MyInputNumber value={buybackBearOnceSet.amountType=='fixed'?buybackBearOnceSet.fixedAmount:showPoolRatio(buybackBearOnceSet.poolRatio)} unit={buybackBearOnceSet.amountType=='fixed'?"SOL":"%"} onChange={e=>handleChange(e.target.value,buybackBearOnceSet.amountType=='fixed',val=>setBuybackBearOnceSet(updateSetObj(buybackBearOnceSet,val)))}/>
                         </RowColumnRow>
                     </RowColumn>
-                    <Checkbox title={t('21063')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <Checkbox title={t('21063')} checked={buybackSpecialMarketEnabled} onChange={val=>setBuybackSpecialMarketEnabled(val)}/>
                     <RowColumn>
                         <RowTip>{t('21064')}</RowTip>
                         <RowColumnRow>
-                            <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
-                            <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
+                            <Select value={buybackSpecialMarketOnceSet.amountType} onChange={val=>setBuybackSpecialMarketOnceSet({...buybackSpecialMarketOnceSet,amountType:val})} options={[{label: t('21036'), value: 'fixed'},{label: t('21037'), value: 'pool_ratio'}]}/>
+                            <MyInputNumber value={buybackSpecialMarketOnceSet.amountType=='fixed'?buybackSpecialMarketOnceSet.fixedAmount:showPoolRatio(buybackSpecialMarketOnceSet.poolRatio)} unit={buybackSpecialMarketOnceSet.amountType=='fixed'?"SOL":"%"} onChange={e=>handleChange(e.target.value,buybackSpecialMarketOnceSet.amountType=='fixed',val=>setBuybackSpecialMarketOnceSet(updateSetObj(buybackSpecialMarketOnceSet,val)))}/>
                         </RowColumnRow>
                     </RowColumn>
-                    <Checkbox title={t('21061')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <Checkbox title={t('21061')} checked={buybackOversoldEnabled} onChange={val=>setBuybackOversoldEnabled(val)}/>
                     <RowColumn>
                         <RowTip>{t('21065')}</RowTip>
                         <RowColumnRow>
-                            <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
-                            <MyInputNumber value={count} unit="%" onChange={handleChange}/>
+                            <Select value={buybackOversoldOnceSet.amountType} onChange={val=>setBuybackOversoldOnceSet({...buybackOversoldOnceSet,amountType:val})} options={[{label: t('21036'), value: 'fixed'},{label: t('21037'), value: 'pool_ratio'}]}/>
+                            <MyInputNumber value={buybackOversoldOnceSet.amountType=='fixed'?buybackOversoldOnceSet.fixedAmount:showPoolRatio(buybackOversoldOnceSet.poolRatio)} unit={buybackOversoldOnceSet.amountType=='fixed'?"SOL":"%"} onChange={e=>handleChange(e.target.value,buybackOversoldOnceSet.amountType=='fixed',val=>setBuybackOversoldOnceSet(updateSetObj(buybackOversoldOnceSet,val)))}/>
                         </RowColumnRow>
                     </RowColumn>
                 </RowColumnGrid>
             </RowColumn>
         </ModalContent>
         :<ModalContentH5>
+            <RowTitle>{t('309')}</RowTitle>
+            <RowContent>
+                <GradientSwitch checked={buybackStatus=='in_progress'} onChange={val=>setBuybackStatus(val?'in_progress':'completed')}/>
+            </RowContent>
             <RowTitle>{t('21048')}</RowTitle>
             <RowContent>
                 <div>
-                    <Radio title={t('21049')} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21049')} checked={buybackCycleType=='continuous'} onChange={val=>setBuybackCycleType('continuous')}/>
                     <RowTip>{t('21050')}</RowTip>
                 </div>
                 <div>
-                    <Radio title={t('21051')} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21051')} checked={buybackCycleType=='limited'} onChange={val=>setBuybackCycleType('limited')}/>
                     <RowTip>{t('21052')}</RowTip>
                 </div>
                 <RowText>{t('21053')}</RowText>
-                <DatePicker onChange={()=>{}} />
+                <DatePicker value={buybackEndTime} onChange={val=>setBuybackEndTime(val)} />
             </RowContent>
             <RowTitle>{t('21054')}</RowTitle>
             <RowContent>
-                <GradientSwitch title={t('21055')} checked={checked} onChange={val=>setChecked(val)}/>
+                <GradientSwitch title={t('21055')} checked={buybackRandomStrategyEnabled} onChange={val=>setBuybackRandomStrategyEnabled(val)}/>
                 <RowText>{t('21056')}</RowText>
-                <Select options={[{label: t('21072'), value: ''},{label: t('21073'), value: ''}]}/>
+                <Select value={buybackRandomCycleHour} onChange={val=>setBuybackRandomCycleHour(val)} options={[{label: t('21072'), value: 24},{label: t('21073'), value: 48}]}/>
                 <RowText>{t('21057')}</RowText>
                 <RowContentColumn>
-                    <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
-                    <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
+                    <Select value={buybackRandomOnceSet.amountType} onChange={val=>setBuybackRandomOnceSet({...buybackRandomOnceSet,amountType:val})} options={[{label: t('21036'), value: 'fixed'},{label: t('21037'), value: 'pool_ratio'}]}/>
+                    <MyInputNumber value={buybackRandomOnceSet.amountType=='fixed'?buybackRandomOnceSet.fixedAmount:showPoolRatio(buybackRandomOnceSet.poolRatio)} unit={buybackRandomOnceSet.amountType=='fixed'?"SOL":"%"} onChange={e=>handleChange(e.target.value,buybackRandomOnceSet.amountType=='fixed',val=>setBuybackRandomOnceSet(updateSetObj(buybackRandomOnceSet,val)))}/>
                 </RowContentColumn>
             </RowContent>
             <RowContent>
-                <GradientSwitch title={t('21058')} checked={checked} onChange={val=>setChecked(val)}/>
+                <GradientSwitch title={t('21058')} checked={buybackIndicatorStrategyEnabled} onChange={val=>setBuybackIndicatorStrategyEnabled(val)}/>
                 <div>
-                    <Checkbox title={t('21059')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <Checkbox title={t('21059')} checked={buybackBullTrendEnabled} onChange={val=>setBuybackBullTrendEnabled(val)}/>
                     <RowTip>{t('21060')}</RowTip>
                 </div>
                 <RowContentColumn>
-                    <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
-                    <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
+                    <Select value={buybackBullOnceSet.amountType} onChange={val=>setBuybackBullOnceSet({...buybackBullOnceSet,amountType:val})} options={[{label: t('21036'), value: 'fixed'},{label: t('21037'), value: 'pool_ratio'}]}/>
+                    <MyInputNumber value={buybackBullOnceSet.amountType=='fixed'?buybackBullOnceSet.fixedAmount:showPoolRatio(buybackBullOnceSet.poolRatio)} unit={buybackBullOnceSet.amountType=='fixed'?"SOL":"%"} onChange={e=>handleChange(e.target.value,buybackBullOnceSet.amountType=='fixed',val=>setBuybackBullOnceSet(updateSetObj(buybackBullOnceSet,val)))}/>
                 </RowContentColumn>
                 <div>
-                    <Checkbox title={t('21061')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <Checkbox title={t('21061')} checked={buybackBearTrendEnabled} onChange={val=>setBuybackBearTrendEnabled(val)}/>
                     <RowTip>{t('21062')}</RowTip>
                 </div>
                 <RowContentColumn>
-                    <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
-                    <MyInputNumber value={count} unit="%" onChange={handleChange}/>
+                    <Select value={buybackBearOnceSet.amountType} onChange={val=>setBuybackBearOnceSet({...buybackBearOnceSet,amountType:val})} options={[{label: t('21036'), value: 'fixed'},{label: t('21037'), value: 'pool_ratio'}]}/>
+                    <MyInputNumber value={buybackBearOnceSet.amountType=='fixed'?buybackBearOnceSet.fixedAmount:showPoolRatio(buybackBearOnceSet.poolRatio)} unit={buybackBearOnceSet.amountType=='fixed'?"SOL":"%"} onChange={e=>handleChange(e.target.value,buybackBearOnceSet.amountType=='fixed',val=>setBuybackBearOnceSet(updateSetObj(buybackBearOnceSet,val)))}/>
                 </RowContentColumn>
                 <div>
-                    <Checkbox title={t('21063')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <Checkbox title={t('21063')} checked={buybackSpecialMarketEnabled} onChange={val=>setBuybackSpecialMarketEnabled(val)}/>
                     <RowTip>{t('21064')}</RowTip>
                 </div>
                 <RowContentColumn>
-                    <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
-                    <MyInputNumber value={count} unit="SOL" onChange={handleChange}/>
+                    <Select value={buybackSpecialMarketOnceSet.amountType} onChange={val=>setBuybackSpecialMarketOnceSet({...buybackSpecialMarketOnceSet,amountType:val})} options={[{label: t('21036'), value: 'fixed'},{label: t('21037'), value: 'pool_ratio'}]}/>
+                    <MyInputNumber value={buybackSpecialMarketOnceSet.amountType=='fixed'?buybackSpecialMarketOnceSet.fixedAmount:showPoolRatio(buybackSpecialMarketOnceSet.poolRatio)} unit={buybackSpecialMarketOnceSet.amountType=='fixed'?"SOL":"%"} onChange={e=>handleChange(e.target.value,buybackSpecialMarketOnceSet.amountType=='fixed',val=>setBuybackSpecialMarketOnceSet(updateSetObj(buybackSpecialMarketOnceSet,val)))}/>
                 </RowContentColumn>
                 <div>
-                    <Checkbox title={t('21061')} checked={checked} onChange={val=>setChecked(val)}/>
+                    <Checkbox title={t('21061')} checked={buybackOversoldEnabled} onChange={val=>setBuybackOversoldEnabled(val)}/>
                     <RowTip>{t('21065')}</RowTip>
                 </div>
                 <RowContentColumn>
-                    <Select options={[{label: t('21036'), value: ''},{label: t('21037'), value: ''}]}/>
-                    <MyInputNumber value={count} unit="%" onChange={handleChange}/>
+                    <Select value={buybackOversoldOnceSet.amountType} onChange={val=>setBuybackOversoldOnceSet({...buybackOversoldOnceSet,amountType:val})} options={[{label: t('21036'), value: 'fixed'},{label: t('21037'), value: 'pool_ratio'}]}/>
+                    <MyInputNumber value={buybackOversoldOnceSet.amountType=='fixed'?buybackOversoldOnceSet.fixedAmount:showPoolRatio(buybackOversoldOnceSet.poolRatio)} unit={buybackOversoldOnceSet.amountType=='fixed'?"SOL":"%"} onChange={e=>handleChange(e.target.value,buybackOversoldOnceSet.amountType=='fixed',val=>setBuybackOversoldOnceSet(updateSetObj(buybackOversoldOnceSet,val)))}/>
                 </RowContentColumn>
             </RowContent>
         </ModalContentH5>}
-        <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
+        <LargeBtn className='custom' onClick={saveBuyback}>{t('21034')}</LargeBtn>
         </>
     }
     const renderDividends = () => {

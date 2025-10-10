@@ -3,21 +3,23 @@ import styled from "styled-components";
 import useBreakpointCheck from "../../hooks/useBreakpointCheck";
 import { Switch } from "antd";
 
-export default function Index({ title, checked, onChange }) {
+export default function Index({ title, disabled, checked, onChange }) {
   const shouldRender = useBreakpointCheck();
     return (
         shouldRender?<Root>
           <MySwitch
             checked={checked}
+            disabled={disabled}
             onChange={onChange}
           />
-          <span>{title}</span>
+          {title&&<span>{title}</span>}
         </Root>
         :
         <Root>
-          <span>{title}</span>
+          {title&&<span>{title}</span>}
           <MySwitch
             checked={checked}
+            disabled={disabled}
             onChange={onChange}
             size={'small'}
           />

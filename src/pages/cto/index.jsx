@@ -578,7 +578,7 @@ export default function Index() {
             </DialogC>
         </DialogOverlay>
         <DirectDividends show={showDirect} onClose={()=>setShowDirect(false)}/>
-        <OperationAlert show={showOperation} onClose={()=>setShowOperation(false)}/>
+        <OperationAlert ctoProjId={data?data.id:null} tokenContractAddr={data?data.tokenContractAddr:null} show={showOperation} onClose={()=>setShowOperation(false)}/>
     </>
 }
 
