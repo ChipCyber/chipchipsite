@@ -11,7 +11,14 @@ import Select from '@/components/select';
 import Checkbox from "@/components/checkbox";
 import InputNumber from '@/components/inputNumber';
 import { importWalletsFromExcel } from "@/utils/excel.js";
-import { repurchaseSetApi, repurchaseSetListApi } from "@/api/cto.js";
+import {
+    repurchaseSetApi,
+    repurchaseSetListApi,
+    dividendRuleApi,
+    dividendRuleQueryApi,
+    burnSettingApi,
+    burnSettingQueryApi,
+} from "@/api/cto.js";
 import { mul, div } from "@/utils/number.js";
 import moment from 'moment';
 
@@ -20,7 +27,6 @@ export default function Index({type=0,ctoProjId,tokenContractAddr,show,onClose})
     const shouldRender = useBreakpointCheck();
     const [curIdx, setCurIdx] = useState(type==undefined?0:type);
     const [count, setCount] = useState(0);
-    const [addressListStr, setAddressListStr] = useState("");
     const handleChange = (newValue,fixed,onResult) => {
         if (newValue === '' || /^(?:0|[1-9]\d*)(?:\.\d*)?$/.test(newValue) || newValue === '.') {
             if(fixed) {
@@ -52,13 +58,13 @@ export default function Index({type=0,ctoProjId,tokenContractAddr,show,onClose})
     const handleImport = async () => {
         try {
             const list = await importWalletsFromExcel();
-            setAddressListStr(list.join(','));
+            setAddressList(list.join(','));
         } catch (err) {
             message.error(err.message);
         }
     };
 
-    const [buybackStatus, setBuybackStatus] = useState('in_progress');// 'in_progress' | 'completed'
+    const [buybackStatus, setBuybackStatus] = useState('in_progress');// 'in_progress' | 'completed' | 'closed'
     const [buybackCycleType,setBuybackCycleType] = useState('continuous');// 'continuous' | 'limited'
     const [buybackEndTime,setBuybackEndTime] = useState(null);
     const [buybackRandomStrategyEnabled,setBuybackRandomStrategyEnabled] = useState(false);
@@ -121,6 +127,10 @@ export default function Index({type=0,ctoProjId,tokenContractAddr,show,onClose})
         if(show) {
             if(curIdx==0) {
                 refreshBuybackSet();
+            }else if(curIdx==1) {
+                refreshDividendsSet();
+            }else if(curIdx==2) {
+                refreshDestroySet();
             }
         }
     },[ctoProjId,show,curIdx]);
@@ -155,7 +165,7 @@ export default function Index({type=0,ctoProjId,tokenContractAddr,show,onClose})
         {shouldRender?<ModalContent>
             <RowTitle>{t('309')}</RowTitle>
             <RowColumn>
-                <GradientSwitch disabled={buybackStatus=='closed'} checked={buybackStatus=='in_progress'} onChange={val=>setBuybackStatus(val?'in_progress':'completed')}/>
+                <GradientSwitch disabled={buybackStatus=='completed'} checked={buybackStatus=='in_progress'} onChange={val=>setBuybackStatus(val?'in_progress':'closed')}/>
             </RowColumn>
             <RowTitle>{t('21048')}</RowTitle>
             <RowColumn>
@@ -224,7 +234,7 @@ export default function Index({type=0,ctoProjId,tokenContractAddr,show,onClose})
         :<ModalContentH5>
             <RowTitle>{t('309')}</RowTitle>
             <RowContent>
-                <GradientSwitch checked={buybackStatus=='in_progress'} onChange={val=>setBuybackStatus(val?'in_progress':'completed')}/>
+                <GradientSwitch disabled={buybackStatus=='completed'} checked={buybackStatus=='in_progress'} onChange={val=>setBuybackStatus(val?'in_progress':'closed')}/>
             </RowContent>
             <RowTitle>{t('21048')}</RowTitle>
             <RowContent>
@@ -289,20 +299,72 @@ export default function Index({type=0,ctoProjId,tokenContractAddr,show,onClose})
         <LargeBtn className='custom' onClick={saveBuyback}>{t('21034')}</LargeBtn>
         </>
     }
+    const handleCountChange = (newValue, onResult) => {
+        if (newValue === '' || /^[1-9]\d*$/.test(newValue)) {
+            onResult && onResult(newValue);
+        }
+    }
+    const [data, setData] = useState(null);
+    const [status, setStatus] = useState('in_progress');// 'in_progress' | 'completed' | 'closed'
+    const [shareRatio, setShareRatio] = useState('');
+    const [conditionType, setConditionType] = useState('by_amount');//by_amount | by_address_list
+    const [minHolding, setMinHolding] = useState('');
+    const [addressList, setAddressList] = useState('');
+    const [distributionMethod, setDistributionMethod] = useState('immediate');//immediate | cycle_weekly | cycle_monthly | cycle_quarterly
+    const [distriCycleNum, setDistriCycleNum] = useState('');
+    const [startTime, setStartTime] = useState(null);
+    const refreshDividendsSet = () => {
+        if(ctoProjId) {
+            dividendRuleQueryApi({ctoProjId}).then(({data})=>{
+                if(data.id>0) {
+                    setData(data);
+                    setStatus(data.status);
+                    setShareRatio(data.shareRatio);
+                    setConditionType(data.conditionType);
+                    setMinHolding(data.minHolding);
+                    setAddressList(data.addressList);
+                    setDistributionMethod(data.distributionMethod);
+                    setDistriCycleNum(data.distriCycleNum);
+                    setStartTime(data.startTime?moment.unix(data.startTime):null);
+                }
+            });
+        }
+    }
+    const saveDividends = () => {
+        dividendRuleApi({
+            id:0,
+            ctoProjId,
+            status,
+            shareRatio,
+            conditionType,
+            minHolding,
+            addressList,
+            distributionMethod,
+            distriCycleNum:Number(distriCycleNum),
+            startTime:startTime?startTime.unix():'',
+        }).then(()=>{
+            message.success(t('616'));
+            refreshDividendsSet();
+        });
+    }
     const renderDividends = () => {
         return <>
             {shouldRender?<ModalContentDividends>
+                <RowHTitle>{t('309')}</RowHTitle>
+                <RowHColumn>
+                    <GradientSwitch disabled={status=='completed'} checked={status=='in_progress'} onChange={val=>setStatus(val?'in_progress':'closed')}/>
+                </RowHColumn>
                 <RowHTitle>{t('21011')}</RowHTitle>
-                <InputNumber value={count} unit="%" onChange={handleChange}/>
+                <InputNumber value={showPoolRatio(shareRatio)} unit="%" onChange={e=>handleChange(e.target.value,false,val=>setShareRatio(val))}/>
                 <RowHTitle>{t('21038')}</RowHTitle>
                 <RowHColumn>
-                    <Radio title={t('21039')} checked={true} onChange={val=>{}}/>
-                    <Radio title={t('21040')} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21039')} checked={conditionType=='by_amount'} onChange={()=>setConditionType('by_amount')}/>
+                    <Radio title={t('21040')} checked={conditionType=='by_address_list'} onChange={()=>setConditionType('by_address_list')}/>
                 </RowHColumn>
                 <RowInputColumn>
-                    <InputNumber value={count} unit="SOL" onChange={handleChange}/>
+                    <InputNumber value={minHolding} unit="SOL" onChange={e=>handleChange(e.target.value,true,val=>setMinHolding(val))}/>
                     <RowTextarea>
-                        <textarea placeholder={t('21041')} value={addressListStr} onChange={e=>setAddressListStr(e.target.value)}></textarea>
+                        <textarea placeholder={t('21041')} value={addressList} onChange={e=>setAddressList(e.target.value)}></textarea>
                     </RowTextarea>
                     <RowEnd>
                         <RowImport onClick={handleImport}>{t('21042')}</RowImport>
@@ -310,112 +372,115 @@ export default function Index({type=0,ctoProjId,tokenContractAddr,show,onClose})
                 </RowInputColumn>
                 <RowHTitle>{t('21044')}</RowHTitle>
                 <RowHColumn>
-                    <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
-                    <Radio title={t('21024')} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21043')} checked={distributionMethod=='immediate'} onChange={()=>setDistributionMethod('immediate')}/>
+                    <Radio title={t('21024')} checked={distributionMethod!='immediate'} onChange={()=>setDistributionMethod(data&&data.distributionMethod!='immediate'?data.distributionMethod:'cycle_weekly')}/>
                 </RowHColumn>
                 <RowInputColumn>
+                    {distributionMethod!='immediate'&&<>
                     <RowInputEmpty/>
                     <Row>
-                        <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
-                        <InputNumber value={count} unit={t('21077')} onChange={handleChange}/>
-                    </Row>
+                        <Select value={distributionMethod} onChange={val=>setDistributionMethod(val)} options={[{label: t('21069'), value: 'cycle_weekly'},{label: t('21070'), value: 'cycle_monthly'},{label: t('21071'), value: 'cycle_quarterly'}]}/>
+                        <InputNumber value={distriCycleNum} unit={t('21077')} onChange={e=>handleCountChange(e.target.value,val=>setDistriCycleNum(val))}/>
+                    </Row></>}
                 </RowInputColumn>
                 <RowHTitle>{t('21009')}</RowHTitle>
-                <DatePicker onChange={()=>{}} />
-                <RowHTitle>{t('21076')}</RowHTitle>
-                <DatePicker onChange={()=>{}} />
+                <DatePicker value={startTime} onChange={val=>setStartTime(val)} />
             </ModalContentDividends>
         :<ModalContentH5>
-            <RowHTitle>{t('21035')}</RowHTitle>
+            <RowHTitle>{t('309')}</RowHTitle>
             <RowH5>
-                <RowHColumn>
-                    <Radio title={t('21036')} checked={true} onChange={val=>{}}/>
-                    <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
-                </RowHColumn>
-                <RowInputColumn>
-                    <InputNumber value={count} unit="SOL" onChange={handleChange}/>
-                    <InputNumber value={count} unit="%" onChange={handleChange}/>
-                </RowInputColumn>
+                <GradientSwitch disabled={status=='completed'} checked={status=='in_progress'} onChange={val=>setStatus(val?'in_progress':'closed')}/>
+            </RowH5>
+            <RowHTitle>{t('21011')}</RowHTitle>
+            <RowH5>
+                <InputNumber value={showPoolRatio(shareRatio)} unit="%" onChange={e=>handleChange(e.target.value,false,val=>setShareRatio(val))}/>
             </RowH5>
             <RowHTitle>{t('21038')}</RowHTitle>
             <RowH5>
                 <RowHColumn>
-                    <Radio title={t('21039')} checked={true} onChange={val=>{}}/>
-                    <Radio title={t('21040')} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21039')} checked={conditionType=='by_amount'} onChange={()=>setConditionType('by_amount')}/>
+                    <Radio title={t('21040')} checked={conditionType=='by_address_list'} onChange={()=>setConditionType('by_address_list')}/>
                 </RowHColumn>
                 <RowInputColumn>
-                    <InputNumber value={count} unit="SOL" onChange={handleChange}/>
+                    <InputNumber value={minHolding} unit="SOL" onChange={e=>handleChange(e.target.value,true,val=>setMinHolding(val))}/>
                     <RowEnd>
                         <RowImport onClick={handleImport}>{t('21042')}</RowImport>
                     </RowEnd>
                 </RowInputColumn>
                 <RowTextarea>
-                    <textarea placeholder={t('21041')} value={addressListStr} onChange={e=>setAddressListStr(e.target.value)}></textarea>
+                    <textarea placeholder={t('21041')} value={addressList} onChange={e=>setAddressList(e.target.value)}></textarea>
                 </RowTextarea>
             </RowH5>
             <RowHTitle>{t('21044')}</RowHTitle>
             <RowH5>
                 <RowHColumn>
-                    <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
-                    <Radio title={t('21024')} checked={false} onChange={val=>{}}/>
+                    <Radio title={t('21043')} checked={distributionMethod=='immediate'} onChange={()=>setDistributionMethod('immediate')}/>
+                    <Radio title={t('21024')} checked={distributionMethod!='immediate'} onChange={()=>setDistributionMethod(data&&data.distributionMethod!='immediate'?data.distributionMethod:'cycle_weekly')}/>
                 </RowHColumn>
-                <RowInputColumn>
+                {distributionMethod!='immediate'&&<><RowInputColumn>
                     <RowInputEmpty/>
                     <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
                 </RowInputColumn>
-                <InputNumber value={count} unit={t('21077')} onChange={handleChange}/>
+                <InputNumber value={distriCycleNum} unit={t('21077')} onChange={e=>handleCountChange(e.target.value,val=>setDistriCycleNum(val))}/></>}
             </RowH5>
             <RowHTitle>{t('21009')}</RowHTitle>
-            <DatePicker onChange={()=>{}} />
-            <RowHTitle>{t('21076')}</RowHTitle>
-            <DatePicker onChange={()=>{}} />
+            <DatePicker value={startTime} onChange={val=>setStartTime(val)} />
         </ModalContentH5>}
-        <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
+        <LargeBtn className='custom' onClick={saveDividends}>{t('21034')}</LargeBtn>
         </>
+    }
+    const [destroyStatus, setDestroyStatus] = useState('in_progress');// 'in_progress' | 'completed' | 'closed'
+    const [burnRatio, setBurnRatio] = useState('');
+    const refreshDestroySet = () => {
+        if(ctoProjId) {
+            burnSettingQueryApi({ctoProjId}).then(({data})=>{
+                if(data.id>0) {
+                    setDestroyStatus(data.status);
+                    setBurnRatio(data.burnRatio);
+                }
+            });
+        }
+    }
+    const saveDestroy = () => {
+        burnSettingApi({
+            id:0,
+            ctoProjId,
+            status:destroyStatus,
+            burnRatio,
+        }).then(()=>{
+            message.success(t('616'));
+            refreshDestroySet();
+        });
     }
     const renderDestroy = () => {
         return <>
             {shouldRender?<ModalContentDestroy>
+                <RowHTitle>{t('309')}</RowHTitle>
+                <RowHColumn>
+                    <GradientSwitch disabled={destroyStatus=='completed'} checked={destroyStatus=='in_progress'} onChange={val=>setDestroyStatus(val?'in_progress':'closed')}/>
+                </RowHColumn>
                 <RowHTitle>{t('21012')}</RowHTitle>
-                <InputNumber value={count} unit="%" onChange={handleChange}/>
+                <InputNumber value={showPoolRatio(burnRatio)} unit="%" onChange={e=>handleChange(e.target.value,false,val=>setBurnRatio(val))}/>
                 <RowHTitle>{t('21066')}</RowHTitle>
                 <RowHColumn>
                     <Radio title={t('21067')} checked={true} onChange={val=>{}}/>
-                    <Radio title={t('21068')} checked={false} onChange={val=>{}}/>
                 </RowHColumn>
-                <RowInputColumn>
-                    <RowInputEmpty/>
-                    <Row>
-                        <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
-                        <InputNumber value={count} unit={t('21077')} onChange={handleChange}/>
-                    </Row>
-                </RowInputColumn>
-                <RowHTitle>{t('21009')}</RowHTitle>
-                <DatePicker onChange={()=>{}} />
-                <RowHTitle>{t('21076')}</RowHTitle>
-                <DatePicker onChange={()=>{}} />
             </ModalContentDestroy>
             :<ModalContentH5>
+                <RowHTitle>{t('309')}</RowHTitle>
+                <RowH5>
+                    <GradientSwitch disabled={destroyStatus=='completed'} checked={destroyStatus=='in_progress'} onChange={val=>setDestroyStatus(val?'in_progress':'closed')}/>
+                </RowH5>
                 <RowHTitle>{t('21012')}</RowHTitle>
-                <InputNumber value={count} unit="%" onChange={handleChange}/>
+                <InputNumber value={showPoolRatio(burnRatio)} unit="%" onChange={e=>handleChange(e.target.value,false,val=>setBurnRatio(val))}/>
                 <RowHTitle>{t('21066')}</RowHTitle>
                 <RowH5>
                     <RowHColumn>
                         <Radio title={t('21067')} checked={true} onChange={val=>{}}/>
-                        <Radio title={t('21068')} checked={false} onChange={val=>{}}/>
                     </RowHColumn>
-                    <RowInputColumn>
-                        <RowInputEmpty/>
-                        <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
-                    </RowInputColumn>
-                    <InputNumber value={count} unit={t('21077')} onChange={handleChange}/>
                 </RowH5>
-                <RowHTitle>{t('21009')}</RowHTitle>
-                <DatePicker onChange={()=>{}} />
-                <RowHTitle>{t('21076')}</RowHTitle>
-                <DatePicker onChange={()=>{}} />
             </ModalContentH5>}
-            <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
+            <LargeBtn className='custom' onClick={saveDestroy}>{t('21034')}</LargeBtn>
         </>
     }
     return (
@@ -657,16 +722,18 @@ grid-row-gap: 25px;
 
 & > :nth-child(1) { grid-area: 1 / 1 / 2 / 2; }
 & > :nth-child(2) { grid-area: 1 / 2 / 2 / 4; }
-& > :nth-child(3) { grid-area: 2 / 1 / 3 / 2; }
-& > :nth-child(4) { grid-area: 2 / 2 / 3 / 3; }
-& > :nth-child(5) { grid-area: 2 / 3 / 3 / 5; }
-& > :nth-child(6) { grid-area: 3 / 1 / 4 / 2; }
-& > :nth-child(7) { grid-area: 3 / 2 / 4 / 3; }
-& > :nth-child(8) { grid-area: 3 / 3 / 4 / 5; }
-& > :nth-child(9) { grid-area: 4 / 1 / 5 / 2; }
-& > :nth-child(10) { grid-area: 4 / 2 / 5 / 4; }
-& > :nth-child(11) { grid-area: 5 / 1 / 6 / 2; }
-& > :nth-child(12) { grid-area: 5 / 2 / 6 / 4; }
+& > :nth-child(3) { grid-area: 2 / 1 / 2 / 2; }
+& > :nth-child(4) { grid-area: 2 / 2 / 2 / 4; }
+& > :nth-child(5) { grid-area: 3 / 1 / 3 / 2; }
+& > :nth-child(6) { grid-area: 3 / 2 / 3 / 3; }
+& > :nth-child(7) { grid-area: 3 / 3 / 3 / 5; }
+& > :nth-child(8) { grid-area: 4 / 1 / 4 / 2; }
+& > :nth-child(9) { grid-area: 5 / 2 / 4 / 3; }
+& > :nth-child(10) { grid-area: 5 / 3 / 4 / 5; }
+& > :nth-child(11) { grid-area: 6 / 1 / 5 / 2; }
+& > :nth-child(12) { grid-area: 6 / 2 / 5 / 4; }
+& > :nth-child(13) { grid-area: 6 / 1 / 6 / 2; }
+& > :nth-child(14) { grid-area: 7 / 2 / 6 / 4; }
 `
 const RowEnd = styled.div`
 display: flex;
@@ -743,11 +810,13 @@ grid-row-gap: 25px;
 
 & > :nth-child(1) { grid-area: 1 / 1 / 2 / 2; }
 & > :nth-child(2) { grid-area: 1 / 2 / 2 / 4; }
-& > :nth-child(3) { grid-area: 2 / 1 / 3 / 2; }
-& > :nth-child(4) { grid-area: 2 / 2 / 3 / 3; }
-& > :nth-child(5) { grid-area: 2 / 3 / 3 / 5; }
-& > :nth-child(6) { grid-area: 3 / 1 / 4 / 2; }
-& > :nth-child(7) { grid-area: 3 / 2 / 4 / 4; }
-& > :nth-child(8) { grid-area: 4 / 1 / 5 / 2; }
-& > :nth-child(9) { grid-area: 4 / 2 / 5 / 4; }
+& > :nth-child(3) { grid-area: 2 / 1 / 2 / 2; }
+& > :nth-child(4) { grid-area: 2 / 2 / 2 / 4; }
+& > :nth-child(5) { grid-area: 3 / 1 / 3 / 2; }
+& > :nth-child(6) { grid-area: 3 / 2 / 3 / 3; }
+& > :nth-child(7) { grid-area: 3 / 3 / 3 / 5; }
+& > :nth-child(8) { grid-area: 4 / 1 / 4 / 2; }
+& > :nth-child(9) { grid-area: 5 / 2 / 4 / 4; }
+& > :nth-child(10) { grid-area: 6 / 1 / 5 / 2; }
+& > :nth-child(11) { grid-area: 6 / 2 / 5 / 4; }
 `

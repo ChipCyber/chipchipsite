@@ -11,7 +11,7 @@ import DirectDividends from "./directDividends";
 import OperationAlert from "./operationAlert";
 import InputNumber from "@/components/inputNumber";
 import { solana_sendSOL, solana_signMsg } from '@/wallet/solana.js';
-import { getProjectListApi, getProjectApi, bindContractAddressApi } from "@/api/cto.js";
+import { getProjectListApi, getProjectApi, bindContractAddressApi, transferoutApi } from "@/api/cto.js";
 import { toDateStrWithSeconds, shortenString } from "@/utils";
 import { sub, mul, div, formatLargeNumber } from '@/utils/number.js';
 import { showLoading, hideLoading } from '@/utils/loading.js';
@@ -30,6 +30,7 @@ export default function Index() {
     const [showTransferIn, setShowTransferIn] = useState(false);
     const [transferInAddress, setTransferInAddress] = useState(null);
     const [showTransferOut, setShowTransferOut] = useState(false);
+    const [showTreasuryTransferOut, setShowTreasuryTransferOut] = useState(false);
     const [showDirect, setShowDirect] = useState(false);
     const [showOperation, setShowOperation] = useState(false);
     const [address, setAddress] = useState('');
@@ -38,6 +39,8 @@ export default function Index() {
     const [transferInLoading, setTransferInLoading] = useState(false);
     const [transferOutCount, setTransferOutCount] = useState("");
     const [transferOutLoading, setTransferOutLoading] = useState(false);
+    const [treasuryTransferOutCount, setTreasuryTransferOutCount] = useState("");
+    const [treasuryTransferOutLoading, setTreasuryTransferOutLoading] = useState(false);
     const handleInChange = (event) => {
         const newValue = event.target.value;
         if (/^(?:0(\.\d+)?|[1-9]\d*(\.\d+)?)$/.test(newValue) || newValue === '') {
@@ -48,6 +51,12 @@ export default function Index() {
         const newValue = event.target.value;
         if (/^(?:0(\.\d+)?|[1-9]\d*(\.\d+)?)$/.test(newValue) || newValue === '') {
             setTransferOutCount(newValue);
+        }
+    }
+    const handleTreasuryOutChange = (event) => {
+        const newValue = event.target.value;
+        if (/^(?:0(\.\d+)?|[1-9]\d*(\.\d+)?)$/.test(newValue) || newValue === '') {
+            setTreasuryTransferOutCount(newValue);
         }
     }
     const connectWallet = () => {
@@ -67,6 +76,7 @@ export default function Index() {
         try {
             await solana_sendSOL(currentWalletAddress, transferInAddress, transferInCount);
             message.success(t('616'));
+            setTransferInCount('');
             setShowTransferIn(false);
         } catch (error) {
             message.error(error);
@@ -76,7 +86,21 @@ export default function Index() {
         }
     }
     const transferOut = async () => {
-        
+        setTransferOutLoading(true);
+        transferoutApi({
+            ctoProjId:data?data.id:null,
+            ownerAddr:currentWalletAddress,
+            amount:transferOutCount,
+        }).then(()=>{
+            message.success(t('616'));
+            setTransferOutCount('');
+            setShowTransferOut(false);
+        }).finally(()=>{
+            setTransferOutLoading(false);
+        });
+    }
+    const treasuryTransferOut = () => {
+
     }
     const bindAddress = async () => {
         try {
@@ -312,7 +336,7 @@ export default function Index() {
                                 <div>{t('21029')}</div>
                                 <div>{data?formatLargeNumber(data.availableBalance):'--'} {data?.symbol ?? '--'}</div>
                             </ItemBottomRightItem>
-                            {isBind?<SmallBorderBtn className='custom' onClick={()=>setShowTransferOut(true)}>{t('21020')}</SmallBorderBtn>:
+                            {isBind?<SmallBorderBtn className='custom' onClick={()=>setShowTreasuryTransferOut(true)}>{t('21020')}</SmallBorderBtn>:
                             <SmallBorderBtn className='custom' onClick={()=>setShowBind(true)}>{t('21031')}</SmallBorderBtn>}
                             <ItemBottomRightInfo>
                                 <img src={require('../../assets/cto/icon_info.png').default}/>
@@ -504,7 +528,7 @@ export default function Index() {
                                 <div>{t('21029')}</div>
                                 <div>{data?formatLargeNumber(data.availableBalance):'--'} {data?.symbol ?? '--'}</div>
                             </ItemBottomRightItem>
-                            {isBind?<SmallBorderBtn className='custom' onClick={()=>setShowTransferOut(true)}>{t('21020')}</SmallBorderBtn>:
+                            {isBind?<SmallBorderBtn className='custom' onClick={()=>setShowTreasuryTransferOut(true)}>{t('21020')}</SmallBorderBtn>:
                             <SmallBorderBtn className='custom' onClick={()=>setShowBind(true)}>{t('21031')}</SmallBorderBtn>}
                             <ItemBottomRightInfo>
                                 <img src={require('../../assets/cto/icon_info.png').default}/>
@@ -577,7 +601,26 @@ export default function Index() {
                 </ModalContent>
             </DialogC>
         </DialogOverlay>
-        <DirectDividends show={showDirect} onClose={()=>setShowDirect(false)}/>
+        <DialogOverlay
+            style={{ height: '100vh', zIndex: 99, background: 'hsla(0, 0%, 0%, 0.6)' }}
+            isOpen={showTreasuryTransferOut}
+            onDismiss={()=>setShowTreasuryTransferOut(false)}
+        >
+            <DialogC aria-label='modal'>
+                <ModalHeader>
+                    <div className='title'>{t('21020')}</div>
+                    <img className='close' onClick={()=>setShowTreasuryTransferOut(false)} src={require('../../assets/nav/close.png').default}/>
+                </ModalHeader>
+                <ModalContent>
+                    <Row>
+                        <div className='title'>{t('605')}</div>
+                        <InputNumber value={treasuryTransferOutCount} unit={data?data.symbol:''} onChange={handleTreasuryOutChange} placeholder={t('21023')}/>
+                    </Row>
+                    <LargeBtn disabled={treasuryTransferOutCount<=0||treasuryTransferOutLoading||!data?.buybackPoolAddr} className='custom' onClick={treasuryTransferOut}>{t('21034')}</LargeBtn>
+                </ModalContent>
+            </DialogC>
+        </DialogOverlay>
+        <DirectDividends ctoProjId={data?data.id:null} show={showDirect} onClose={()=>setShowDirect(false)}/>
         <OperationAlert ctoProjId={data?data.id:null} tokenContractAddr={data?data.tokenContractAddr:null} show={showOperation} onClose={()=>setShowOperation(false)}/>
     </>
 }

@@ -5,30 +5,107 @@ import { DialogOverlay, DialogContent } from "@reach/dialog";
 import { message } from 'antd';
 import useBreakpointCheck from "../../hooks/useBreakpointCheck";
 import Radio from "@/components/radio";
+import GradientSwitch from "@/components/gradientSwitch";
 import DatePicker from "@/components/datePicker";
 import Select from "@/components/select";
 import InputNumber from "@/components/inputNumber";
 import { importWalletsFromExcel } from "@/utils/excel.js";
+import { directdividendRuleApi, directdividendRuleQueryApi } from "@/api/cto.js";
+import { mul, div } from "@/utils/number.js";
+import moment from 'moment';
 
-export default function Index({show,onClose}) {
+export default function Index({ctoProjId,show,onClose}) {
     const { t } = useTranslation();
     const shouldRender = useBreakpointCheck();
     const [count, setCount] = useState(0);
-    const [addressListStr, setAddressListStr] = useState("");
-    const handleChange = (event) => {
-        const newValue = event.target.value;
-        if (newValue === '' || /^[1-9]\d*$/.test(newValue)) {
-            setCount(newValue);
-        }
-    };
     const handleImport = async () => {
         try {
             const list = await importWalletsFromExcel();
-            setAddressListStr(list.join(','));
+            setAddressList(list.join(','));
         } catch (err) {
             message.error(err.message);
         }
     };
+    const handleChange = (newValue,fixed,onResult) => {
+        if (newValue === '' || /^(?:0|[1-9]\d*)(?:\.\d*)?$/.test(newValue) || newValue === '.') {
+            if(fixed) {
+                onResult && onResult(newValue);
+            }else{
+                if (newValue === '') {
+                    onResult && onResult(newValue);
+                }else{
+                    if(newValue<=0) {
+                        onResult && onResult(newValue);
+                    }else{
+                        onResult && onResult(div(newValue,100,6));
+                    }
+                }
+            }
+        }
+    }
+    const showPoolRatio = (ratio) => {
+        return ratio==0?ratio:mul(ratio,100,6);
+    }
+    const handleCountChange = (newValue, onResult) => {
+        if (newValue === '' || /^[1-9]\d*$/.test(newValue)) {
+            onResult && onResult(newValue);
+        }
+    }
+    const [data, setData] = useState(null);
+    const [status, setStatus] = useState('in_progress');// 'in_progress' | 'completed' | 'closed'
+    const [distriAmountType, setDistriAmountType] = useState('fixed');//fixed | pool_ratio
+    const [distriFixedAmount, setDistriFixedAmount] = useState('');
+    const [distriPoolRatio, setDistriPoolRatio] = useState('');
+    const [conditionType, setConditionType] = useState('by_amount');//by_amount | by_address_list
+    const [minHolding, setMinHolding] = useState('');
+    const [addressList, setAddressList] = useState('');
+    const [distributionMethod, setDistributionMethod] = useState('immediate');//immediate | cycle_weekly | cycle_monthly | cycle_quarterly
+    const [distriCycleNum, setDistriCycleNum] = useState('');
+    const [startTime, setStartTime] = useState(null);
+    const refreshData = () => {
+        if(ctoProjId) {
+            directdividendRuleQueryApi({ctoProjId}).then(({data})=>{
+                if(data.id>0) {
+                    setData(data);
+                    setStatus(data.status);
+                    setDistriAmountType(data.distriAmountType);
+                    setDistriFixedAmount(data.distriFixedAmount);
+                    setDistriPoolRatio(data.distriPoolRatio);
+                    setConditionType(data.conditionType);
+                    setMinHolding(data.minHolding);
+                    setAddressList(data.addressList);
+                    setDistributionMethod(data.distributionMethod);
+                    setDistriCycleNum(data.distriCycleNum);
+                    setStartTime(data.startTime?moment.unix(data.startTime):null);
+                }
+            });
+        }
+    }
+    useEffect(()=>{
+        if(show) {
+            refreshData();
+        }
+    },[ctoProjId,show]);
+    const submitData = () => {
+        directdividendRuleApi({
+            id:0,
+            ctoProjId,
+            status,
+            distriAmountType,
+            distriFixedAmount,
+            distriPoolRatio,
+            conditionType,
+            minHolding,
+            addressList,
+            distributionMethod,
+            distriCycleNum:Number(distriCycleNum),
+            startTime:startTime?startTime.unix():'',
+            createdBy:"",
+        }).then(()=>{
+            message.success(t('616'));
+            refreshData();
+        });
+    }
     return (
         <DialogOverlay
             style={{ height: '100vh', zIndex: 99, background: 'hsla(0, 0%, 0%, 0.6)' }}
@@ -41,24 +118,28 @@ export default function Index({show,onClose}) {
                     <img className='close' onClick={onClose} src={require('../../assets/nav/close.png').default}/>
                 </ModalHeader>
                 {shouldRender ? <ModalContent>
+                    <RowTitle>{t('309')}</RowTitle>
+                    <RowColumn>
+                        <GradientSwitch disabled={status=='completed'} checked={status=='in_progress'} onChange={val=>setStatus(val?'in_progress':'closed')}/>
+                    </RowColumn>
                     <RowTitle>{t('21035')}</RowTitle>
                     <RowColumn>
-                        <Radio title={t('21036')} checked={true} onChange={val=>{}}/>
-                        <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
+                        <Radio title={t('21036')} checked={distriAmountType=='fixed'} onChange={()=>setDistriAmountType('fixed')}/>
+                        <Radio title={t('21037')} checked={distriAmountType=='pool_ratio'} onChange={()=>setDistriAmountType('pool_ratio')}/>
                     </RowColumn>
                     <RowInputColumn>
-                        <InputNumber value={count} unit="SOL" onChange={handleChange}/>
-                        <InputNumber value={count} unit="%" onChange={handleChange}/>
+                        <InputNumber value={distriFixedAmount} unit="SOL" onChange={e=>handleChange(e.target.value,true,val=>setDistriFixedAmount(val))}/>
+                        <InputNumber value={showPoolRatio(distriPoolRatio)} unit="%" onChange={e=>handleChange(e.target.value,false,val=>setDistriPoolRatio(val))}/>
                     </RowInputColumn>
                     <RowTitle>{t('21038')}</RowTitle>
                     <RowColumn>
-                        <Radio title={t('21039')} checked={true} onChange={val=>{}}/>
-                        <Radio title={t('21040')} checked={false} onChange={val=>{}}/>
+                        <Radio title={t('21039')} checked={conditionType=='by_amount'} onChange={()=>setConditionType('by_amount')}/>
+                        <Radio title={t('21040')} checked={conditionType=='by_address_list'} onChange={()=>setConditionType('by_address_list')}/>
                     </RowColumn>
                     <RowInputColumn>
-                        <InputNumber value={count} unit="SOL" onChange={handleChange}/>
+                        <InputNumber value={minHolding} unit="SOL" onChange={e=>handleChange(e.target.value,true,val=>setMinHolding(val))}/>
                         <RowTextarea>
-                            <textarea placeholder={t('21041')} value={addressListStr} onChange={e=>setAddressListStr(e.target.value)}></textarea>
+                            <textarea placeholder={t('21041')} value={addressList} onChange={e=>setAddressList(e.target.value)}></textarea>
                         </RowTextarea>
                         <RowText>
                             <RowImport onClick={handleImport}>{t('21042')}</RowImport>
@@ -66,68 +147,69 @@ export default function Index({show,onClose}) {
                     </RowInputColumn>
                     <RowTitle>{t('21044')}</RowTitle>
                     <RowColumn>
-                        <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
-                        <Radio title={t('21024')} checked={false} onChange={val=>{}}/>
+                        <Radio title={t('21043')} checked={distributionMethod=='immediate'} onChange={()=>setDistributionMethod('immediate')}/>
+                        <Radio title={t('21024')} checked={distributionMethod!='immediate'} onChange={()=>setDistributionMethod(data&&data.distributionMethod!='immediate'?data.distributionMethod:'cycle_weekly')}/>
                     </RowColumn>
                     <RowInputColumn>
+                        {distributionMethod!='immediate'&&<>
                         <RowInputEmpty/>
                         <Row>
-                            <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
-                            <InputNumber value={count} unit={t('21077')} onChange={handleChange}/>
-                        </Row>
+                            <Select value={distributionMethod} onChange={val=>setDistributionMethod(val)} options={[{label: t('21069'), value: 'cycle_weekly'},{label: t('21070'), value: 'cycle_monthly'},{label: t('21071'), value: 'cycle_quarterly'}]}/>
+                            <InputNumber value={distriCycleNum} unit={t('21077')} onChange={e=>handleCountChange(e.target.value,val=>setDistriCycleNum(val))}/>
+                        </Row></>}
                     </RowInputColumn>
                     <RowTitle>{t('21009')}</RowTitle>
-                    <DatePicker onChange={()=>{}} />
-                    <RowTitle>{t('21076')}</RowTitle>
-                    <DatePicker onChange={()=>{}} />
+                    <DatePicker value={startTime} onChange={val=>setStartTime(val)} />
                 </ModalContent>:
                 <ModalContentH5>
+                    <RowTitle>{t('309')}</RowTitle>
+                    <RowH5>
+                        <GradientSwitch disabled={status=='completed'} checked={status=='in_progress'} onChange={val=>setStatus(val?'in_progress':'closed')}/>
+                    </RowH5>
                     <RowTitle>{t('21035')}</RowTitle>
                     <RowH5>
                         <RowColumn>
-                            <Radio title={t('21036')} checked={true} onChange={val=>{}}/>
-                            <Radio title={t('21037')} checked={false} onChange={val=>{}}/>
+                            <Radio title={t('21036')} checked={distriAmountType=='fixed'} onChange={()=>setDistriAmountType('fixed')}/>
+                            <Radio title={t('21037')} checked={distriAmountType=='pool_ratio'} onChange={()=>setDistriAmountType('pool_ratio')}/>
                         </RowColumn>
                         <RowInputColumn>
-                            <InputNumber value={count} unit="SOL" onChange={handleChange}/>
-                            <InputNumber value={count} unit="%" onChange={handleChange}/>
+                            <InputNumber value={distriFixedAmount} unit="SOL" onChange={e=>handleChange(e.target.value,true,val=>setDistriFixedAmount(val))}/>
+                            <InputNumber value={showPoolRatio(distriPoolRatio)} unit="%" onChange={e=>handleChange(e.target.value,false,val=>setDistriPoolRatio(val))}/>
                         </RowInputColumn>
                     </RowH5>
                     <RowTitle>{t('21038')}</RowTitle>
                     <RowH5>
                         <RowColumn>
-                            <Radio title={t('21039')} checked={true} onChange={val=>{}}/>
-                            <Radio title={t('21040')} checked={false} onChange={val=>{}}/>
+                            <Radio title={t('21039')} checked={conditionType=='by_amount'} onChange={()=>setConditionType('by_amount')}/>
+                            <Radio title={t('21040')} checked={conditionType=='by_address_list'} onChange={()=>setConditionType('by_address_list')}/>
                         </RowColumn>
                         <RowInputColumn>
-                            <InputNumber value={count} unit="SOL" onChange={handleChange}/>
+                            <InputNumber value={minHolding} unit="SOL" onChange={e=>handleChange(e.target.value,true,val=>setMinHolding(val))}/>
                             <RowText>
                                 <RowImport onClick={handleImport}>{t('21042')}</RowImport>
                             </RowText>
                         </RowInputColumn>
                         <RowTextarea>
-                            <textarea placeholder={t('21041')} value={addressListStr} onChange={e=>setAddressListStr(e.target.value)}></textarea>
+                            <textarea placeholder={t('21041')} value={addressList} onChange={e=>setAddressList(e.target.value)}></textarea>
                         </RowTextarea>
                     </RowH5>
                     <RowTitle>{t('21044')}</RowTitle>
                     <RowH5>
                         <RowColumn>
-                            <Radio title={t('21043')} checked={true} onChange={val=>{}}/>
-                            <Radio title={t('21024')} checked={false} onChange={val=>{}}/>
+                            <Radio title={t('21043')} checked={distributionMethod=='immediate'} onChange={()=>setDistributionMethod('immediate')}/>
+                            <Radio title={t('21024')} checked={distributionMethod!='immediate'} onChange={()=>setDistributionMethod(data&&data.distributionMethod!='immediate'?data.distributionMethod:'cycle_weekly')}/>
                         </RowColumn>
-                        <RowInputColumn>
+                        {distributionMethod!='immediate'&&<RowInputColumn>
                             <RowInputEmpty/>
-                            <Select options={[{label: t('21069'), value: ''},{label: t('21070'), value: ''},{label: t('21071'), value: ''}]}/>
-                        </RowInputColumn>
-                        <InputNumber value={count} unit={t('21077')} onChange={handleChange}/>
+                            <Select value={distributionMethod} onChange={val=>setDistributionMethod(val)} options={[{label: t('21069'), value: 'cycle_weekly'},{label: t('21070'), value: 'cycle_monthly'},{label: t('21071'), value: 'cycle_quarterly'}]}/>
+                        </RowInputColumn>}
+                        <InputNumber value={distriCycleNum} unit={t('21077')} onChange={e=>handleCountChange(e.target.value,val=>setDistriCycleNum(val))}/>
                     </RowH5>
                     <RowTitle>{t('21009')}</RowTitle>
-                    <DatePicker onChange={()=>{}} />
-                    <RowTitle>{t('21076')}</RowTitle>
-                    <DatePicker onChange={()=>{}} />
+                    <DatePicker value={startTime} onChange={val=>setStartTime(val)} />
                 </ModalContentH5>
                 }
-                <LargeBtn className='custom' onClick={()=>{}}>{t('21034')}</LargeBtn>
+                <LargeBtn className='custom' onClick={submitData}>{t('21034')}</LargeBtn>
             </DialogC>
         </DialogOverlay>
     )
@@ -211,21 +293,24 @@ grid-row-gap: 25px;
 
 & > :nth-child(1) { grid-area: 1 / 1 / 2 / 2; }
 & > :nth-child(2) { grid-area: 1 / 2 / 2 / 3; }
-& > :nth-child(3) { grid-area: 1 / 3 / 2 / 5; }
 
-& > :nth-child(4) { grid-area: 2 / 1 / 3 / 2; }
-& > :nth-child(5) { grid-area: 2 / 2 / 3 / 3; }
-& > :nth-child(6) { grid-area: 2 / 3 / 3 / 5; }
+& > :nth-child(3) { grid-area: 2 / 1 / 2 / 2; }
+& > :nth-child(4) { grid-area: 2 / 2 / 2 / 3; }
+& > :nth-child(5) { grid-area: 2 / 3 / 2 / 5; }
 
-& > :nth-child(7) { grid-area: 3 / 1 / 4 / 2; }
-& > :nth-child(8) { grid-area: 3 / 2 / 4 / 3; }
-& > :nth-child(9) { grid-area: 3 / 3 / 4 / 5; }
+& > :nth-child(6) { grid-area: 3 / 1 / 3 / 2; }
+& > :nth-child(7) { grid-area: 3 / 2 / 3 / 3; }
+& > :nth-child(8) { grid-area: 3 / 3 / 3 / 5; }
 
-& > :nth-child(10) { grid-area: 4 / 1 / 5 / 2; }
-& > :nth-child(11) { grid-area: 4 / 2 / 5 / 4; }
+& > :nth-child(9) { grid-area: 4 / 1 / 4 / 2; }
+& > :nth-child(10) { grid-area: 5 / 2 / 4 / 3; }
+& > :nth-child(11) { grid-area: 5 / 3 / 4 / 5; }
 
-& > :nth-child(12) { grid-area: 5 / 1 / 6 / 2; }
-& > :nth-child(13) { grid-area: 5 / 2 / 6 / 4; }
+& > :nth-child(12) { grid-area: 6 / 1 / 5 / 2; }
+& > :nth-child(13) { grid-area: 6 / 2 / 5 / 4; }
+
+& > :nth-child(14) { grid-area: 7 / 1 / 6 / 2; }
+& > :nth-child(15) { grid-area: 7 / 2 / 6 / 4; }
 `
 const RowTitle = styled.div`
 font-size: 14px;
