@@ -441,6 +441,7 @@
     "21075":"Closed",
     "21076": "End time",
     "21077": "Times",
+    "21078":"In order to withdraw project-bound tokens from the community treasury, CTO project creators must first transfer 0.01 SOL coins to the community treasury as a handling fee if the community treasury's transfer fee SOL is insufficient.",
 
     "":""
 }

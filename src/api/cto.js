@@ -116,3 +116,11 @@ export function transferoutApi(data) {
         loading: true,
     })
 }
+export function communitytreasuryWithdrawApi(data) {
+    return request({
+        url: '/cto/v1/communitytreasury/Withdraw',
+        method: 'post',
+        data,
+        loading: true,
+    })
+}

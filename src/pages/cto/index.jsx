@@ -11,7 +11,7 @@ import DirectDividends from "./directDividends";
 import OperationAlert from "./operationAlert";
 import InputNumber from "@/components/inputNumber";
 import { solana_sendSOL, solana_signMsg } from '@/wallet/solana.js';
-import { getProjectListApi, getProjectApi, bindContractAddressApi, transferoutApi } from "@/api/cto.js";
+import { getProjectListApi, getProjectApi, bindContractAddressApi, transferoutApi, communitytreasuryWithdrawApi } from "@/api/cto.js";
 import { toDateStrWithSeconds, shortenString } from "@/utils";
 import { sub, mul, div, formatLargeNumber } from '@/utils/number.js';
 import { showLoading, hideLoading } from '@/utils/loading.js';
@@ -100,7 +100,18 @@ export default function Index() {
         });
     }
     const treasuryTransferOut = () => {
-
+        setTreasuryTransferOutLoading(true);
+        communitytreasuryWithdrawApi({
+            ctoProjId:data?data.id:null,
+            ownerAddr:currentWalletAddress,
+            amount:treasuryTransferOutCount,
+        }).then(()=>{
+            message.success(t('616'));
+            setTreasuryTransferOutCount('');
+            setShowTreasuryTransferOut(false);
+        }).finally(()=>{
+            setTreasuryTransferOutLoading(false);
+        });
     }
     const bindAddress = async () => {
         try {
@@ -616,6 +627,7 @@ export default function Index() {
                         <div className='title'>{t('605')}</div>
                         <InputNumber value={treasuryTransferOutCount} unit={data?data.symbol:''} onChange={handleTreasuryOutChange} placeholder={t('21023')}/>
                     </Row>
+                    <Tip className="g_wait">{t('21078')}</Tip>
                     <LargeBtn disabled={treasuryTransferOutCount<=0||treasuryTransferOutLoading||!data?.buybackPoolAddr} className='custom' onClick={treasuryTransferOut}>{t('21034')}</LargeBtn>
                 </ModalContent>
             </DialogC>
@@ -1081,6 +1093,7 @@ const ItemBottomLeftBtnRow = styled.div`
 margin-top: 25px;
 display: flex;
 gap: 10px;
+flex-wrap: wrap;
 ${({ theme }) => theme.mediaQueries.sm}{
 margin-top: 32px;
 gap: 20px;
@@ -1294,6 +1307,14 @@ font-size: 24px;
 `
 const ModalContent = styled.div`
 
+`
+const Tip = styled.div`
+margin-top: 15px;
+font-size: 12px;
+font-weight: 500;
+${({ theme }) => theme.mediaQueries.sm}{
+font-size: 14px;
+};
 `
 const Row = styled.div`
 margin-top: 16px;
