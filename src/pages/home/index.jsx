@@ -24,156 +24,14 @@ import {
 } from "../../constants";
 
 import ItemBg from '../../assets/home/img3_item_bg.png';
-import ChartLogo from '../../assets/home/chart_logo.png';
-
-const data = [
-    { name: '64%', desc: '1100', value: 64, color: '#2F1AA4' },
-    { name: '10%', desc: '1101', value: 10, color: '#A084FA' },
-    { name: '7%', desc: 'IDO', value: 7, color: '#FFD43B' },
-    { name: '3%', desc: 'CHIPCHIPDAO', value: 3, color: '#78E1AE' },
-    { name: '1%', desc: '1102', value: 1, color: '#5F8AF9' },
-    { name: '15%', desc: '1103', value: 15, color: '#FF74C6' },
-];
-const getOption = (t) => ({
-    legend: {
-        show: false
-    },
-    tooltip: {
-        trigger: 'item',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        textStyle: {
-            color: '#FFF',
-        },
-        position: function (point, params, dom, rect, size) {
-            const [x, y] = point;
-            const [viewWidth, viewHeight] = size.viewSize;
-            const tooltipWidth = dom.offsetWidth;
-            const tooltipHeight = dom.offsetHeight;
-            const left = x - tooltipWidth / 2;
-            const finalLeft = Math.max(0, Math.min(left, viewWidth - tooltipWidth));
-            const top = y - tooltipHeight - 10;
-            const finalTop = Math.max(0, Math.min(top, viewHeight - tooltipHeight));
-            return [finalLeft, finalTop];
-        },
-        formatter: function(params) {
-            const item = data.find(d => d.name === params.name);
-            return `${item.name} ${t(item.desc)}`;
-        },
-    },
-    series: {
-        type: 'pie',
-        radius: ['35%', '50%'],
-        padAngle: 3,
-        label: {
-            alignTo: 'edge',
-            formatter: function(params) {
-                const item = data.find(d => d.desc === params.data.desc);
-                // const description = t(item.desc);
-                // const maxLineLength = 10;
-                // let formattedDesc = '';
-                // for (let i = 0; i < description.length; i += maxLineLength) {
-                //     formattedDesc += description.slice(i, i + maxLineLength) + '\n';
-                // }
-                return `{name|${params.name}}\n{circle|●} {desc|${t(item.desc)}}`;
-            },
-            minMargin: 5,
-            edgeDistance: 10,
-            lineHeight: 22,
-            rich: {
-                name: {
-                    fontSize: 12,
-                    lineHeight: 25,
-                },
-                desc: {
-                    fontSize: 10,
-                    padding: [2, 0, 0, 0]
-                },
-                circle: {
-                    fontSize: 10,
-                    borderRadius: 5,
-                }
-            }
-        },
-        labelLine: {
-            length: 15,
-            length2: 0,
-            maxSurfaceAngle: 80
-        },
-        labelLayout: function (params) {
-            const isLeft = params.labelRect.x < 200 / 2;
-            const points = params.labelLinePoints;
-            // Update the end point.
-            points[2][0] = isLeft
-            ? params.labelRect.x
-            : params.labelRect.x + params.labelRect.width;
-            return {
-                labelLinePoints: points
-            };
-        },
-        data: data.map(item => ({
-            value: item.value,
-            name: item.name,
-            desc: item.desc,
-            itemStyle: { color: item.color },
-            label: {
-                rich: {
-                    name: {
-                        color: item.color,
-                        fontSize: 18,
-                        fontWeight: 'bold',
-                    },
-                    desc: {
-                        textAlign: 'left',
-                        fontSize: 10,
-                        color: '#999',
-                    },
-                    circle: {
-                        backgroundColor: item.color
-                    }
-                }
-            }
-        }))
-    },
-    graphic: {
-        elements: [
-            {
-                type: 'image',
-                style: {
-                    image: ChartLogo,
-                    width: 56,
-                    height: 56
-                },
-                left: 'center',
-                top: 'center'
-            },
-        ]
-    }
-});
 
 export default function Home() {
     const { t } = useTranslation();
     const { language } = useLanguage();
-    const chartRef = useRef(null);
-    const { ref, inView } = useInView({
-        triggerOnce: true,
-        threshold: 0.3,
-    });
     const history = useHistory();
     const shouldRender = useBreakpointCheck();
     const [articleList, setArticleList] = useState([]);
     const [faqList, setFaqList] = useState([]);
-    useEffect(() => {
-        let myChart = null;
-        if(chartRef.current){
-            myChart = echarts.init(chartRef.current);
-            if (inView) {
-                myChart&&myChart.setOption(getOption(t));
-            }
-        }
-        return () => {
-            myChart&&myChart.dispose();
-        };
-    }, [shouldRender, inView, language]);
     useEffect(() => {
         articlePageListApi({pageIndex:1,pageSize:4}).then(({data})=>{
             setArticleList(data.list);
@@ -261,21 +119,21 @@ export default function Home() {
                             <div className='desc'>{t('122')}</div>
                         </Top3RowItem>
                         <Top3RowItem>
-                            <img src={require('../../assets/home/img3_item4.png').default}/>
-                            <div className='title'>{t('123')}</div>
-                            <div className='desc'>{t('124')}</div>
-                        </Top3RowItem>
-                        <Top3RowItem>
                             <img src={require('../../assets/home/img3_item2.png').default}/>
                             <div className='title'>{t('119')}</div>
                             <div className='desc'>{t('120')}</div>
+                        </Top3RowItem>
+                        <Top3RowItem>
+                            <img src={require('../../assets/home/img3_item4.png').default}/>
+                            <div className='title'>{t('123')}</div>
+                            <div className='desc'>{t('124')}</div>
                         </Top3RowItem>
                     </Top3Row>
                 </Top3>
                 <Top4>
                     <TopBg src={require('../../assets/home/bg4.png').default}/>
                     <Top4Content>
-                        <Top4Title>
+                        {/* <Top4Title>
                             <span>{t('125')}</span>
                             <img src={require('../../assets/home/img4_title.png').default}/>
                         </Top4Title>
@@ -301,14 +159,9 @@ export default function Home() {
                                         </Top4Row1LeftCardItem>
                                     </Top4Row1LeftCardContent>
                                 </Top4Row1LeftCard>
-                                {/* <Top2Btn className='custom' disabled>
-                                    <span>Fair Launch</span>
-                                    <img src={require('../../assets/home/arrow_enter.png').default}/>
-                                </Top2Btn> */}
                             </Top4Row1Left>
-                            {/* <Chart ref={(node) => { ref(node); chartRef.current = node; }}></Chart> */}
                             <Chart><img src={require("../../assets/home/chart_icon.png").default} alt='icon'/></Chart>
-                        </Top4Row1>
+                        </Top4Row1> */}
                         <Top4Row2>
                             <Top4Row2Img className='wow animate__animated animate__fadeInLeft' src={require('../../assets/home/img42.png').default}/>
                             <Top4Row2Right className='wow animate__animated animate__fadeInRight'>
@@ -541,22 +394,21 @@ export default function Home() {
                     <img className='icon' src={require('../../assets/home/h5/img3_item3.png').default}/>
                 </Top3H5Item>
                 <Top3H5Item>
-                    <div className='title'>{t('123')}</div>
-                    <div className='desc'>{t('124')}</div>
-                    <img className='icon' src={require('../../assets/home/h5/img3_item4.png').default}/>
-                </Top3H5Item>
-                <Top3H5Item>
                     <div className='title'>{t('119')}</div>
                     <div className='desc'>{t('120')}</div>
                     <img className='icon' src={require('../../assets/home/h5/img3_item2.png').default}/>
                 </Top3H5Item>
+                <Top3H5Item>
+                    <div className='title'>{t('123')}</div>
+                    <div className='desc'>{t('124')}</div>
+                    <img className='icon' src={require('../../assets/home/h5/img3_item4.png').default}/>
+                </Top3H5Item>
             </Top3H5>
-            <Top4H5>
+            {/* <Top4H5>
                 <div className='t_title'>{t('125')}</div>
                 <div className='t_sub_title'>{t('126')}</div>
                 <div className='desc'>{t('127')}</div>
                 <div className='desc'>{t('128')}<a href={GitbookTokenUrl} target='__blank'>Gitbook</a></div>
-                {/* <Chart ref={(node) => { ref(node); chartRef.current = node; }}></Chart> */}
                 <Chart><img src={require("../../assets/home/h5/chart_icon.png").default} alt='icon'/></Chart>
                 <Top4H5Card>
                     <img className='icon' src={require('../../assets/home/h5/img41.png').default}/>
@@ -573,11 +425,7 @@ export default function Home() {
                         <div className='item_desc'>{t('344')}</div>
                     </Top4H5CardItem>
                 </Top4H5Card>
-                {/* <BtnH5 className='custom' disabled>
-                    <span>Fair Launch</span>
-                    <img src={require('../../assets/nav/login_arrow.png').default}/>
-                </BtnH5> */}
-            </Top4H5>
+            </Top4H5> */}
             <Top5H5>
                 <img className='bg' src={require('../../assets/home/h5/bg5.png').default}/>
                 <div className='t_title'>{t('200')}</div>

@@ -99,7 +99,7 @@ export default function Index() {
                             <ItemTitle>Q1 2025</ItemTitle>
                             <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1501')}</ItemRow>
                             <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1502')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1503')}</ItemRow>
+                            {/* <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1503')}</ItemRow> */}
                             <ItemRow className='wow animate__animated animate__fadeInRight'>{t('1504')}</ItemRow>
                         </Item>
                         <Item>
@@ -110,7 +110,7 @@ export default function Index() {
                             <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1514')}</ItemRow>
                             <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1515')}</ItemRow>
                             <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1516')}</ItemRow>
-                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1517')}</ItemRow>
+                            {/* <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('1517')}</ItemRow> */}
                         </Item>
                         <Item>
                             <ItemTitle>Q3 2025</ItemTitle>
@@ -167,7 +167,7 @@ export default function Index() {
                             <ItemH5Row>{t('1514')}</ItemH5Row>
                             <ItemH5Row>{t('1515')}</ItemH5Row>
                             <ItemH5Row>{t('1516')}</ItemH5Row>
-                            <ItemH5Row>{t('1517')}</ItemH5Row>
+                            {/* <ItemH5Row>{t('1517')}</ItemH5Row> */}
                         </ItemH5>
                     </Left>
                     {currentQuarterSeq==1&&<img className='middle' src={require('../../assets/roadmap/h5/bg1.png').default}/>}
@@ -200,7 +200,7 @@ export default function Index() {
                             <ItemH5Title>Q1 2025</ItemH5Title>
                             <ItemH5Row>{t('1501')}</ItemH5Row>
                             <ItemH5Row>{t('1502')}</ItemH5Row>
-                            <ItemH5Row>{t('1503')}</ItemH5Row>
+                            {/* <ItemH5Row>{t('1503')}</ItemH5Row> */}
                             <ItemH5Row>{t('1504')}</ItemH5Row>
                         </ItemH5>
                         <ItemH5>

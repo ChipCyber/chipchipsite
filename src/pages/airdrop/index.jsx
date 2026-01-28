@@ -84,7 +84,8 @@ export default function Index() {
         }
     }
     if (shouldRender) {
-        const result = list && list.find(item => item.id == 5);
+        const result = list && list.find(item => item.id == 6) || {};
+        const typeObj = {4:'SS1',5:'SS2',6:'SS3'};
         return (
             <Root>
                 <Top>
@@ -95,21 +96,21 @@ export default function Index() {
       <>
        <div className="imgWrapper">
        <img className="optionheadImg" src={require(`../../assets/airdrop/head_option${idx}.png`).default} />
-         {(idx === 1 || idx === 2 || idx === 3) && (
+         {
             <div className="optionTagBox">
               <img className="optionTagImg" src={require(`../../assets/airdrop/top_option_icon${idx}.png`).default} />
-              <div className="optionTagText">{idx === 3 ? t('2007') : t('2006')}</div>
+              <div className="optionTagText">{idx === 4 ? t('2007') : t('2006')}</div>
             </div>
-          )}
-          { idx=== 2 && result && result.isEnd  ==false &&
+          }
+          { idx=== 3 && result && result.isEnd  ==false &&
           <div className='optioButton'>
            <SmallBtnOption className='custom' onClick={e=>claimAction(e,result)}>
            <span>{t('211')}</span>
            </SmallBtnOption>
            </div>
           }
-
-          {(idx === 4) && <img className="imgIcon3Box" src={require('../../assets/airdrop/top_option_icon4.png').default} />}
+          {(idx === 4) && <div className='optionTip'>{t('219')}</div>}
+          {/* {(idx === 4) && <img className="imgIcon3Box" src={require('../../assets/airdrop/top_option_icon4.png').default} />} */}
        </div>
        
        {idx !== 4 && (
@@ -187,7 +188,7 @@ export default function Index() {
                                 </ItemContent>
                                 </ItemTop>
                                 <ItemButton>
-                                    <div style={{fontWeight:500}}>{t('2038',{name:item.id==result.id?'SS2':'SS1'})}</div>
+                                    <div style={{fontWeight:500}}>{t('2038',{name:typeObj[item.id]})}</div>
                                     <div style={{color:"#E3E3E5"}}>{t('2039')}</div>
                                 </ItemButton>
                                 </ItemNew>
@@ -616,7 +617,16 @@ z-index: 2;
 display: flex;
 justify-content: center; 
 }
-
+.optionTip {
+z-index: 3;
+text-align: center;
+font-size: 14px;
+position: absolute;
+top: 70%;
+left: 0;
+width: 100%;
+color: #000;
+}
 .left {
 padding-top: 20px;
 padding-bottom: 30px;
