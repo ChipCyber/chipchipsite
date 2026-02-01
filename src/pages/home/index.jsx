@@ -34,7 +34,7 @@ export default function Home() {
     const [faqList, setFaqList] = useState([]);
     useEffect(() => {
         articlePageListApi({pageIndex:1,pageSize:4}).then(({data})=>{
-            setArticleList(data.list);
+            setArticleList(data);
         });
         knowledgePageListApi({pageIndex:1,pageSize:5,knowledgeType:1}).then(({data})=>{
             setFaqList(data);
