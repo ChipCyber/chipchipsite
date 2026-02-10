@@ -44,16 +44,16 @@ export default function Index() {
                             </div>
                             <img className='arrow' src={require('../../assets/arrow.png').default}/>
                         </RowLink>
-                        <Row href={AndroidUrl} target='__blank'>
+                        <Row href={iOSUrl} target='__blank'>
                             <div className='content'>
-                                <img src={require('../../assets/download/android.png').default}/>
-                                <span>Android</span>
+                                <img src={require('../../assets/download/ios.png').default}/>
+                                <span>iOS</span>
                             </div>
                             <img className='qr' src={require('../../assets/download/qr.png').default}/>
                             <div className='download_qr'>
                                 <div>{t('505')}</div>
                                 <QRCode
-                                    value={AndroidUrl}
+                                    value={iOSUrl}
                                     size={130}
                                     includeMargin={true}
                                 />
@@ -61,14 +61,14 @@ export default function Index() {
                         </Row>
                         <Row className='disabled'>
                             <div className='content'>
-                                <img src={require('../../assets/download/ios.png').default}/>
-                                <span>iOS({t('10')})</span>
+                                <img src={require('../../assets/download/android.png').default}/>
+                                <span>Android({t('10')})</span>
                             </div>
                             <img className='qr' src={require('../../assets/download/qr.png').default}/>
                             {/* <div className='download_qr'>
                                 <div>{t('505')}</div>
                                 <QRCode
-                                    value={iOSUrl}
+                                    value={AndroidUrl}
                                     size={130}
                                     includeMargin={true}
                                 />
@@ -118,17 +118,17 @@ export default function Index() {
                             </div>
                             <img className='arrow' src={require('../../assets/arrow.png').default}/>
                         </RowLink>
-                        <RowLink href={AndroidUrl} target='__blank'>
+                        <RowLink href={iOSUrl} target='__blank'>
                             <div className='content'>
-                                <img src={require('../../assets/download/android.png').default}/>
-                                <span>Android</span>
+                                <img src={require('../../assets/download/ios.png').default}/>
+                                <span>iOS</span>
                             </div>
                             <img className='download' src={require('../../assets/download/download.png').default}/>
                         </RowLink>
                         <RowLinkDisabled>
                             <div className='content'>
-                                <img src={require('../../assets/download/ios.png').default}/>
-                                <span>iOS({t('10')})</span>
+                                <img src={require('../../assets/download/android.png').default}/>
+                                <span>Android({t('10')})</span>
                             </div>
                             <img className='download' src={require('../../assets/download/download.png').default}/>
                         </RowLinkDisabled>
