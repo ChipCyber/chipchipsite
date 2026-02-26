@@ -74,6 +74,10 @@ export const LanaguageRequestMap = {
     'en': 'en-US',
     'zh_CN': 'zh-CN',
 };
+export const LanaguageLangMap = {
+    'en': 'en',
+    'zh_CN': 'zh',
+};
 
 export const CONNECTION_CONNECTED = 'CONNECTION_CONNECTED'
 export const CONNECTION_DISCONNECTED = 'CONNECTION_DISCONNECTED'

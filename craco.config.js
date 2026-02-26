@@ -3,6 +3,8 @@ const TerserPlugin = require('terser-webpack-plugin');
 const { NODE_ENV } = process.env;
 const path = require('path');
 
+const isProd = NODE_ENV === "production";
+
 const Webpack = {
   production: {
     plugins: [
@@ -32,6 +34,15 @@ module.exports = {
       '@babel/plugin-proposal-logical-assignment-operators',
       '@babel/plugin-proposal-nullish-coalescing-operator',
       '@babel/plugin-proposal-optional-chaining',
+      [
+        "babel-plugin-styled-components",
+        {
+          displayName: !isProd,
+          fileName: false,
+          minify: isProd,
+          pure: true
+        }
+      ],
     ],
   },
   plugins: [

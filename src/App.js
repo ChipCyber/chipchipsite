@@ -20,27 +20,38 @@ import emitter from "./constants/emitter";
 import { LanaguageMap, CHANGELANGUAGE } from "./constants";
 import { useLanguage, LanguageProvider } from "./LanguageContext";
 
+import SEO from "./components/seo";
 import ScrollToTop from "./components/scrollToTop";
 import Nav from "./components/nav";
 import Footer from "./components/footer";
 import Copyright from "./components/copyright";
 import Home from "./pages/home";
-import Airdrop from "./pages/airdrop";
-import AirdropDetail from "./pages/airdrop/detail";
 // import NGNF from "./pages/ngnf";
-import FAQ from "./pages/faq";
-import FAQDetail from "./pages/faq/detail";
-import News from "./pages/news";
-import NewsDetail from "./pages/news/detail";
-import Download from "./pages/download";
-import FairDealing from "./pages/fairDealing"
+// import Airdrop from "./pages/airdrop";
+// import AirdropDetail from "./pages/airdrop/detail";
+// import FAQ from "./pages/faq";
+// import FAQDetail from "./pages/faq/detail";
+// import News from "./pages/news";
+// import NewsDetail from "./pages/news/detail";
+// import Download from "./pages/download";
+// import FairDealing from "./pages/fairDealing";
+// import Roadmap from "./pages/roadmap";
 // import Displacement from "./pages/displacement";
-import Roadmap from "./pages/roadmap";
 // import IDO from "./pages/ido";
-import Mint from "./pages/mint";
+// import Mint from "./pages/mint";
 
 import { setWalletInfo, refreshWalletBalance } from '@/store/userSlice';
 import { recentConnector } from "@/wallet";
+
+const Airdrop = React.lazy(() => import("./pages/airdrop"));
+const AirdropDetail = React.lazy(() => import("./pages/airdrop/detail"));
+const FAQ = React.lazy(() => import("./pages/faq"));
+const FAQDetail = React.lazy(() => import("./pages/faq/detail"));
+const News = React.lazy(() => import("./pages/news"));
+const NewsDetail = React.lazy(() => import("./pages/news/detail"));
+const Download = React.lazy(() => import("./pages/download"));
+const FairDealing = React.lazy(() => import("./pages/fairDealing"));
+const Roadmap = React.lazy(() => import("./pages/roadmap"));
 
 function App() {
   const { changeLanguage } = useLanguage();
@@ -90,6 +101,7 @@ function App() {
       <ConfigProvider locale={curLanguage.includes('zh')?zhCN:enUS}>
         <Content>
           <ScrollToTop>
+            <SEO />
             <Switch>
               <Route path="/" exact>
                 <Nav/>
