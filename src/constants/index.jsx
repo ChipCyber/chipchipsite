@@ -30,7 +30,7 @@ export const FairDealUrl = "https://chipchipgame.medium.com/94a6a8bd0849"
 //下载链接
 export const TelegramMiniAppUrl = "https://t.me/chipchipgame_bot";
 export const WebUrl = "";
-export const AndroidUrl = "https://h5.chipchip.io/#home";
+export const AndroidUrl = "https://game.chipchip.io/api/download/android";
 export const iOSUrl = "https://link.chipchip.io/CHIPCHIP.mobileconfig";
 //线路图立即加入
 export const JoinNowUrl = "";

@@ -59,20 +59,20 @@ export default function Index() {
                                 />
                             </div>
                         </Row>
-                        <Row className='disabled'>
+                        <Row href={AndroidUrl} target='__blank'>
                             <div className='content'>
                                 <img src={require('../../assets/download/android.png').default}/>
-                                <span>Android({t('10')})</span>
+                                <span>Android</span>
                             </div>
                             <img className='qr' src={require('../../assets/download/qr.png').default}/>
-                            {/* <div className='download_qr'>
+                            <div className='download_qr'>
                                 <div>{t('505')}</div>
                                 <QRCode
                                     value={AndroidUrl}
                                     size={130}
                                     includeMargin={true}
                                 />
-                            </div> */}
+                            </div>
                         </Row>
                     </List>
                 </Left>
@@ -125,13 +125,13 @@ export default function Index() {
                             </div>
                             <img className='download' src={require('../../assets/download/download.png').default}/>
                         </RowLink>
-                        <RowLinkDisabled>
+                        <RowLink href={AndroidUrl} target='__blank'>
                             <div className='content'>
                                 <img src={require('../../assets/download/android.png').default}/>
-                                <span>Android({t('10')})</span>
+                                <span>Android</span>
                             </div>
                             <img className='download' src={require('../../assets/download/download.png').default}/>
-                        </RowLinkDisabled>
+                        </RowLink>
                     </List>
                 </BottomH5>
             </ContentH5>
