@@ -25,31 +25,31 @@ export default function Index() {
     if (shouldRender) {
         return (
             <Root>
-                <img className='bg' src={require('../../assets/download/bg.png').default}/>
+                <img className='bg' src={require('../../assets/download/bg.png').default} alt="" aria-hidden="true"/>
                 <Left>
-                    <div className='title'>{t('500')}</div>
+                    <h1 className='title'>{t('500')}</h1>
                     <div className='desc'>{t('501')}</div>
                     <List>
                         <RowLink href='https://t.me/chipchipgame_bot/CHIPCHIPGAME' target='__blank'>
                             <div className='content'>
-                                <img src={require('../../assets/download/telegram.png').default}/>
+                                <img src={require('../../assets/download/telegram.png').default} alt="" aria-hidden="true"/>
                                 <span>Telegram Mini-app</span>
                             </div>
-                            <img className='arrow' src={require('../../assets/arrow.png').default}/>
+                            <img className='arrow' src={require('../../assets/arrow.png').default} alt="" aria-hidden="true"/>
                         </RowLink>
                         <RowLink href='https://auth.chipchip.io/' target='__blank'>
                             <div className='content'>
-                                <img src={require('../../assets/download/web.png').default}/>
+                                <img src={require('../../assets/download/web.png').default} alt="" aria-hidden="true"/>
                                 <span>Web</span>
                             </div>
-                            <img className='arrow' src={require('../../assets/arrow.png').default}/>
+                            <img className='arrow' src={require('../../assets/arrow.png').default} alt="" aria-hidden="true"/>
                         </RowLink>
                         <Row href={iOSUrl} target='__blank'>
                             <div className='content'>
-                                <img src={require('../../assets/download/ios.png').default}/>
+                                <img src={require('../../assets/download/ios.png').default} alt="" aria-hidden="true"/>
                                 <span>iOS</span>
                             </div>
-                            <img className='qr' src={require('../../assets/download/qr.png').default}/>
+                            <img className='qr' src={require('../../assets/download/qr.png').default} alt="" aria-hidden="true"/>
                             <div className='download_qr'>
                                 <div>{t('505')}</div>
                                 <QRCode
@@ -61,10 +61,10 @@ export default function Index() {
                         </Row>
                         <Row href={AndroidUrl} target='__blank'>
                             <div className='content'>
-                                <img src={require('../../assets/download/android.png').default}/>
+                                <img src={require('../../assets/download/android.png').default} alt="" aria-hidden="true"/>
                                 <span>Android</span>
                             </div>
-                            <img className='qr' src={require('../../assets/download/qr.png').default}/>
+                            <img className='qr' src={require('../../assets/download/qr.png').default} alt="" aria-hidden="true"/>
                             <div className='download_qr'>
                                 <div>{t('505')}</div>
                                 <QRCode
@@ -77,17 +77,17 @@ export default function Index() {
                     </List>
                 </Left>
                 <Right>
-                    <img className='img' src={require('../../assets/download/img.png').default}/>
+                    <img className='img' src={require('../../assets/download/img.png').default} alt={t('10003')}/>
                     <div className='tag1'>
-                        <img src={require('../../assets/download/icon1.png').default}/>
+                        <img src={require('../../assets/download/icon1.png').default} alt="" aria-hidden="true"/>
                         <span>{t('502')}</span>
                     </div>
                     <div className='tag2'>
-                        <img src={require('../../assets/download/icon2.png').default}/>
+                        <img src={require('../../assets/download/icon2.png').default} alt="" aria-hidden="true"/>
                         <span>{t('503')}</span>
                     </div>
                     <div className='tag3'>
-                        <img src={require('../../assets/download/icon3.png').default}/>
+                        <img src={require('../../assets/download/icon3.png').default} alt="" aria-hidden="true"/>
                         <span>{t('504')}</span>
                     </div>
                 </Right>
@@ -96,41 +96,41 @@ export default function Index() {
     }
     return (
         <RootH5>
-            <img className='bg' src={require('../../assets/download/h5/bg.png').default}/>
+            <img className='bg' src={require('../../assets/download/h5/bg.png').default} alt="" aria-hidden="true"/>
             <ContentH5>
-                <div className='title'><div>{t('500')}</div></div>
+                <h1 className='title'>{t('500')}</h1>
                 <div className='desc'>{t('506')}&nbsp;&nbsp;&nbsp;{t('507')}&nbsp;&nbsp;&nbsp;{t('508')}</div>
-                <img className='img' src={require('../../assets/download/h5/img.png').default}/>
+                <img className='img' src={require('../../assets/download/h5/img.png').default} alt={t('10003')}/>
                 <BottomH5>
                     <div className='subTitle'>{t('501')}</div>
                     <List>
                         <RowLink href='https://t.me/chipchipgame_bot/CHIPCHIPGAME' target='__blank'>
                             <div className='content'>
-                                <img src={require('../../assets/download/telegram.png').default}/>
+                                <img src={require('../../assets/download/telegram.png').default} alt="" aria-hidden="true"/>
                                 <span>Telegram Mini-app</span>
                             </div>
-                            <img className='arrow' src={require('../../assets/arrow.png').default}/>
+                            <img className='arrow' src={require('../../assets/arrow.png').default} alt="" aria-hidden="true"/>
                         </RowLink>
                         <RowLink href='https://auth.chipchip.io/' target='__blank'>
                             <div className='content'>
-                                <img src={require('../../assets/download/web.png').default}/>
+                                <img src={require('../../assets/download/web.png').default} alt="" aria-hidden="true"/>
                                 <span>Web</span>
                             </div>
-                            <img className='arrow' src={require('../../assets/arrow.png').default}/>
+                            <img className='arrow' src={require('../../assets/arrow.png').default} alt="" aria-hidden="true"/>
                         </RowLink>
                         <RowLink href={iOSUrl} target='__blank'>
                             <div className='content'>
-                                <img src={require('../../assets/download/ios.png').default}/>
+                                <img src={require('../../assets/download/ios.png').default} alt="" aria-hidden="true"/>
                                 <span>iOS</span>
                             </div>
-                            <img className='download' src={require('../../assets/download/download.png').default}/>
+                            <img className='download' src={require('../../assets/download/download.png').default} alt="" aria-hidden="true"/>
                         </RowLink>
                         <RowLink href={AndroidUrl} target='__blank'>
                             <div className='content'>
-                                <img src={require('../../assets/download/android.png').default}/>
+                                <img src={require('../../assets/download/android.png').default} alt="" aria-hidden="true"/>
                                 <span>Android</span>
                             </div>
-                            <img className='download' src={require('../../assets/download/download.png').default}/>
+                            <img className='download' src={require('../../assets/download/download.png').default} alt="" aria-hidden="true"/>
                         </RowLink>
                     </List>
                 </BottomH5>
@@ -152,14 +152,13 @@ width: 100%;
 const ContentH5 = styled.div`
 position: relative;
 .title {
+margin: 0;
 font-size: 28px;
 font-weight: 700;
 text-align: center;
 display: flex;
 justify-content: center;
-div {
-width: 55%;
-}
+padding: 0 20%;
 }
 .desc {
 margin: 0 30px;
@@ -200,6 +199,7 @@ width: 100%;
 const Left = styled.div`
 position: relative;
 .title {
+margin: 0;
 font-size: 52px;
 font-weight: 700;
 }

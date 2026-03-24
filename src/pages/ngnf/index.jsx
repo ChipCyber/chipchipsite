@@ -22,31 +22,31 @@ export default function Index() {
     };
     return (
         <Root>
-            <Post src={shouldRender?require('@/assets/ngnf/post.png').default:require('@/assets/ngnf/h5/post.png').default}/>
+            <Post src={shouldRender?require('@/assets/ngnf/post.png').default:require('@/assets/ngnf/h5/post.png').default} alt='Promotional poster introducing NGNF token'/>
             <Content>
-                <Logo src={require('@/assets/ngnf/logo.png').default}/>
+                <Logo src={require('@/assets/ngnf/logo.png').default} alt='NGNF logo'/>
                 <Name>NGNF</Name>
                 <Title>{t('900')}</Title>
                 <SubTitle>{t('901')}</SubTitle>
                 <Bottom>{t('902')}<NavLink to='/airdrop'>{t('903')}</NavLink></Bottom>
-                <Ca>CA:{Const_CA} <img onClick={copyCa} src={require('@/assets/copy.png').default}/></Ca>
+                <Ca>CA:{Const_CA} <img onClick={copyCa} src={require('@/assets/copy.png').default} alt="" aria-hidden="true"/></Ca>
                 <Guide>
                     <div>{t('905')} NGNF</div>
                     <GuideContent>
                         <a href='https://dexscreener.com/solana/8afq8gtjph3u9yxnjasf5lwy1czdazgazfar6qhhtkk7' target='__blank'>
-                            <img src={require('@/assets/ngnf/dexscreener.png').default} alt=''/>
+                            <img src={require('@/assets/ngnf/dexscreener.png').default} alt="" aria-hidden="true"/>
                             <span>{t('904',{name:'Dexscreener'})}</span>
                         </a>
                         <a href='https://gmgn.ai/sol/token/CXcWiHFDM1J8RHfAuzor1YGSk6BxGKFY5kstjUZjpump' target='__blank'>
-                            <img src={require('@/assets/ngnf/gmgn.png').default} alt=''/>
+                            <img src={require('@/assets/ngnf/gmgn.png').default} alt="" aria-hidden="true"/>
                             <span>{t('904',{name:'GMGN'})}</span>
                         </a>
                         <a href='https://www.xxyy.io/sol/8afQ8gtjph3U9yXNJAsF5Lwy1cZDAzGAzfar6QHHTkK7' target='__blank'>
-                            <img src={require('@/assets/ngnf/xxyy.png').default} alt=''/>
+                            <img src={require('@/assets/ngnf/xxyy.png').default} alt="" aria-hidden="true"/>
                             <span>{t('904',{name:'XXYY'})}</span>
                         </a>
                         <a href='https://raydium.io/swap/?outputMint=CXcWiHFDM1J8RHfAuzor1YGSk6BxGKFY5kstjUZjpump&inputMint=sol' target='__blank'>
-                            <img src={require('@/assets/ngnf/raydium.png').default} alt=''/>
+                            <img src={require('@/assets/ngnf/raydium.png').default} alt="" aria-hidden="true"/>
                             <span>{t('904',{name:'Raydium'})}</span>
                         </a>
                     </GuideContent>
@@ -54,7 +54,7 @@ export default function Index() {
                         <EnterChatTitle>{t('906')}</EnterChatTitle>
                         <EnterChatBtn className='custom' onClick={()=>openUrl(QuickyUrl)}>
                             <span>{t('907')}</span>
-                            {shouldRender&&<img src={require('../../assets/home/arrow_enter.png').default}/>}
+                            {shouldRender&&<img src={require('../../assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>}
                         </EnterChatBtn>
                     </EnterChat>
                 </Guide>

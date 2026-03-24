@@ -3,7 +3,14 @@ import { Helmet } from "react-helmet";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from "../../LanguageContext";
-import { LanaguageLangMap } from "../../constants";
+import {
+    LanaguageLangMap,
+    SocialMediaMediumUrl,
+    SocialMediaTelegramUrl,
+    SocialMediaTwitterUrl,
+    SocialMediaDiscordUrl,
+    SocialMediaGitHubUrl
+} from "../../constants";
 
 export default function SEO() {
     const { t } = useTranslation();
@@ -32,10 +39,25 @@ export default function SEO() {
                     "@context": "https://schema.org",
                     "@type": "Game",
                     "name": "CHIPCHIP",
-                    "url": "https://chipchip.io/",
+                    "url": "https://chipchip.io",
                     "applicationCategory": "OnlineGame",
                     "description": "CHIPCHIP is a Web3 crypto poker platform...",
                     "genre": "Poker"
+                })}
+            </script>
+            <script type="application/ld+json">
+                {JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "Organization",
+                    "name": "CHIPCHIP",
+                    "url": "https://chipchip.io",
+                    "logo": "https://chipchip.io/favicon.ico",
+                    "sameAs": [
+                        SocialMediaMediumUrl,
+                        SocialMediaTwitterUrl,
+                        SocialMediaTelegramUrl,
+                        SocialMediaGitHubUrl
+                    ]
                 })}
             </script>
         </Helmet>

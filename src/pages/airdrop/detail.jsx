@@ -144,7 +144,7 @@ export default function Index() {
         <Root>
             <Content>
                 <Header>
-                    <Icon src={data.head_image} alt='icon' />
+                    <Icon src={data.head_image} alt={data.name} />
                     <HeaderContent>
                         <InfoLeftHeader>
                             <div>{data.name}</div>
@@ -171,22 +171,22 @@ export default function Index() {
                         <InfoTimeTip>{data.isEnd?t('2011'):(data.isBegin?t('2011'):t('2012'))}</InfoTimeTip>
                         <Time>
                             <TimeItem>
-                                <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                <img src={require('@/assets/airdrop/time_bg.png').default} alt="" aria-hidden="true"/>
                                 <span>{data.remaining?.days ?? 0}D</span>
                             </TimeItem>
                             <span>:</span>
                             <TimeItem>
-                                <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                <img src={require('@/assets/airdrop/time_bg.png').default} alt="" aria-hidden="true"/>
                                 <span>{data.remaining?.hours ?? 0}</span>
                             </TimeItem>
                             <span>:</span>
                             <TimeItem>
-                                <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                <img src={require('@/assets/airdrop/time_bg.png').default} alt="" aria-hidden="true"/>
                                 <span>{data.remaining?.minutes ?? 0}</span>
                             </TimeItem>
                             <span>:</span>
                             <TimeItem>
-                                <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                <img src={require('@/assets/airdrop/time_bg.png').default} alt="" aria-hidden="true"/>
                                 <span>{data.remaining?.seconds ?? 0}</span>
                             </TimeItem>
                         </Time>
@@ -199,20 +199,20 @@ export default function Index() {
                         <InfoBtnRow>
                             <SmallBtn className='custom' disabled={currentWalletAddress?(!data.isBegin||data.isEnd||!walletInfo||walletInfo.claiming==1||walletInfo.airdrop_amount<=0):false} onClick={()=>{currentWalletAddress?receiveAirdrop():dispatch(setShowConnectWallet())}}>
                                 <span>{currentWalletAddress?(walletInfo&&walletInfo.claiming==1?t('215'):(data.isEnd?t('2006'):(data.isBegin?t('2013'):t('2014')))):t('602')}</span>
-                                {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
-                                <img src={require('@/assets/nav/login_arrow.png').default}/>}
+                                {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>:
+                                <img src={require('@/assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>}
                             </SmallBtn>
                             <SmallBtn className='custom' onClick={()=>setShowSearch(true)}>
                                 <span>{t('2017')}</span>
-                                {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
-                                <img src={require('@/assets/nav/login_arrow.png').default}/>}
+                                {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>:
+                                <img src={require('@/assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>}
                             </SmallBtn>
                         </InfoBtnRow>
                     </InfoRight>
                 </Info>
                 <Introduction>
                     <IntroductionHeader>
-                        <img src={data.logo} alt='coin'/>
+                        <img src={data.logo} alt={`${data.symbol} token logo`}/>
                         <div>
                             <div>{data.symbol}</div>
                             <div>{data.token_slogan}</div>
@@ -222,11 +222,11 @@ export default function Index() {
                     <IntroductionDesc dangerouslySetInnerHTML={{__html:data.token_introduce}}></IntroductionDesc>
                     <IntroductionContact>
                         <div onClick={()=>openUrl(data.token_website)}>
-                            <img src={require('@/assets/airdrop/website.png').default}/>
+                            <img src={require('@/assets/airdrop/website.png').default} alt="" aria-hidden="true"/>
                             <span>{t('2019')}</span>
                         </div>
                         <div onClick={()=>openUrl(data.token_telegram)}>
-                            <img src={require('@/assets/airdrop/telegram.png').default}/>
+                            <img src={require('@/assets/airdrop/telegram.png').default} alt="" aria-hidden="true"/>
                             <span>Telegram</span>
                         </div>
                     </IntroductionContact>
@@ -240,24 +240,24 @@ export default function Index() {
                 </Introduction>
                 <Leader>
                     <LeaderHeader>
-                        <img src={require('@/assets/airdrop/leader_avatar.png').default} alt='icon'/>
+                        <img src={require('@/assets/airdrop/leader_avatar.png').default} alt={`${t('2024')}, project leader`}/>
                         <span>{t('2024')}</span>
                     </LeaderHeader>
                     <LeaderBtnRow>
                         <SmallBtn className='custom' onClick={()=>openUrl(OKX_BUY_CHIPBOX_URL)}>
                             <span>{t('2002')}</span>
-                            {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
-                                <img src={require('@/assets/nav/login_arrow.png').default}/>}
+                            {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>:
+                                <img src={require('@/assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>}
                         </SmallBtn>
                         <SmallBtn className='custom' onClick={()=>openUrl(JOIN_GOKU_COMMUNITY)}>
                             <span>{t('176')}</span>
-                            {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
-                                <img src={require('@/assets/nav/login_arrow.png').default}/>}
+                            {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>:
+                                <img src={require('@/assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>}
                         </SmallBtn>
                         <SmallBtn className='custom' onClick={()=>openUrl(FOLLOW_GOKU_X)}>
                             <span>{t('2025')}</span>
-                            {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default}/>:
-                                <img src={require('@/assets/nav/login_arrow.png').default}/>}
+                            {shouldRender?<img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>:
+                                <img src={require('@/assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>}
                         </SmallBtn>
                     </LeaderBtnRow>
                     <LeaderContent>
@@ -279,8 +279,8 @@ export default function Index() {
                         </div>
                     </LeaderContent>
                 </Leader>
-                {shouldRender?<img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default}/>:
-                <img className='bg_bottom' src={require('../../assets/airdrop/h5/bottom_bg.png').default}/>}
+                {shouldRender?<img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default} alt="" aria-hidden="true"/>:
+                <img className='bg_bottom' src={require('../../assets/airdrop/h5/bottom_bg.png').default} alt="" aria-hidden="true"/>}
             </Content>
             <DialogOverlay
                 style={{ height: '100vh', zIndex: 99, background: 'hsla(0, 0%, 0%, 0.6)' }}
@@ -290,7 +290,7 @@ export default function Index() {
                 <Dialog aria-label='search'>
                     <DialogHeader>
                         <div className='title'>{t('2017')}</div>
-                        <img className='close' onClick={()=>closeSearch()} src={require('@/assets/nav/close.png').default}/>
+                        <img className='close' onClick={()=>closeSearch()} src={require('@/assets/nav/close.png').default} alt="" aria-hidden="true"/>
                     </DialogHeader>
                     <DialogTip>{t('2036')}</DialogTip>
                     <DialogInput>

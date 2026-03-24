@@ -319,22 +319,22 @@ export default function Index() {
     }
     const renderNoData = () => (
         <NoData>
-            <img src={require('../../assets/noData.png').default}/>
+            <img src={require('../../assets/noData.png').default} alt='No data available'/>
             <span>{t('375')}</span>
         </NoData>
     );
     const renderWeb = () => (
         <Root>
-            <img className='bg' src={require('../../assets/displacement/bg.png').default}/>
+            <img className='bg' src={require('../../assets/displacement/bg.png').default} alt="" aria-hidden="true"/>
             <Content>
                 <div className='t_title'>{t('600')}</div>
                 <div className='t_desc'>{t('601')}</div>
                 <Btn className='custom' onClick={()=>showConnectWallet()}>
                     <span>{address?shortenString(address):t('602')}</span>
-                    <img src={require('../../assets/nav/login_arrow.png').default}/>
+                    <img src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
                 </Btn>
                 {connected&&<Coin>
-                    <img src={require('../../assets/displacement/coin.png').default}/>
+                    <img src={require('../../assets/displacement/coin.png').default} alt="" aria-hidden="true"/>
                     <span>{t('603')} {balance ?? '--'} CHIPCHIPBOX</span>
                 </Coin>}
                 <Card>
@@ -386,7 +386,7 @@ export default function Index() {
                 <DialogM aria-label='list'>
                     <ModalHeader>
                         <div className='title'>{t('609')}</div>
-                        <img className='close' onClick={()=>setShowHistory(false)} src={require('../../assets/nav/close.png').default}/>
+                        <img className='close' onClick={()=>setShowHistory(false)} src={require('../../assets/nav/close.png').default} alt="" aria-hidden="true"/>
                     </ModalHeader>
                     <ModalTableHeader>
                         <span>{t('610')}</span>
@@ -424,17 +424,17 @@ export default function Index() {
     )
     const renderH5 = () => (
         <RootH5>
-            <img className='bg' src={require('../../assets/displacement/h5/bg.png').default}/>
+            <img className='bg' src={require('../../assets/displacement/h5/bg.png').default} alt="" aria-hidden="true"/>
             <ContentH5>
                 <ContentH5Header>
                     <div className='title'>{t('600')}</div>
                     <div className='desc'>{t('601')}</div>
                     <Btn className='custom' onClick={()=>showConnectWallet()}>
                         <span>{address?shortenString(address):t('602')}</span>
-                        <img src={require('../../assets/nav/login_arrow.png').default}/>
+                        <img src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
                     </Btn>
                     {connected&&<Coin>
-                        <img src={require('../../assets/displacement/coin.png').default}/>
+                        <img src={require('../../assets/displacement/coin.png').default} alt="" aria-hidden="true"/>
                         <span>{t('603')} {balance ?? '--'} CHIPCHIPBOX</span>
                     </Coin>}
                 </ContentH5Header>
@@ -487,7 +487,7 @@ export default function Index() {
                 <DialogM>
                     <ModalHeader>
                         <div className='title'>{t('609')}</div>
-                        <img className='close' onClick={()=>setShowHistory(false)} src={require('../../assets/nav/close.png').default}/>
+                        <img className='close' onClick={()=>setShowHistory(false)} src={require('../../assets/nav/close.png').default} alt="" aria-hidden="true"/>
                     </ModalHeader>
                     <ModalTableHeader>
                         <span>{t('605')}</span>
@@ -534,15 +534,15 @@ export default function Index() {
             <DialogM aria-label='modal'>
                 <ModalHeader>
                     <div className='title'>{t('602')}</div>
-                    <img className='close' onClick={()=>setShowChooseWallet(false)} src={require('../../assets/nav/close.png').default}/>
+                    <img className='close' onClick={()=>setShowChooseWallet(false)} src={require('../../assets/nav/close.png').default} alt="" aria-hidden="true"/>
                 </ModalHeader>
                 <ConnectWalletContent>
                     <ConnectWalletItem onClick={()=>connectWallet(WalletType.UNISAT)}>
-                        <ConnectWalletBtn src={require('../../assets/nav/unisat.png').default}/>
+                        <ConnectWalletBtn src={require('../../assets/nav/unisat.png').default} alt='UNISAT Logo'/>
                         <ConnectWalletTitle>UNISAT</ConnectWalletTitle>
                     </ConnectWalletItem>
                     <ConnectWalletItem onClick={()=>connectWallet(WalletType.OKX)}>
-                        <ConnectWalletBtn src={require('../../assets/nav/okx.png').default}/>
+                        <ConnectWalletBtn src={require('../../assets/nav/okx.png').default} alt='OKX Logo'/>
                         <ConnectWalletTitle>OKX</ConnectWalletTitle>
                     </ConnectWalletItem>
                 </ConnectWalletContent>

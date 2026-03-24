@@ -8,7 +8,7 @@
     "103":"News",
     "104":"More",
     "105":"Login",
-    "106":"Play Poker with Friends Using Crypto",
+    "106":"Play Poker with Friends Using Crypto on CHIPCHIP",
     "107":"Play and Bet for Fun",
     "108":"Everyone is a Stakeholder",
     "109":"Decentralized Management",
@@ -365,6 +365,15 @@
     "1013":"Decrypt the Ciphertext using the Key derived from the Fairness Code to reveal the complete deck sequence.",
     "1014":"The table above compares hand probabilities from ​​1 million simulated 9-handed games​​ on CHIPCHIP against mathematical expectations. The observed average probabilities for all hand types closely align with their mathematical expectations. Results confirm that our algorithm meets strict randomness requirements.",
     "1015":"​​Learn the full workflow",
+
+    "10001":"CHIPCHIP Online Poker: Building a Fair and Transparent Poker Experience",
+    "10002":"CHIPCHIP Token Airdrop: Event Details and How to Participate",
+    "10003":"Download CHIPCHIP Poker App for iOS and Android",
+    "10004":"CHIPCHIP Cryptographically Secure Random Shuffling Algorithm",
+    "10005":"CHIPCHIP Fair Randomization Mimicking Physical Card Shuffling",
+    "10006":"CHIPCHIP Texas Hold'em Poker Hand Rankings Probability Chart",
+    "10007":"CHIPCHIP Verifiable Random Deal Algorithm Explained",
+    "10008":"CHIPCHIP Verifiable Random Deal Ensures Absolute Fairness",
 
     "":""
 }

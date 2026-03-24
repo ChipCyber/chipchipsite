@@ -21,7 +21,7 @@ export default function Footer() {
             <div className='bg'/>
             <div className='content'>
                 <Left>
-                    <img className='logo' src={require('../../assets/nav/logo.png').default}/>
+                    <img className='logo' src={require('../../assets/nav/logo.png').default} alt='CHIPCHIP logo'/>
                     <div className='desc'>{t('1106')}</div>
                     <div className='email'>Email：{OfficialEmail}</div>
                     <div className='copyright'>Copyright © 2026 CHIPCHIP</div>

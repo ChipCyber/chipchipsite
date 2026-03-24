@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import useBreakpointCheck from "../../hooks/useBreakpointCheck";
 import { knowledgePageListApi } from "../../api"
 import { useLanguage } from "../../LanguageContext";
+import { Helmet } from "react-helmet";
 
 export default function Index() {
     const { t } = useTranslation();
@@ -17,8 +18,24 @@ export default function Index() {
     const [pageIndex, setPageIndex] = useState(1);
     const [list, setList] = useState([]);
     const [requestDataTrigger, setRequestDataTrigger] = useState(false);
+
+    const faqSchema = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            ...list.map(item => ({
+                "@type": "Question",
+                "name": item.title,
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": item.content.replace(/<[^>]+>/g, '')
+                }
+            }))
+        ]
+    };
+
     const loadMore = () => {
-        setPageIndex(pageIndex+1);
+        setPageIndex(pageIndex + 1);
     }
     useEffect(() => {
         setPageIndex(1);
@@ -27,34 +44,34 @@ export default function Index() {
         setRequestDataTrigger(prev => !prev);
     }, [language]);
     const requestData = () => {
-        if(noMore||loading.current) {
+        if (noMore || loading.current) {
             return;
         }
         loading.current = true;
-        knowledgePageListApi({pageIndex,pageSize:30}).then(({data,res})=>{
-            setList([...list,...data]);
-            if(!data||data.length>=res.totalCount) {
+        knowledgePageListApi({ pageIndex, pageSize: 30 }).then(({ data, res }) => {
+            setList([...list, ...data]);
+            if (!data || data.length >= res.totalCount) {
                 setNoMore(true);
             }
-        }).finally(()=>{
+        }).finally(() => {
             loading.current = false;
         });
     }
     useEffect(() => {
         requestData();
-    }, [pageIndex,requestDataTrigger]);
+    }, [pageIndex, requestDataTrigger]);
     useEffect(() => {
         const ob = new IntersectionObserver((entries) => {
             const entry = entries[0];
-            if (entry.isIntersecting&&!loading.current) {
+            if (entry.isIntersecting && !loading.current) {
                 loadMore();
             }
-        }, { root: null, threshold: 0})
-        if(loadingRef.current) {
+        }, { root: null, threshold: 0 })
+        if (loadingRef.current) {
             ob.observe(loadingRef.current);
         }
         return () => {
-            if(loadingRef.current) {
+            if (loadingRef.current) {
                 ob.unobserve(loadingRef.current);
             }
         }
@@ -62,14 +79,17 @@ export default function Index() {
     if (shouldRender) {
         return (
             <Root>
-                <BgOrange1/>
-                <BgOrange2/>
-                <BgGreen/>
+                <Helmet>
+                    <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+                </Helmet>
+                <BgOrange1 />
+                <BgOrange2 />
+                <BgGreen />
                 <FAQ>
-                    <div className='title'>{t('172')}</div>
+                    <h1 className='title'>{t('172')}</h1>
                     {
-                        list.map((item,idx)=>(
-                            <div className='item' onClick={()=>history.push('/faqDetail?id='+item.id)} key={idx}>{item.title}</div>
+                        list.map((item, idx) => (
+                            <div className='item' onClick={() => history.push('/faqDetail?id=' + item.id)} key={idx}>{item.title}</div>
                         ))
                     }
                 </FAQ>
@@ -79,14 +99,17 @@ export default function Index() {
     }
     return (
         <Root>
-            <BgGreen/>
+            <Helmet>
+                <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+            </Helmet>
+            <BgGreen />
             <FAQH5>
-                <div className='t_title'>{t('172')}</div>
+                <h1 className='t_title'>{t('172')}</h1>
                 <div className='t_desc'>{t('193')}...</div>
                 <FAQH5Tip>
                     {
-                        list.map((item,idx)=>(
-                            <FAQH5TipRow onClick={()=>history.push('/faqDetail?id='+item.id)} key={idx}>{item.title}</FAQH5TipRow>
+                        list.map((item, idx) => (
+                            <FAQH5TipRow onClick={() => history.push('/faqDetail?id=' + item.id)} key={idx}>{item.title}</FAQH5TipRow>
                         ))
                     }
                 </FAQH5Tip>
@@ -154,6 +177,7 @@ font-size: 38px;
 font-weight: 600;
 line-height: 60px;
 text-transform: uppercase;
+margin: 0;
 margin-bottom: 30px;
 }
 .item {
@@ -181,6 +205,7 @@ padding-left: 38px;
 `
 const FAQH5 = styled.div`
 .t_title {
+margin: 0;
 font-size: 24px;
 font-weight: 600;
 background: linear-gradient(90deg, #FFF 0%, #8CEA8D 100%);

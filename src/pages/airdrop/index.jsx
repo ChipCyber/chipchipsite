@@ -91,14 +91,14 @@ export default function Index() {
                 <Top>
                     <div className='content'>
                         <div className='bgBox'>
-                        <img className='bg' src={require('../../assets/airdrop/top_newBg.png').default}/>
+                        <img className='bg' src={require('../../assets/airdrop/top_newBg.png').default} alt="" aria-hidden="true"/>
                         {[1, 2, 3, 4].map((idx) => (
       <>
        <div className="imgWrapper">
-       <img className="optionheadImg" src={require(`../../assets/airdrop/head_option${idx}.png`).default} />
+       <img className="optionheadImg" src={require(`../../assets/airdrop/head_option${idx}.png`).default} alt={`Season ${idx} icon`} />
          {
             <div className="optionTagBox">
-              <img className="optionTagImg" src={require(`../../assets/airdrop/top_option_icon${idx}.png`).default} />
+              <img className="optionTagImg" src={require(`../../assets/airdrop/top_option_icon${idx}.png`).default} alt="" aria-hidden="true"/>
               <div className="optionTagText">{idx === 4 ? t('2007') : t('2006')}</div>
             </div>
           }
@@ -115,7 +115,7 @@ export default function Index() {
        
        {idx !== 4 && (
           <div className="top_linesBox">
-            <img className="top_lines" src={require('../../assets/airdrop/top_lines.png').default} />
+            <img className="top_lines" src={require('../../assets/airdrop/top_lines.png').default} alt="" aria-hidden="true"/>
           </div>
         )}
       </>
@@ -129,19 +129,19 @@ export default function Index() {
                             <TopBtnRow>
                                 <LargeBtn className='custom' onClick={()=>openUrl(OKX_BUY_CHIPBOX_URL)}>
                                     <span>{t('2002')}</span>
-                                    <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                    <img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                                 </LargeBtn>
                                 <Btn className='custom' onClick={()=>openUrl(JOIN_GOKU_COMMUNITY)}>
                                     <span>{t('2003')}</span>
-                                    <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                    <img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                                 </Btn>
                                 <LargeBtn className='custom' onClick={()=>openUrl(FOLLOW_GOKU_X)}>
                                     <span>{t('2004')}</span>
-                                    <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                    <img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                                 </LargeBtn>
                                 <Btn className='custom' onClick={()=>openUrl(FOLLOW_GOKU_YOUTUBE)}>
                                     <span>{t('2005')}</span>
-                                    <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                    <img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                                 </Btn>
                             </TopBtnRow>
                         </div>
@@ -149,7 +149,7 @@ export default function Index() {
                     </div>
 
                     <div className='topPart'>
-                        <div className='topPart_title'>{t('2040')}</div>
+                        <h1 className='topPart_title'>{t('2040')}</h1>
                         <div className='topPart_txt'>
                             <div>{t('2041')}</div>
                             <div>{t('2042')}</div>
@@ -159,18 +159,18 @@ export default function Index() {
 
                 </Top>
                 <div style={{overflow:'hidden',height:96}}>
-                    <img style={{objectFit:'unset',width:'100%',height:'100%'}} src={require('../../assets/home/logo_row.png').default}/>
+                    <img style={{objectFit:'unset',width:'100%',height:'100%'}} src={require('../../assets/home/logo_row.png').default} alt="" aria-hidden="true"/>
                 </div>
                 <Content>
-                    <img className='bg' src={require('../../assets/airdrop/bg.png').default}/>
-                    <img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default}/>
+                    <img className='bg' src={require('../../assets/airdrop/bg.png').default} alt="" aria-hidden="true"/>
+                    <img className='bg_bottom' src={require('../../assets/airdrop/bg_bottom.png').default} alt="" aria-hidden="true"/>
                     {
                         list.map(item=>(
                             item.type == 1  ?
                                 <ItemNew key={item.id} onClick={()=>goDetailAction(item)}>
                                 <ItemTag className={item.isEnd?'end':(item.isBegin?'ing':'')}>{item.isEnd?t('2006'):(item.isBegin?t('2007'):t('2008'))}</ItemTag>
                                 <ItemTop>
-                                <ItemImg src={item.head_image} alt='icon'/>
+                                <ItemImg src={item.head_image} alt={item.name}/>
                                 <ItemContent>
                                     <ItemHeader>
                                         <ItemName>{item.name}</ItemName>
@@ -182,7 +182,7 @@ export default function Index() {
                                     <ItemBottomNew>
                                         <SmallBtnNew className='custom' onClick={e=>claimAction(e,item)}>
                                             <span>{item.isEnd?t('2006'):(item.isBegin?t('211'):t('2014'))}</span>
-                                            <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                            <img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                                         </SmallBtnNew>
                                     </ItemBottomNew>
                                 </ItemContent>
@@ -195,7 +195,7 @@ export default function Index() {
                                 :
                                 <Item key={item.id} onClick={()=>goDetailAction(item)}>
                                 <ItemTag className={item.isEnd?'end':(item.isBegin?'ing':'')}>{item.isEnd?t('2006'):(item.isBegin?t('2007'):t('2008'))}</ItemTag>
-                                <ItemImg src={item.head_image} alt='icon'/>
+                                <ItemImg src={item.head_image} alt={item.name}/>
                                 <ItemContent>
                                     <ItemHeader>
                                         <ItemName>{item.name}</ItemName>
@@ -216,28 +216,28 @@ export default function Index() {
                                     <ItemBottom>
                                         <Time>
                                             <TimeItem>
-                                                <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                                <img src={require('@/assets/airdrop/time_bg.png').default} alt="" aria-hidden="true"/>
                                                 <span>{item.remaining?.days ?? 0}D</span>
                                             </TimeItem>
                                             <span>:</span>
                                             <TimeItem>
-                                                <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                                <img src={require('@/assets/airdrop/time_bg.png').default} alt="" aria-hidden="true"/>
                                                 <span>{item.remaining?.hours ?? 0}</span>
                                             </TimeItem>
                                             <span>:</span>
                                             <TimeItem>
-                                                <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                                <img src={require('@/assets/airdrop/time_bg.png').default} alt="" aria-hidden="true"/>
                                                 <span>{item.remaining?.minutes ?? 0}</span>
                                             </TimeItem>
                                             <span>:</span>
                                             <TimeItem>
-                                                <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                                <img src={require('@/assets/airdrop/time_bg.png').default} alt="" aria-hidden="true"/>
                                                 <span>{item.remaining?.seconds ?? 0}</span>
                                             </TimeItem>
                                         </Time>
                                         <SmallBtn className='custom' onClick={e=>claimAction(e,item)}>
                                             <span>{item.isEnd?t('2006'):(item.isBegin?t('2013'):t('2014'))}</span>
-                                            <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                            <img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                                         </SmallBtn>
                                     </ItemBottom>
                                 </ItemContent>
@@ -259,37 +259,37 @@ export default function Index() {
     return (
         <Root>
             <TopH5>
-                <img className='icon' src={require('../../assets/airdrop/h5/top_icon.png').default}/>
+                <img className='icon' src={require('../../assets/airdrop/h5/top_icon.png').default} alt="" aria-hidden="true"/>
                 <div className='title'>{t('2000')}</div>
                 <div className='desc'>{t('2001')}</div>
                 <TopBtnRow>
                     <H5Btn className='custom' onClick={()=>openUrl(OKX_BUY_CHIPBOX_URL)}>
                         <span>{t('2002')}</span>
-                        <img src={require('@/assets/home/arrow_enter.png').default}/>
+                        <img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                     </H5Btn>
                     <H5Btn className='custom' onClick={()=>openUrl(JOIN_GOKU_COMMUNITY)}>
                         <span>{t('2003')}</span>
-                        <img src={require('@/assets/home/arrow_enter.png').default}/>
+                        <img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                     </H5Btn>
                     <H5Btn className='custom' onClick={()=>openUrl(FOLLOW_GOKU_X)}>
                         <span>{t('2004')}</span>
-                        <img src={require('@/assets/home/arrow_enter.png').default}/>
+                        <img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                     </H5Btn>
                     <H5Btn className='custom' onClick={()=>openUrl(FOLLOW_GOKU_YOUTUBE)}>
                         <span>{t('2005')}</span>
-                        <img src={require('@/assets/home/arrow_enter.png').default}/>
+                        <img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                     </H5Btn>
                 </TopBtnRow>
             </TopH5>
             <div style={{overflow:'hidden',height:30}}>
-                <img style={{objectFit:'contain',verticalAlign:'top',height:'100%'}} src={require('../../assets/home/h5/logo_row.png').default}/>
+                <img style={{objectFit:'contain',verticalAlign:'top',height:'100%'}} src={require('../../assets/home/h5/logo_row.png').default} alt="" aria-hidden="true"/>
             </div>
             <ContentH5>
                 {
                     list.map(item=>(
                         <Item key={item.id} onClick={()=>goDetailAction(item)}>
                             <ItemTag className={item.isEnd?'end':(item.isBegin?'ing':'')}>{item.isEnd?t('2006'):(item.isBegin?t('2007'):t('2008'))}</ItemTag>
-                            <ItemImg src={item.head_image} alt='icon'/>
+                            <ItemImg src={item.head_image} alt={item.name}/>
                             <ItemContent>
                                 <ItemHeader>
                                     <ItemName>{item.name}</ItemName>
@@ -310,28 +310,28 @@ export default function Index() {
                                 <ItemBottom>
                                     <Time>
                                         <TimeItem>
-                                            <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                            <img src={require('@/assets/airdrop/time_bg.png').default} alt="" aria-hidden="true"/>
                                             <span>{item.remaining?.days ?? 0}D</span>
                                         </TimeItem>
                                         <span>:</span>
                                         <TimeItem>
-                                            <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                            <img src={require('@/assets/airdrop/time_bg.png').default} alt="" aria-hidden="true"/>
                                             <span>{item.remaining?.hours ?? 0}</span>
                                         </TimeItem>
                                         <span>:</span>
                                         <TimeItem>
-                                            <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                            <img src={require('@/assets/airdrop/time_bg.png').default} alt="" aria-hidden="true"/>
                                             <span>{item.remaining?.minutes ?? 0}</span>
                                         </TimeItem>
                                         <span>:</span>
                                         <TimeItem>
-                                            <img src={require('@/assets/airdrop/time_bg.png').default} alt='bg'/>
+                                            <img src={require('@/assets/airdrop/time_bg.png').default} alt="" aria-hidden="true"/>
                                             <span>{item.remaining?.seconds ?? 0}</span>
                                         </TimeItem>
                                     </Time>
                                     <SmallBtn className='custom' onClick={e=>claimAction(e,item)}>
                                         <span>{item.isEnd?t('2006'):(item.isBegin?t('2013'):t('2014'))}</span>
-                                        <img src={require('@/assets/home/arrow_enter.png').default}/>
+                                        <img src={require('@/assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                                     </SmallBtn>
                                 </ItemBottom>
                             </ItemContent>
@@ -658,6 +658,7 @@ flex-direction: column;
 gap:26px;
 }
 .topPart_title{
+margin: 0;
  font-size: 62px;
   font-weight: 700;
  background: linear-gradient(90deg, #03DBAA 0%, #FFFFFF 30%, #BF65F8 60%);

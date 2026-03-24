@@ -206,7 +206,7 @@ class Nav extends Component {
         return (
             <NavBody>
                 <NavLeft>
-                    <NavLogo onClick={()=>history.push('/')} src={require('@/assets/nav/logo.png').default} alt='logo'/>
+                    <NavLogo onClick={()=>history.push('/')} src={require('@/assets/nav/logo.png').default} alt='CHIPCHIP logo'/>
                 </NavLeft>
                 <NavCenter>
                     <NavCenterLink to='/' onClick={this.closeMenu} isActive={()=>pathname==='/'}>{t('100')}</NavCenterLink>
@@ -223,7 +223,7 @@ class Nav extends Component {
                     <NavCenterLinkAuto to='/news' onClick={this.closeMenu} isActive={()=>pathname==='/news'}>{t('103')}</NavCenterLinkAuto>
                     <NavCenterNoLink className='default'>
                         <span>{t('104')}</span>
-                        <img src={require('@/assets/arrow_down.png').default}/>
+                        <img src={require('@/assets/arrow_down.png').default} alt="" aria-hidden="true"/>
                         {showMore&&<Modal className='modal'>
                             <ModalContent>
                                 {/* <ModalRow to='/ngnf' onClick={this.closeMore} isActive={()=>pathname==='/ngnf'}>$NGNF</ModalRow> */}
@@ -239,7 +239,7 @@ class Nav extends Component {
                     <LoginBtn className='custom' onClick={()=>setShowConnectWallet()}>{t('602')}</LoginBtn>
                     :
                     <LoginBtn className='custom'>
-                        <img src={require("@/assets/nav/wallet.png").default} alt='icon'/>
+                        <img src={require("@/assets/nav/wallet.png").default} alt="" aria-hidden="true"/>
                         <span>{shortenNameAddress(currentWalletAddress)}</span>
                         {showPModal&&<WalletModal className='modal'>
                         <WalletModalContent>
@@ -250,10 +250,10 @@ class Nav extends Component {
                         </WalletModal>}
                     </LoginBtn>)
                     // <PersonalBody>
-                    //     <img src={require('@/assets/nav/personal.png').default}/>
+                    //     <img src={require('@/assets/nav/personal.png').default} alt="" aria-hidden="true"/>
                     //     {showPModal&&<PModal className='modal'>
                     //     <PModalContent>
-                    //         <img src={require('@/assets/nav/personal.png').default}/>
+                    //         <img src={require('@/assets/nav/personal.png').default} alt="" aria-hidden="true"/>
                     //         <div>{maskEmail(userInfo.email)}</div>
                     //         <button type='button' default onClick={()=>this.logout()}>{t('1105')}</button>
                     //     </PModalContent>
@@ -272,7 +272,7 @@ class Nav extends Component {
                     <DialogC aria-label='login'>
                         <LoginHeader>
                             <div className='title'>{t('105')}</div>
-                            <img className='close' onClick={this.closeLogin} src={require('@/assets/nav/close.png').default}/>
+                            <img className='close' onClick={this.closeLogin} src={require('@/assets/nav/close.png').default} alt="" aria-hidden="true"/>
                         </LoginHeader>
                         <LoginRow>
                             <div className='title'>{t('186')}</div>
@@ -289,20 +289,20 @@ class Nav extends Component {
                         </LoginRow>
                         <LoginSureBtn className='custom' disabled={isEmpty(this.state.email)||isEmpty(this.state.code)} onClick={this.sureLogin}>
                             <span>{t('105')}</span>
-                            <img src={require('@/assets/nav/login_arrow.png').default}/>
+                            <img src={require('@/assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
                         </LoginSureBtn>
                         <LoginLine>{t('1104')}</LoginLine>
                         <LoginOtherRow>
                             <LoginOtherRowItem>
-                                <LoginOtherBtn onClick={()=>this.handleGoogleAuthClick()}><img src={require('@/assets/nav/google.png').default}/></LoginOtherBtn>
+                                <LoginOtherBtn onClick={()=>this.handleGoogleAuthClick()}><img src={require('@/assets/nav/google.png').default} alt="" aria-hidden="true"/></LoginOtherBtn>
                                 <span>Google</span>
                             </LoginOtherRowItem>
                             <LoginOtherRowItem>
-                                <LoginOtherBtn onClick={()=>this.handleMetamaskAuthClick()}><img src={require('@/assets/nav/metamask.png').default}/></LoginOtherBtn>
+                                <LoginOtherBtn onClick={()=>this.handleMetamaskAuthClick()}><img src={require('@/assets/nav/metamask.png').default} alt="" aria-hidden="true"/></LoginOtherBtn>
                                 <span>Metamask</span>
                             </LoginOtherRowItem>
                             <LoginOtherRowItem>
-                                <LoginOtherBtn onClick={()=>this.handlePhantomAuthClick()}><img src={require('@/assets/nav/phantom.png').default}/></LoginOtherBtn>
+                                <LoginOtherBtn onClick={()=>this.handlePhantomAuthClick()}><img src={require('@/assets/nav/phantom.png').default} alt="" aria-hidden="true"/></LoginOtherBtn>
                                 <span>Phantom</span>
                             </LoginOtherRowItem>
                         </LoginOtherRow>
@@ -352,7 +352,7 @@ class Nav extends Component {
                     <DialogC aria-label='connect'>
                         <DialogCHeader>
                             <p>Connect Wallet</p>
-                            <img onClick={()=>setCloseConnectWallet()} width={24} height={24} src={require("@/assets/nav/close.png").default} alt='close'/>
+                            <img onClick={()=>setCloseConnectWallet()} width={24} height={24} src={require("@/assets/nav/close.png").default} alt="" aria-hidden="true"/>
                         </DialogCHeader>
                         <DialogCTip>POPULAR</DialogCTip>
                         <DialogCContent>
@@ -360,7 +360,7 @@ class Nav extends Component {
                                 (NetworkSupprtWallet[NetworkType.Solana] ?? []).map((item,idx)=>(
                                     <DialogCContentRow key={`${item}_${idx}`} onClick={()=>this.connectChooseWallet(item)}>
                                         <div className='icon'>
-                                            <img src={require(`@/assets/wallet/${`${item}`.toLowerCase()}.png`).default} alt='metamask'/>
+                                            <img src={require(`@/assets/wallet/${`${item}`.toLowerCase()}.png`).default} alt="" aria-hidden="true"/>
                                         </div>
                                         <div className='name'>{item}</div>
                                     </DialogCContentRow>

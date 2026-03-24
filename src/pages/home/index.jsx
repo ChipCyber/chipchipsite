@@ -44,11 +44,11 @@ export default function Home() {
         return (
             <Root>
                 <Top1>
-                    <TopBg src={require('../../assets/home/bg1.png').default}/>
+                    <TopBg src={require('../../assets/home/bg1.png').default} alt="" aria-hidden="true"/>
                     <Top1Content>
                         <div className='wow animate__animated animate__fadeInLeft'>
                             <div className='title'>CHIPCHIP.IO</div>
-                            <div className='desc'>{t('106')}</div>
+                            <h1 className='desc'>{t('106')}</h1>
                         </div>
                         <Top1Tip className="wow animate__animated animate__fadeInLeft">
                             <Top1TipRow>{t('107')}</Top1TipRow>
@@ -61,15 +61,15 @@ export default function Home() {
                             <Top1TipBorderBtn className='custom' to='/airdrop'>{t('101')}</Top1TipBorderBtn>
                             {/* <Top1TipBorderBtn className='custom' to='/displacement'>{t('111')}</Top1TipBorderBtn> */}
                             <Top1TipBorderBtn className='custom' to='/download'>
-                                <img src={require('../../assets/home/download.png').default}/>
+                                <img src={require('../../assets/home/download.png').default} alt="" aria-hidden="true"/>
                                 <span>{t('112')}</span>
                             </Top1TipBorderBtn>
                         </Top1TipBtnRow>
                     </Top1Content>
                 </Top1>
-                <ImgRow src={require('../../assets/home/logo_row.png').default}/>
+                <ImgRow src={require('../../assets/home/logo_row.png').default} alt="" aria-hidden="true"/>
                 <Top2>
-                    <TopBg src={require('../../assets/home/bg2.png').default}/>
+                    <TopBg src={require('../../assets/home/bg2.png').default} alt="" aria-hidden="true"/>
                     <Top2BgRadio/>
                     <Top2Content>
                         <div className="title wow animate__animated animate__fadeInLeft">{t('113')}</div>
@@ -78,64 +78,64 @@ export default function Home() {
                                 <div className='desc'>{t('114')}</div>
                                 <Top2Btn  className='custom' onClick={()=>openUrl(GitbookUrl)}>
                                     <span>Gitbook</span>
-                                    <img src={require('../../assets/home/arrow_enter.png').default}/>
+                                    <img src={require('../../assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                                 </Top2Btn>
                             </Top2RowLeft>
-                            <Top2RowImg className="wow animate__animated animate__fadeInRight" src={require('../../assets/home/img21.png').default}/>
+                            <Top2RowImg className="wow animate__animated animate__fadeInRight" src={require('../../assets/home/img21.png').default} alt={t('10001')}/>
                         </Top2Row>
                         <Top2Row2>
-                            <Top2Row2Img className="wow animate__animated animate__fadeInLeft" src={require('../../assets/home/img22.png').default}/>
+                            <Top2Row2Img className="wow animate__animated animate__fadeInLeft" src={require('../../assets/home/img22.png').default} alt={t('10001')}/>
                             <Top2Row2Right className="wow animate__animated animate__fadeInRight">
-                                <img src={require('../../assets/home/66.png').default}/>
+                                <img src={require('../../assets/home/66.png').default} alt="" aria-hidden="true"/>
                                 <div className='desc'>{t('115')}</div>
                                 <Top2Btn className='custom' onClick={()=>openUrl(SocialMediaTelegramUrl)}>
                                     <span>{t('199')}</span>
-                                    <img src={require('../../assets/home/arrow_enter.png').default}/>
+                                    <img src={require('../../assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                                 </Top2Btn>
                             </Top2Row2Right>
                         </Top2Row2>
                     </Top2Content>
                 </Top2>
-                <ImgRow src={require('../../assets/home/arrow_row.png').default}/>
+                <ImgRow src={require('../../assets/home/arrow_row.png').default} alt="" aria-hidden="true"/>
                 <Top3>
                     <Top3Top>
                         <Top3Title>{t('116')}</Top3Title>
-                        <img src={require('../../assets/home/img31.png').default}/>
+                        <img src={require('../../assets/home/img31.png').default} alt="" aria-hidden="true"/>
                     </Top3Top>
                     <Top3Row className='wow animate__animated animate__fadeInDown'>
                         <Top3RowItem>
-                            <img src={require('../../assets/home/img3_item0.png').default}/>
+                            <img src={require('../../assets/home/img3_item0.png').default} alt="" aria-hidden="true"/>
                             <div className='title'>{t('197')}</div>
                             <div className='desc'>{t('198')}</div>
                         </Top3RowItem>
                         <Top3RowItem>
-                            <img src={require('../../assets/home/img3_item1.png').default}/>
+                            <img src={require('../../assets/home/img3_item1.png').default} alt="" aria-hidden="true"/>
                             <div className='title'>{t('117')}</div>
                             <div className='desc'>{t('118')}</div>
                         </Top3RowItem>
                         <Top3RowItem>
-                            <img src={require('../../assets/home/img3_item3.png').default}/>
+                            <img src={require('../../assets/home/img3_item3.png').default} alt="" aria-hidden="true"/>
                             <div className='title'>{t('121')}</div>
                             <div className='desc'>{t('122')}</div>
                         </Top3RowItem>
                         <Top3RowItem>
-                            <img src={require('../../assets/home/img3_item2.png').default}/>
+                            <img src={require('../../assets/home/img3_item2.png').default} alt="" aria-hidden="true"/>
                             <div className='title'>{t('119')}</div>
                             <div className='desc'>{t('120')}</div>
                         </Top3RowItem>
                         <Top3RowItem>
-                            <img src={require('../../assets/home/img3_item4.png').default}/>
+                            <img src={require('../../assets/home/img3_item4.png').default} alt="" aria-hidden="true"/>
                             <div className='title'>{t('123')}</div>
                             <div className='desc'>{t('124')}</div>
                         </Top3RowItem>
                     </Top3Row>
                 </Top3>
                 <Top4>
-                    <TopBg src={require('../../assets/home/bg4.png').default}/>
+                    <TopBg src={require('../../assets/home/bg4.png').default} alt="" aria-hidden="true"/>
                     <Top4Content>
                         {/* <Top4Title>
                             <span>{t('125')}</span>
-                            <img src={require('../../assets/home/img4_title.png').default}/>
+                            <img src={require('../../assets/home/img4_title.png').default} alt="" aria-hidden="true"/>
                         </Top4Title>
                         <Top4Row1>
                             <Top4Row1Left>
@@ -143,7 +143,7 @@ export default function Home() {
                                 <div className='desc'>{t('127')}</div>
                                 <div className='desc'>{t('128')}<a href={GitbookTokenUrl} target='__blank'>Gitbook</a></div>
                                 <Top4Row1LeftCard>
-                                    <img src={require('../../assets/home/img41.png').default}/>
+                                    <img src={require('../../assets/home/img41.png').default} alt="" aria-hidden="true"/>
                                     <Top4Row1LeftCardContent>
                                         <Top4Row1LeftCardItem>
                                             <div className='item_title'>NGNF</div>
@@ -160,33 +160,33 @@ export default function Home() {
                                     </Top4Row1LeftCardContent>
                                 </Top4Row1LeftCard>
                             </Top4Row1Left>
-                            <Chart><img src={require("../../assets/home/chart_icon.png").default} alt='icon'/></Chart>
+                            <Chart><img src={require("../../assets/home/chart_icon.png").default} alt="" aria-hidden="true"/></Chart>
                         </Top4Row1> */}
                         <Top4Row2>
-                            <Top4Row2Img className='wow animate__animated animate__fadeInLeft' src={require('../../assets/home/img42.png').default}/>
+                            <Top4Row2Img className='wow animate__animated animate__fadeInLeft' src={require('../../assets/home/img42.png').default} alt={t('10002')}/>
                             <Top4Row2Right className='wow animate__animated animate__fadeInRight'>
                                 <div className='title'>{t('200')}</div>
                                 <div className='subTitle'>{t('129')}</div>
                                 <div className='desc'>{t('130')}</div>
                                 <Top2Btn className='custom' onClick={()=>history.push('/airdrop')}>
                                     <span>{t('131')}</span>
-                                    <img src={require('../../assets/home/arrow_enter.png').default}/>
+                                    <img src={require('../../assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                                 </Top2Btn>
                             </Top4Row2Right>
                         </Top4Row2>
                     </Top4Content>
                 </Top4>
-                <ImgRow src={require('../../assets/home/logo_row.png').default}/>
+                <ImgRow src={require('../../assets/home/logo_row.png').default} alt="" aria-hidden="true"/>
                 {/* <Top5>
                     <Top5Content>
                         <div className='title wow animate__animated animate__fadeIn'>
-                            <img src={require('../../assets/home/img5_title.png').default}/>
+                            <img src={require('../../assets/home/img5_title.png').default} alt="" aria-hidden="true"/>
                             <div>CHIPCHIPBOX</div>
                         </div>
                         <div className='desc wow animate__animated animate__fadeIn'>{t('132')}</div>
                         <div className='desc wow animate__animated animate__fadeIn' dangerouslySetInnerHTML={{__html:t('133')}}></div>
                         <Top5Card className='wow animate__animated animate__fadeIn'>
-                            <img src={require('../../assets/home/img51.png').default}/>
+                            <img src={require('../../assets/home/img51.png').default} alt="" aria-hidden="true"/>
                             <div>{t('134')}</div>
                             <Top5Btn className='custom' onClick={()=>openUrl(ALetterUrl)}>{t('195')}</Top5Btn>
                         </Top5Card>
@@ -195,15 +195,15 @@ export default function Home() {
                     </Top5Content>
                 </Top5> */}
                 <Top6>
-                    <Top6Bg src={require('../../assets/home/bg6.png').default}/>
+                    <Top6Bg src={require('../../assets/home/bg6.png').default} alt="" aria-hidden="true"/>
                     <Top6Title>{t('102')}</Top6Title>
                     <Top6Content>
-                        <Top6Img src={require('../../assets/home/roadmap.png').default}/>
+                        <Top6Img src={require('../../assets/home/roadmap.png').default} alt='Roadmap milestone icon'/>
                         <Top6Row>
                             <Top6RowItem>
                                 <div className='title'>
                                     <span>Q2 2023</span>
-                                    <img src={require('../../assets/home/flag.png').default}/>
+                                    <img src={require('../../assets/home/flag.png').default} alt="" aria-hidden="true"/>
                                 </div>
                                 <Top6Tip className='wow animate__animated animate__fadeInLeft'>
                                     <Top6TipRow>{t('135')}</Top6TipRow>
@@ -212,7 +212,7 @@ export default function Home() {
                             <Top6RowItem>
                                 <div className='title'>
                                     <span style={{color:'#20CFF1'}}>Q2 2024</span>
-                                    <img src={require('../../assets/home/flag.png').default}/>
+                                    <img src={require('../../assets/home/flag.png').default} alt="" aria-hidden="true"/>
                                 </div>
                                 <Top6Tip className='wow animate__animated animate__fadeInUp'>
                                     <Top6TipRow>{t('144')}</Top6TipRow>
@@ -230,7 +230,7 @@ export default function Home() {
                                 </Top6Tip>
                                 <Top6Btn className='custom' onClick={()=>history.push('/roadmap')}>
                                     <span>{t('104')}</span>
-                                    <img src={require('../../assets/home/arrow_enter.png').default}/>
+                                    <img src={require('../../assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                                 </Top6Btn>
                             </Top6RowItem>
                         </Top6Row>
@@ -239,28 +239,28 @@ export default function Home() {
                 <Top7>
                     <Top7BlueBgRadio/>
                     <Top7RedBgRadio/>
-                    <Top7RedBox src={require('../../assets/home/top7_box.png').default}/>
+                    <Top7RedBox src={require('../../assets/home/top7_box.png').default} alt="" aria-hidden="true"/>
                     <Top7Title>POWERED BY CHIPCHIPGAME</Top7Title>
                     <Top7Content>
                         <Top7Item1 className='wow animate__animated animate__fadeInDown'>
-                            <img src={require('../../assets/home/top71.png').default}/>
+                            <img src={require('../../assets/home/top71.png').default} alt="RUMMY"/>
                             <Top7ItemRow>
                                 <span>RUMMY</span>
                                 <Top7DisabledBtn className='custom'>{t('169')}</Top7DisabledBtn>
                             </Top7ItemRow>
                         </Top7Item1>
                         <Top7Item2 className='wow animate__animated animate__fadeInDown'>
-                            <img src={require('../../assets/home/top72.png').default}/>
+                            <img src={require('../../assets/home/top72.png').default} alt={t('167')}/>
                             <Top7ItemRow>
                                 <span>{t('167')}</span>
                                 <Top7Btn className='custom' onClick={()=>openUrl(EnterGameUrl)}>
                                     <span>{t('168')}</span>
-                                    <img src={require('../../assets/home/arrow_enter.png').default}/>
+                                    <img src={require('../../assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                                 </Top7Btn>
                             </Top7ItemRow>
                         </Top7Item2>
                         <Top7Item3 className='wow animate__animated animate__fadeInDown'>
-                            <img src={require('../../assets/home/top73.png').default}/>
+                            <img src={require('../../assets/home/top73.png').default} alt="OKEY"/>
                             <Top7ItemRow>
                                 <span>OKEY</span>
                                 <Top7DisabledBtn className='custom'>{t('169')}</Top7DisabledBtn>
@@ -272,14 +272,14 @@ export default function Home() {
                     <div className='t_title'>{t('170')}</div>
                     <Top8Content>
                         {articleList&&articleList.map((item,idx)=><Top8Item key={idx} onClick={()=>history.push(`/newsDetail?id=${item.id}`)} className='wow animate__animated animate__fadeIn'>
-                            <img className='icon' src={item.thumbnail}/>
+                            <img className='icon' src={item.thumbnail} alt="" aria-hidden="true"/>
                             <div className='right'>
                                 <div className='title'>{item.title}</div>
                                 <div className='time'>{getDateDiff(item.publishTime)}</div>
                             </div>
                         </Top8Item>)}
                         {/* {articleList&&articleList[0]&&<Top8Item1 className='wow animate__animated animate__fadeIn'>
-                            <img src={articleList[0].thumbnail}/>
+                            <img src={articleList[0].thumbnail} alt="" aria-hidden="true"/>
                             <div className='content'>
                                 <div className='title'>{articleList[0].title}</div>
                                 <div className='desc'>{articleList[0].source}</div>
@@ -298,7 +298,7 @@ export default function Home() {
                     </Top8Content>
                     <Top8Btn className='custom' onClick={()=>history.push('/news')}>
                         <span>{t('171')}</span>
-                        <img src={require('../../assets/home/arrow_enter.png').default}/>
+                        <img src={require('../../assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                     </Top8Btn>
                 </Top8>
                 <Top9>
@@ -309,13 +309,13 @@ export default function Home() {
                         <Top191Tip>
                             {
                                 faqList.map((item,idx)=>(
-                                    <Top91TipRow onClick={()=>history.push('/faqDetail?id='+item.id)} key={idx}>{item.title}</Top91TipRow>
+                                    <Top91TipRow onClick={()=>history.push('/faqDetail/?id='+item.id)} key={idx}>{item.title}</Top91TipRow>
                                 ))
                             }
                         </Top191Tip>
                         <Top6Btn className='custom' style={{marginLeft:'32px'}} onClick={()=>history.push('/faq')}>
                             <span>{t('104')}</span>
-                            <img src={require('../../assets/home/arrow_enter.png').default}/>
+                            <img src={require('../../assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
                         </Top6Btn>
                     </Top91>
                     <Top92 className='wow animate__animated animate__fadeInRight'>
@@ -324,11 +324,11 @@ export default function Home() {
                             <div className='title'>{t('173')}</div>
                             <div className='desc'>{t('194')}</div>
                             <div className='row'>
-                                <a href={SocialMediaMediumUrl} target='__blank'><img src={require('../../assets/home/c_xx.png').default}/></a>
-                                <a href={SocialMediaTwitterUrl} target='__blank'><img src={require('../../assets/home/c_twitter.png').default}/></a>
-                                {/* <a href={SocialMediaDiscordUrl} target='__blank'><img src={require('../../assets/home/c_discord.png').default}/></a> */}
-                                <a href={SocialMediaTelegramUrl} target='__blank'><img src={require('../../assets/home/c_telegram.png').default}/></a>
-                                <a href={SocialMediaGitHubUrl} target='__blank'><img src={require('../../assets/home/c_github.png').default}/></a>
+                                <a href={SocialMediaMediumUrl} target='__blank'><img src={require('../../assets/home/c_xx.png').default} alt="Follow us on Medium"/></a>
+                                <a href={SocialMediaTwitterUrl} target='__blank'><img src={require('../../assets/home/c_twitter.png').default} alt="Follow us on Twitter"/></a>
+                                {/* <a href={SocialMediaDiscordUrl} target='__blank'><img src={require('../../assets/home/c_discord.png').default} alt="Follow us on Discord"/></a> */}
+                                <a href={SocialMediaTelegramUrl} target='__blank'><img src={require('../../assets/home/c_telegram.png').default} alt="Follow us on Telegram"/></a>
+                                <a href={SocialMediaGitHubUrl} target='__blank'><img src={require('../../assets/home/c_github.png').default} alt="Follow us on GitHub"/></a>
                             </div>
                         </div>
                     </Top92>
@@ -339,10 +339,10 @@ export default function Home() {
     return (
         <Root>
             <Top1H5>
-                <img className='bg' src={require('../../assets/home/h5/bg1.png').default}/>
+                <img className='bg' src={require('../../assets/home/h5/bg1.png').default} alt="" aria-hidden="true"/>
                 <div className='content'>
                     <div className='title'>CHIPCHIP.IO</div>
-                    <div className='desc'>{t('106')}</div>
+                    <h1 className='desc'>{t('106')}</h1>
                     <div className='tip'>{t('107')}<br/>{t('109')}<br/>{t('108')}<br/>{t('110')}</div>
                     <div className='row'>
                         {/* <Top1TipDisabledBtn disabled>Fair Launch</Top1TipDisabledBtn> */}
@@ -351,57 +351,57 @@ export default function Home() {
                     <div className='row'>
                         {/* <Top1TipBorderBtn to='/displacement'>{t('111')}</Top1TipBorderBtn> */}
                         <Top1TipBorderBtn to='/download'>
-                            <img src={require('../../assets/home/download.png').default}/>
+                            <img src={require('../../assets/home/download.png').default} alt="" aria-hidden="true"/>
                             <span>{t('112')}</span>
                         </Top1TipBorderBtn>
                     </div>
                 </div>
             </Top1H5>
             <div style={{overflow:'hidden',height:30}}>
-                <img style={{objectFit:'contain',verticalAlign:'top',height:'100%'}} src={require('../../assets/home/h5/logo_row.png').default}/>
+                <img style={{objectFit:'contain',verticalAlign:'top',height:'100%'}} src={require('../../assets/home/h5/logo_row.png').default} alt="" aria-hidden="true"/>
             </div>
             <Top2H5>
                 <div className='title'>{t('113')}</div>
                 <div className='desc'>{t('114')}</div>
                 <BtnH5 className='custom' onClick={()=>openUrl(GitbookUrl)}>
                     <span>Gitbook</span>
-                    <img src={require('../../assets/nav/login_arrow.png').default}/>
+                    <img src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
                 </BtnH5>
                 <div className='desc'>{t('115')}</div>
                 <BtnH5 className='custom' onClick={()=>openUrl(SocialMediaTelegramUrl)}>
                     <span>{t('199')}</span>
-                    <img src={require('../../assets/nav/login_arrow.png').default}/>
+                    <img src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
                 </BtnH5>
             </Top2H5>
             <div style={{overflow:'hidden',height:15}}>
-                <img style={{objectFit:'contain',verticalAlign:'top',width:'100%'}} src={require('../../assets/home/h5/arrow_row.png').default}/>
+                <img style={{objectFit:'contain',verticalAlign:'top',width:'100%'}} src={require('../../assets/home/h5/arrow_row.png').default} alt="" aria-hidden="true"/>
             </div>
             <Top3H5>
                 <div className='t_title'>{t('116')}</div>
                 <Top3H5Item>
                     <div className='title'>{t('197')}</div>
                     <div className='desc'>{t('198')}</div>
-                    <img className='icon' src={require('../../assets/home/h5/img3_item0.png').default}/>
+                    <img className='icon' src={require('../../assets/home/h5/img3_item0.png').default} alt="" aria-hidden="true"/>
                 </Top3H5Item>
                 <Top3H5Item>
                     <div className='title'>{t('117')}</div>
                     <div className='desc'>{t('118')}</div>
-                    <img className='icon' src={require('../../assets/home/h5/img3_item1.png').default}/>
+                    <img className='icon' src={require('../../assets/home/h5/img3_item1.png').default} alt="" aria-hidden="true"/>
                 </Top3H5Item>
                 <Top3H5Item>
                     <div className='title'>{t('121')}</div>
                     <div className='desc'>{t('122')}</div>
-                    <img className='icon' src={require('../../assets/home/h5/img3_item3.png').default}/>
+                    <img className='icon' src={require('../../assets/home/h5/img3_item3.png').default} alt="" aria-hidden="true"/>
                 </Top3H5Item>
                 <Top3H5Item>
                     <div className='title'>{t('119')}</div>
                     <div className='desc'>{t('120')}</div>
-                    <img className='icon' src={require('../../assets/home/h5/img3_item2.png').default}/>
+                    <img className='icon' src={require('../../assets/home/h5/img3_item2.png').default} alt="" aria-hidden="true"/>
                 </Top3H5Item>
                 <Top3H5Item>
                     <div className='title'>{t('123')}</div>
                     <div className='desc'>{t('124')}</div>
-                    <img className='icon' src={require('../../assets/home/h5/img3_item4.png').default}/>
+                    <img className='icon' src={require('../../assets/home/h5/img3_item4.png').default} alt="" aria-hidden="true"/>
                 </Top3H5Item>
             </Top3H5>
             {/* <Top4H5>
@@ -409,9 +409,9 @@ export default function Home() {
                 <div className='t_sub_title'>{t('126')}</div>
                 <div className='desc'>{t('127')}</div>
                 <div className='desc'>{t('128')}<a href={GitbookTokenUrl} target='__blank'>Gitbook</a></div>
-                <Chart><img src={require("../../assets/home/h5/chart_icon.png").default} alt='icon'/></Chart>
+                <Chart><img src={require("../../assets/home/h5/chart_icon.png").default} alt="" aria-hidden="true"/></Chart>
                 <Top4H5Card>
-                    <img className='icon' src={require('../../assets/home/h5/img41.png').default}/>
+                    <img className='icon' src={require('../../assets/home/h5/img41.png').default} alt="" aria-hidden="true"/>
                     <Top4H5CardItem>
                         <div className='item_title'>NGNF</div>
                         <div className='item_desc'>{t('342')}</div>
@@ -427,46 +427,46 @@ export default function Home() {
                 </Top4H5Card>
             </Top4H5> */}
             <Top5H5>
-                <img className='bg' src={require('../../assets/home/h5/bg5.png').default}/>
+                <img className='bg' src={require('../../assets/home/h5/bg5.png').default} alt="" aria-hidden="true"/>
                 <div className='t_title'>{t('200')}</div>
                 <div className='t_sub_title'>{t('129')}</div>
                 <div className='desc'>{t('130')}</div>
                 <BtnH5 className='custom' onClick={()=>history.push('/airdrop')}>
                     <span>{t('131')}</span>
-                    <img src={require('../../assets/nav/login_arrow.png').default}/>
+                    <img src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
                 </BtnH5>
             </Top5H5>
             <div style={{overflow:'hidden',height:30}}>
-                <img style={{objectFit:'contain',verticalAlign:'top',height:'100%'}} src={require('../../assets/home/h5/logo_row.png').default}/>
+                <img style={{objectFit:'contain',verticalAlign:'top',height:'100%'}} src={require('../../assets/home/h5/logo_row.png').default} alt="" aria-hidden="true"/>
             </div>
             {/* <Top6H5>
                 <div className='content'>
                     <div className='title'>
-                        <img src={require('../../assets/home/h5/img6_title.png').default}/>
+                        <img src={require('../../assets/home/h5/img6_title.png').default} alt="" aria-hidden="true"/>
                         <div>CHIPCHIPBOX</div>
                     </div>
                     <div className='desc'>{t('132')}</div>
                     <div className='desc' dangerouslySetInnerHTML={{__html:t('133')}}></div>
                     <Top6H5Card>
-                        <img className='icon' src={require('../../assets/home/h5/img61.png').default}/>
+                        <img className='icon' src={require('../../assets/home/h5/img61.png').default} alt="" aria-hidden="true"/>
                         <div>{t('134')}</div>
                         <BtnSmallH5 className='custom' onClick={()=>openUrl(ALetterUrl)}>{t('195')}</BtnSmallH5>
                     </Top6H5Card>
                     <div className='box'>
-                        <img src={require('../../assets/box.png').default}/>
+                        <img src={require('../../assets/box.png').default} alt="" aria-hidden="true"/>
                     </div>
-                    <img className='box_shadow' src={require('../../assets/home/h5/img6_box_shadow.png').default}/>
+                    <img className='box_shadow' src={require('../../assets/home/h5/img6_box_shadow.png').default} alt="" aria-hidden="true"/>
                 </div>
             </Top6H5> */}
             <Top7H5>
-                <img className='bg' src={require('../../assets/home/h5/bg7.png').default}/>
+                <img className='bg' src={require('../../assets/home/h5/bg7.png').default} alt="" aria-hidden="true"/>
                 <div className='t_title'>{t('102')}</div>
                 <div className='content'>
                     <Top7H5Left>
                         <Top7H5Item>
                             <div className='title'>
                                 <span>Q2 2023</span>
-                                <img src={require('../../assets/home/h5/flag.png').default}/>
+                                <img src={require('../../assets/home/h5/flag.png').default} alt="" aria-hidden="true"/>
                             </div>
                             <div className='desc'>{t('135')}</div>
                         </Top7H5Item>
@@ -477,12 +477,12 @@ export default function Home() {
                             <div className='desc'>{t('165')}<br/><a href='#' target='__blank'>{t('166')}</a></div>
                         </Top7H5Item>
                     </Top7H5Left>
-                    <Top7H5Center src={require('../../assets/home/h5/roadmap.png').default}/>
+                    <Top7H5Center src={require('../../assets/home/h5/roadmap.png').default} alt='Roadmap milestone icon'/>
                     <Top7H5Right>
                         <Top7H5Item>
                             <div className='title'>
                                 <span style={{color:'#20CFF1'}}>Q2 2024</span>
-                                <img src={require('../../assets/home/h5/flag.png').default}/>
+                                <img src={require('../../assets/home/h5/flag.png').default} alt="" aria-hidden="true"/>
                             </div>
                             <div className='desc'>{t('144')}</div>
                             <div className='desc'>{t('145')}</div>
@@ -493,7 +493,7 @@ export default function Home() {
                 </div>
                 <BtnH5 className='custom' onClick={()=>history.push('/roadmap')} style={{margin:'0 auto',marginTop:50}}>
                     <span>{t('171')}</span>
-                    <img src={require('../../assets/nav/login_arrow.png').default}/>
+                    <img src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
                 </BtnH5>
             </Top7H5>
             <Top8H5>
@@ -502,32 +502,32 @@ export default function Home() {
                 <div className='t_title'>POWERED BY CHIPCHIPGAME</div>
                 <div className='content'>
                     <Top8H5Item>
-                        <img className='icon' src={require('../../assets/home/top72.png').default}/>
+                        <img className='icon' src={require('../../assets/home/top72.png').default} alt={t('168')}/>
                         <div className='row'>
                             <div className='title'>{t('167')}</div>
                             <button className='btn custom' type='button' onClick={()=>openUrl(EnterGameUrl)}>
                                 <span>{t('168')}</span>
-                                <img src={require('../../assets/home/h5/arrow_enter.png').default}/>
+                                <img src={require('../../assets/home/h5/arrow_enter.png').default} alt="" aria-hidden="true"/>
                             </button>
                         </div>
                     </Top8H5Item>
                     <Top8H5Item>
-                        <img className='icon' src={require('../../assets/home/top71.png').default}/>
+                        <img className='icon' src={require('../../assets/home/top71.png').default} alt="RUMMY"/>
                         <div className='row'>
                             <div className='title'>RUMMY</div>
                             <button className='disabled_btn custom' type='button' disabled>
                                 <span>{t('169')}</span>
-                                <img src={require('../../assets/home/h5/arrow_enter.png').default}/>
+                                <img src={require('../../assets/home/h5/arrow_enter.png').default} alt="" aria-hidden="true"/>
                             </button>
                         </div>
                     </Top8H5Item>
                     <Top8H5Item>
-                        <img className='icon' src={require('../../assets/home/top73.png').default}/>
+                        <img className='icon' src={require('../../assets/home/top73.png').default} alt="OKEY"/>
                         <div className='row'>
                             <div className='title'>OKEY</div>
                             <button className='disabled_btn custom' type='button' disabled>
                                 <span>{t('169')}</span>
-                                <img src={require('../../assets/home/h5/arrow_enter.png').default}/>
+                                <img src={require('../../assets/home/h5/arrow_enter.png').default} alt="" aria-hidden="true"/>
                             </button>
                         </div>
                     </Top8H5Item>
@@ -536,7 +536,7 @@ export default function Home() {
                     <div className='t_title'>{t('170')}</div>
                     {articleList.map((item,idx)=>(
                         <Top8H5NewsItem key={idx}>
-                            <img className='icon' src={item.thumbnail}/>
+                            <img className='icon' src={item.thumbnail} alt="" aria-hidden="true"/>
                             <div className='right'>
                                 <div className='title'>{item.title}</div>
                                 <div className='time'>{getDateDiff(item.publishTime)}</div>
@@ -545,7 +545,7 @@ export default function Home() {
                     ))}
                     <BtnH5 className='custom' onClick={()=>history.push('/news')} style={{marginLeft:12,marginTop:36}}>
                         <span>{t('171')}</span>
-                        <img src={require('../../assets/nav/login_arrow.png').default}/>
+                        <img src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
                     </BtnH5>
                 </div>
             </Top8H5>
@@ -561,7 +561,7 @@ export default function Home() {
                 </Top9H5Tip>
                 <Top9H5More className='custom' onClick={()=>history.push('/faq')}>
                     <span>{t('171')}</span>
-                    <img src={require('../../assets/nav/login_arrow.png').default}/>
+                    <img src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
                 </Top9H5More>
             </Top9H5>
             <Top10H5>
@@ -570,38 +570,38 @@ export default function Home() {
                 <div className='t_desc'>{t('194')}</div>
                 <div className='row' onClick={()=>openUrl(SocialMediaMediumUrl)}>
                     <div className='left'>
-                        <img className='icon' src={require('../../assets/home/h5/c_xx.png').default}/>
+                        <img className='icon' src={require('../../assets/home/h5/c_xx.png').default} alt="Follow us on Medium"/>
                         <span>{t('174')}</span>
                     </div>
-                    <img className='arrow' src={require('../../assets/nav/login_arrow.png').default}/>
+                    <img className='arrow' src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
                 </div>
                 <div className='row' onClick={()=>openUrl(SocialMediaTwitterUrl)}>
                     <div className='left'>
-                        <img className='icon' src={require('../../assets/home/h5/c_twitter.png').default}/>
+                        <img className='icon' src={require('../../assets/home/h5/c_twitter.png').default} alt="Follow us on Twitter"/>
                         <span>{t('175')}</span>
                     </div>
-                    <img className='arrow' src={require('../../assets/nav/login_arrow.png').default}/>
+                    <img className='arrow' src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
                 </div>
                 {/* <div className='row' onClick={()=>openUrl(SocialMediaDiscordUrl)}>
                     <div className='left'>
-                        <img className='icon' src={require('../../assets/home/h5/c_discord.png').default}/>
+                        <img className='icon' src={require('../../assets/home/h5/c_discord.png').default} alt="Follow us on Discord"/>
                         <span>{t('176')}</span>
                     </div>
-                    <img className='arrow' src={require('../../assets/nav/login_arrow.png').default}/>
+                    <img className='arrow' src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
                 </div> */}
                 <div className='row' onClick={()=>openUrl(SocialMediaTelegramUrl)}>
                     <div className='left'>
-                        <img className='icon' src={require('../../assets/home/h5/c_telegram.png').default}/>
+                        <img className='icon' src={require('../../assets/home/h5/c_telegram.png').default} alt="Follow us on Telegram"/>
                         <span>{t('176')}</span>
                     </div>
-                    <img className='arrow' src={require('../../assets/nav/login_arrow.png').default}/>
+                    <img className='arrow' src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
                 </div>
                 <div className='row' onClick={()=>openUrl(SocialMediaGitHubUrl)}>
                     <div className='left'>
-                        <img className='icon' src={require('../../assets/home/h5/c_github.png').default}/>
+                        <img className='icon' src={require('../../assets/home/h5/c_github.png').default} alt="Follow us on GitHub"/>
                         <span>{t('171')}</span>
                     </div>
-                    <img className='arrow' src={require('../../assets/nav/login_arrow.png').default}/>
+                    <img className='arrow' src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
                 </div>
             </Top10H5>
         </Root>
@@ -633,7 +633,7 @@ font-weight: 700;
 text-align: center;
 }
 .desc {
-margin-top: 16px;
+margin: 0;
 text-shadow: 0px 4px 18px rgba(0, 0, 0, 0.25);
 font-size: 24px;
 font-weight: 300;
@@ -1273,6 +1273,7 @@ font-weight: 700;
 .desc {
 font-size: 38px;
 font-weight: 300;
+margin-bottom: 0;
 }
 `
 const Top1Tip = styled.ul`

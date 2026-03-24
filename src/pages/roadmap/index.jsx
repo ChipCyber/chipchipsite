@@ -40,12 +40,12 @@ export default function Index() {
                 <Bg4/>
                 <Bg5/>
                 <Bg6/>
-                <div className='title'>{t('102')}</div>
+                <h1 className='title'>{t('102')}</h1>
                 <Content>
                     <Body>
-                        {currentQuarterSeq==1&&<Img className='wow animate__animated animate__fadeIn' src={require('../../assets/roadmap/bg1.png').default}/>}
-                        {currentQuarterSeq==2&&<Img className='wow animate__animated animate__fadeIn' src={require('../../assets/roadmap/bg2.png').default}/>}
-                        {currentQuarterSeq==3&&<Img className='wow animate__animated animate__fadeIn' src={require('../../assets/roadmap/bg3.png').default}/>}
+                        {currentQuarterSeq==1&&<Img className='wow animate__animated animate__fadeIn' src={require('../../assets/roadmap/bg1.png').default} alt="" aria-hidden="true"/>}
+                        {currentQuarterSeq==2&&<Img className='wow animate__animated animate__fadeIn' src={require('../../assets/roadmap/bg2.png').default} alt="" aria-hidden="true"/>}
+                        {currentQuarterSeq==3&&<Img className='wow animate__animated animate__fadeIn' src={require('../../assets/roadmap/bg3.png').default} alt="" aria-hidden="true"/>}
                         <Item>
                             <ItemTitle>Q2 2023</ItemTitle>
                             <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('135')}</ItemRow>
@@ -114,7 +114,7 @@ export default function Index() {
                         </Item>
                         <Item>
                             <ItemTitle>Q3 2025</ItemTitle>
-                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('165')}<br/><Btn className='custom' onClick={()=>openUrl(JoinNowUrl)}><span>{t('166')}</span><img src={require('../../assets/home/arrow_enter.png').default}/></Btn></ItemRow>
+                            <ItemRow className='wow animate__animated animate__fadeInLeft'>{t('165')}<br/><Btn className='custom' onClick={()=>openUrl(JoinNowUrl)}><span>{t('166')}</span><img src={require('../../assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/></Btn></ItemRow>
                         </Item>
                     </Body>
                 </Content>
@@ -129,7 +129,7 @@ export default function Index() {
                 <Bg4/>
                 <Bg5/>
                 <Bg6/>
-                <div className='title'>{t('102')}</div>
+                <h1 className='title'>{t('102')}</h1>
                 <ContentH5>
                     <Left>
                         <ItemH5>
@@ -170,9 +170,9 @@ export default function Index() {
                             {/* <ItemH5Row>{t('1517')}</ItemH5Row> */}
                         </ItemH5>
                     </Left>
-                    {currentQuarterSeq==1&&<img className='middle' src={require('../../assets/roadmap/h5/bg1.png').default}/>}
-                    {currentQuarterSeq==2&&<img className='middle' src={require('../../assets/roadmap/h5/bg2.png').default}/>}
-                    {currentQuarterSeq==3&&<img className='middle' src={require('../../assets/roadmap/h5/bg3.png').default}/>}
+                    {currentQuarterSeq==1&&<img className='middle' src={require('../../assets/roadmap/h5/bg1.png').default} alt="" aria-hidden="true"/>}
+                    {currentQuarterSeq==2&&<img className='middle' src={require('../../assets/roadmap/h5/bg2.png').default} alt="" aria-hidden="true"/>}
+                    {currentQuarterSeq==3&&<img className='middle' src={require('../../assets/roadmap/h5/bg3.png').default} alt="" aria-hidden="true"/>}
                     <Right>
                         <ItemH5>
                             <ItemH5Title>Q3 2023</ItemH5Title>
@@ -301,6 +301,7 @@ position: relative;
 padding: 94px 18px 138px;
 overflow: hidden;
 .title {
+margin: 0;
 position: relative;
 font-size: 32px;
 font-weight: 700;

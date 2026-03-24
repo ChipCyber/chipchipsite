@@ -66,15 +66,15 @@ export default function Index() {
                 <BgOrange1/>
                 <BgOrange2/>
                 <BgGreen/>
-                <div className='t_title'>{t('103')}</div>
+                <h1 className='t_title'>{t('103')}</h1>
                 <Content>
                     {list.map((item,idx)=><Item key={idx} onClick={()=>history.push('/newsDetail?id='+item.id)}>
-                        <img className='icon' src={item.thumbnail}/>
+                        <img className='icon' src={item.thumbnail} alt="" aria-hidden="true"/>
                         <div className='time'>{getDateDiff(item.publishTime)}</div>
                         <div className='title'>{item.title}</div>
                         <DetailBtn>
                             <span>{t('402')}</span>
-                            <img src={require('../../assets/nav/login_arrow.png').default}/>
+                            <img src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
                         </DetailBtn>
                     </Item>)}
                 </Content>
@@ -85,9 +85,9 @@ export default function Index() {
     return (
         <Root>
             <BgGreen/>
-            <div className='t_title'>{t('400')}</div>
+            <h1 className='t_title'>{t('400')}</h1>
             {list.map((item,idx)=><ItemH5 key={idx} onClick={()=>history.push('/newsDetail?id='+item.id)}>
-                <img className='icon' src={item.thumbnail}/>
+                <img className='icon' src={item.thumbnail} alt="" aria-hidden="true"/>
                 <div className='content'>
                     <div className='title'>{item.title}</div>
                     <div className='time'>{getDateDiff(item.publishTime)}</div>

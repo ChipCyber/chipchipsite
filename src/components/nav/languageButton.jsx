@@ -29,18 +29,18 @@ class LanguageButton extends Component {
         const {showModal} = this.state;
         return (
             <Root>
-                <Icon src={require('../../assets/nav/language.png').default}/>
-                <Text>{language=='zh_CN'?'中文':'EN'}</Text>
-                <Down src={require('../../assets/arrow_down.png').default}/>
+                <Icon src={require('../../assets/nav/language.png').default} alt="" aria-hidden="true"/>
+                {/* <Text>{language=='zh_CN'?'中文':'EN'}</Text>
+                <Down src={require('../../assets/arrow_down.png').default} alt="" aria-hidden="true"/> */}
                 {showModal&&<Modal className='modal'>
                     <ModalContent>
                         <Row onClick={()=>this.change('en')}>
                             <span>English</span>
-                            {language=='en'&&<img src={require('../../assets/checked.png').default}/>}
+                            {language=='en'&&<img src={require('../../assets/checked.png').default} alt="" aria-hidden="true"/>}
                         </Row>
                         <Row onClick={()=>this.change('zh_CN')}>
                             <span>中文</span>
-                            {language=='zh_CN'&&<img src={require('../../assets/checked.png').default}/>}
+                            {language=='zh_CN'&&<img src={require('../../assets/checked.png').default} alt="" aria-hidden="true"/>}
                         </Row>
                     </ModalContent>
                 </Modal>}
@@ -79,11 +79,11 @@ width: 20px;
 height: 20px;
 `
 const Text = styled.div`
-font-size: 18px;
+font-size: 16px;
 color: ${({theme})=>theme.colors.textSubtle};
 display: none;
 ${({ theme }) => theme.mediaQueries.sm} {
-    display: blcok;
+    display: block;
 };
 `
 const Down = styled.img`
@@ -91,7 +91,7 @@ width: 14px;
 height: 14px;
 display: none;
 ${({ theme }) => theme.mediaQueries.sm} {
-    display: blcok;
+    display: block;
 };
 `
 const Modal = styled.div`

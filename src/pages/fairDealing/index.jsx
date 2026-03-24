@@ -15,15 +15,15 @@ export default function Index() {
                 <Top>
                     <div className='imgBox'>
                         <div className='topLeft'>
-                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/topLeft.png').default} />
+                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/topLeft.png').default} alt="" aria-hidden="true"/>
                         </div>
                         <div className='topRight'>
-                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/topRight.svg').default} />
+                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/topRight.svg').default} alt={t('10004')}/>
                         </div>
                     </div>
 
                     <div className='topCenter'>
-                        <div className='topTitle'>{t('1002')}</div>
+                        <h1 className='topTitle'>{t('1002')}</h1>
                         <div className="topTxt">
                             <Trans
                                 i18nKey="1003"
@@ -33,7 +33,7 @@ export default function Index() {
                     </div>
                 </Top>
                 <div style={{ overflow: 'hidden', height: 96 }}>
-                    <img style={{ objectFit: 'unset', width: '100%', height: '100%' }} src={require('../../assets/home/logo_row.png').default} />
+                    <img style={{ objectFit: 'unset', width: '100%', height: '100%' }} src={require('../../assets/home/logo_row.png').default} alt="" aria-hidden="true"/>
                 </div>
                 <Content>
                     <Bg1 />
@@ -42,7 +42,7 @@ export default function Index() {
                     <StepTitle>
                         <SerialNumber>
                             <OptionImg>
-                                <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/option.svg').default} />
+                                <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/option.svg').default} alt="" aria-hidden="true"/>
                             </OptionImg>
                             <OptionTxt>1</OptionTxt>
                         </SerialNumber>
@@ -56,15 +56,15 @@ export default function Index() {
 
                     <StepContent>
                         <StepContentImg>
-                            <img style={{ objectFit: 'cover', width: '4px', height: '100%' }} src={require('../../assets/fairDealing/line1.png').default} />
+                            <img style={{ objectFit: 'cover', width: '4px', height: '100%' }} src={require('../../assets/fairDealing/line1.png').default} alt="" aria-hidden="true"/>
                         </StepContentImg>
                         <StepContentRight>
                             <div style={{ width: '100%', marginTop: '30px' }}>
-                                <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter1.png').default} />
+                                <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter1.png').default} alt={t('10005')}/>
                             </div>
 
                             <div style={{ width: '100%', }}>
-                                <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter2.png').default} />
+                                <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter2.png').default} alt={t('10006')}/>
                             </div>
                             <SerialSecond>{t('1014')}</SerialSecond>
                         </StepContentRight>
@@ -73,7 +73,7 @@ export default function Index() {
                     <StepTitle>
                         <SerialNumber>
                             <OptionImg>
-                                <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/option.svg').default} />
+                                <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/option.svg').default} alt="" aria-hidden="true"/>
                             </OptionImg>
                             <OptionTxt>2</OptionTxt>
                         </SerialNumber>
@@ -87,11 +87,11 @@ export default function Index() {
 
                     <StepContent>
                         <StepContentImg>
-                            <img style={{ objectFit: 'cover', width: '4px', height: '100%' }} src={require('../../assets/fairDealing/line2.png').default} />
+                            <img style={{ objectFit: 'cover', width: '4px', height: '100%' }} src={require('../../assets/fairDealing/line2.png').default} alt="" aria-hidden="true"/>
                         </StepContentImg>
                         <StepContentRight>
                             <div style={{ width: '100%', marginTop: '30px' }}>
-                                <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter3.png').default} />
+                                <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter3.png').default} alt={t('10007')}/>
                             </div>
                         </StepContentRight>
                     </StepContent>
@@ -99,7 +99,7 @@ export default function Index() {
                     <StepTitle>
                         <SerialNumber>
                             <OptionImg>
-                                <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/option.svg').default} />
+                                <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/option.svg').default} alt="" aria-hidden="true"/>
                             </OptionImg>
                             <OptionTxt>3</OptionTxt>
                         </SerialNumber>
@@ -116,7 +116,7 @@ export default function Index() {
                         </StepContentImg>
                         <StepContentRight>
                             <div style={{ width: '100%', }}>
-                                <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter4.png').default} />
+                                <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter4.png').default} alt={t('10008')}/>
                             </div>
                             <StepContentButtom>
                                 <ButtomTitle >{t('1015')}</ButtomTitle>
@@ -138,10 +138,10 @@ export default function Index() {
         <Root>
             <TopH5>
                 <div className='topRight'>
-                    <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/topRight.svg').default} />
+                    <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/topRight.svg').default} alt={t('10004')}/>
                 </div>
                 <div className='topCenter'>
-                    <div className='topTitle'>{t('1002')}</div>
+                    <h1 className='topTitle'>{t('1002')}</h1>
                     <div className="topTxt">
                         <Trans
                             i18nKey="1003"
@@ -150,7 +150,7 @@ export default function Index() {
                     </div>
                 </div>
                 <div style={{ overflow: 'hidden', height: 30, width: '100%', }}>
-                    <img style={{ objectFit: 'cover', verticalAlign: 'top', height: '100%', width: '100%', }} src={require('../../assets/home/h5/logo_row.png').default} />
+                    <img style={{ objectFit: 'cover', verticalAlign: 'top', height: '100%', width: '100%', }} src={require('../../assets/home/h5/logo_row.png').default} alt="" aria-hidden="true"/>
                 </div>
             </TopH5>
             <FairTitle>{t('1004')}</FairTitle>
@@ -158,7 +158,7 @@ export default function Index() {
                 <StepTitle>
                     <SerialNumber>
                         <OptionImg>
-                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/option.svg').default} />
+                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/option.svg').default} alt="" aria-hidden="true"/>
                         </OptionImg>
                         <OptionTxt>1</OptionTxt>
                     </SerialNumber>
@@ -175,11 +175,11 @@ export default function Index() {
                 <StepContent>
                     <StepContentRight>
                         <StepContentRightH5Img>
-                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter1.png').default} />
+                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter1.png').default} alt={t('10005')}/>
                         </StepContentRightH5Img>
 
                         <div style={{ width: '100%', }}>
-                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter2.png').default} />
+                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter2.png').default} alt={t('10006')}/>
                         </div>
                         <SerialSecond>{t('1014')}</SerialSecond>
                     </StepContentRight>
@@ -187,7 +187,7 @@ export default function Index() {
                 <StepTitle>
                     <SerialNumber>
                         <OptionImg>
-                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/option.svg').default} />
+                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/option.svg').default} alt="" aria-hidden="true"/>
                         </OptionImg>
                         <OptionTxt>2</OptionTxt>
                     </SerialNumber>
@@ -203,7 +203,7 @@ export default function Index() {
                 <StepContent>
                     <StepContentRight>
                         <StepContentRightH5Img >
-                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter3.png').default} />
+                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter3.png').default} alt={t('10007')}/>
                         </StepContentRightH5Img>
                     </StepContentRight>
                 </StepContent>
@@ -211,7 +211,7 @@ export default function Index() {
                 <StepTitle>
                     <SerialNumber>
                         <OptionImg>
-                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/option.svg').default} />
+                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/option.svg').default} alt="" aria-hidden="true"/>
                         </OptionImg>
                         <OptionTxt>3</OptionTxt>
                     </SerialNumber>
@@ -227,7 +227,7 @@ export default function Index() {
                 <StepContent>
                     <StepContentRight>
                         <StepContentRightH5Img>
-                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter4.png').default} />
+                            <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={require('../../assets/fairDealing/conter4.png').default} alt={t('10008')}/>
                         </StepContentRightH5Img>
                     </StepContentRight>
                 </StepContent>
@@ -277,7 +277,6 @@ flex: 1;
     font-weight: 700;
   }
   .topTxt {
-    margin-top: 20px;
     width: 46%;
     font-size: 24px; 
     line-height:28px;
@@ -307,7 +306,6 @@ text-align: center;
     font-weight: 700;
   }
   .topTxt {
-    margin-top: 20px;
     font-size: 16px; 
     line-height:22px;
     font-weight: 600;
