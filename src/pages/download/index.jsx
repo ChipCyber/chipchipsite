@@ -30,7 +30,7 @@ export default function Index() {
                     <h1 className='title'>{t('500')}</h1>
                     <div className='desc'>{t('501')}</div>
                     <List>
-                        <RowLink href='https://t.me/chipchipgame_bot/CHIPCHIPGAME' target='__blank'>
+                        <RowLink href={TelegramMiniAppUrl} target='__blank'>
                             <div className='content'>
                                 <img src={require('../../assets/download/telegram.png').default} alt="" aria-hidden="true"/>
                                 <span>Telegram Mini-app</span>
@@ -104,7 +104,7 @@ export default function Index() {
                 <BottomH5>
                     <div className='subTitle'>{t('501')}</div>
                     <List>
-                        <RowLink href='https://t.me/chipchipgame_bot/CHIPCHIPGAME' target='__blank'>
+                        <RowLink href={TelegramMiniAppUrl} target='__blank'>
                             <div className='content'>
                                 <img src={require('../../assets/download/telegram.png').default} alt="" aria-hidden="true"/>
                                 <span>Telegram Mini-app</span>
