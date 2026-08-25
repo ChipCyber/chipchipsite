@@ -33,7 +33,7 @@ export default function Home() {
     const [articleList, setArticleList] = useState([]);
     const [faqList, setFaqList] = useState([]);
     useEffect(() => {
-        articlePageListApi({pageIndex:1,pageSize:4}).then(({data})=>{
+        articlePageListApi({pageIndex:1,pageSize:4,articleTypes:[43,44,45]}).then(({data})=>{
             setArticleList(data);
         });
         knowledgePageListApi({pageIndex:1,pageSize:5,knowledgeType:1}).then(({data})=>{

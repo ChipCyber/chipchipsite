@@ -52,6 +52,7 @@ const NewsDetail = React.lazy(() => import("./pages/news/detail"));
 const Download = React.lazy(() => import("./pages/download"));
 const FairDealing = React.lazy(() => import("./pages/fairDealing"));
 const Roadmap = React.lazy(() => import("./pages/roadmap"));
+const CrazyWednesday = React.lazy(() => import("./pages/crazyWednesday"));
 
 function App() {
   const { changeLanguage } = useLanguage();
@@ -161,6 +162,11 @@ function App() {
               <Route path="/roadmap" exact>
                 <Nav/>
                 <Roadmap/>
+                <Footer/>
+              </Route>
+              <Route path="/liveshow" exact>
+                <Nav/>
+                <CrazyWednesday/>
                 <Footer/>
               </Route>
               {/* <Route path="/ido" exact>

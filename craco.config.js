@@ -1,9 +1,14 @@
 const CracoLessPlugin = require('craco-less');
 const TerserPlugin = require('terser-webpack-plugin');
 const { NODE_ENV } = process.env;
+const dotenv = require('dotenv');
 const path = require('path');
 
 const isProd = NODE_ENV === "production";
+
+if (process.env.REACT_APP_ENV === 'test') {
+  dotenv.config({ path: path.resolve(process.cwd(), '.env.test') });
+}
 
 const Webpack = {
   production: {

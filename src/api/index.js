@@ -1,5 +1,13 @@
 import request from '../utils/http'
 
+export function getconfigByKeyApi(data) {
+  return request({
+    url: '/api/common/getconfigByKey',
+    method: 'post',
+    data,
+    loading: true,
+  })
+}
 export function sendEmailApi(data) {
   return request({
     url: '/api/common/vcode/sendEmail',

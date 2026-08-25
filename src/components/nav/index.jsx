@@ -215,7 +215,8 @@ class Nav extends Component {
                     {/* <NavCenterLink to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLink> */}
                     {/* <NavCenterLink to='/ido' onClick={this.closeMenu} isActive={()=>pathname==='/ido'}>IDO</NavCenterLink> */}
                     {/* <NavCenterLinkDisabled>Fair Launch</NavCenterLinkDisabled> */}
-                    <NavCenterLink to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLink> 
+                    <NavCenterLink to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLink>
+                    <NavCenterLinkAuto to='/liveshow' onClick={this.closeMenu} isActive={()=>pathname==='/liveshow'}>{t('10100')}</NavCenterLinkAuto>
                     {/* <NavCenterLinkAuto to='/ngnf' onClick={this.closeMenu} isActive={()=>pathname==='/ngnf'}>$NGNF</NavCenterLinkAuto> */}
                     {/* <NavCenterLink to='/mint' onClick={this.closeMenu} isActive={()=>pathname==='/mint'}>Fair Launch</NavCenterLink> */}
                     <NavCenterLinkAuto to='/roadmap' onClick={this.closeMenu} isActive={()=>pathname==='/roadmap'}>{t('102')}</NavCenterLinkAuto>
@@ -227,6 +228,7 @@ class Nav extends Component {
                         {showMore&&<Modal className='modal'>
                             <ModalContent>
                                 {/* <ModalRow to='/ngnf' onClick={this.closeMore} isActive={()=>pathname==='/ngnf'}>$NGNF</ModalRow> */}
+                                <ModalRow to='/liveshow' onClick={this.closeMore} isActive={()=>pathname==='/liveshow'}>{t('10100')}</ModalRow>
                                 <ModalRow to='/roadmap' onClick={this.closeMore} isActive={()=>pathname==='/roadmap'}>{t('102')}</ModalRow>
                                 {/* <ModalRow to='/fairDealing' onClick={this.closeMenu} isActive={()=>pathname==='/fairDealing'}>{t('1001')}</ModalRow> */}
                                 <ModalRow to='/news' onClick={this.closeMore} isActive={()=>pathname==='/news'}>{t('103')}</ModalRow>
@@ -321,6 +323,7 @@ class Nav extends Component {
                             <Row><NavLink to='/airdrop' onClick={this.closeMenu}>{t('101')}</NavLink></Row>
                             {/* <Row><NavLink to='/ngnf' onClick={this.closeMenu}>$NGNF</NavLink></Row> */}
                             {/* <Row><NavLink to='/ido' onClick={this.closeMenu}>IDO</NavLink></Row> */}
+                            <Row><NavLink to='/liveshow' onClick={this.closeMenu}>{t('10100')}</NavLink></Row>
                             <Row><NavLink to='/roadmap' onClick={this.closeMenu}>{t('102')}</NavLink></Row>
                             <Row><NavLink to='/news' onClick={this.closeMenu}>{t('103')}</NavLink></Row>
                         </Group>

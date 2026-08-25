@@ -26,7 +26,7 @@ export default function Index() {
         updateUrl(id);
     };
     useEffect(() => {
-        articlePageListApi({pageIndex:1,pageSize:10}).then(({data})=>{
+        articlePageListApi({pageIndex:1,pageSize:10,articleTypes:[43,44,45]}).then(({data})=>{
             setList(data);
         });
     }, []);
