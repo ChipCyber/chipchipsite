@@ -10,6 +10,8 @@ import {
     WebUrl,
     AndroidUrl,
     iOSUrl,
+    iOSNativePrimaryUrl,
+    iOSNativeBackupUrl,
 } from "../../constants";
 
 function ArrowIcon() {
@@ -18,6 +20,82 @@ function ArrowIcon() {
             <path d="M16.25 10.5001C16.25 10.6876 16.1875 10.8126 16.0625 10.9376L16 11.0001L12.25 14.7501L12.1875 14.8126C11.9375 15.0001 11.625 15.0001 11.4375 14.8126L11.375 14.7501L11.3125 14.6876C11.125 14.4376 11.125 14.1251 11.3125 13.9376L11.375 13.8751L14.0625 11.1876H4.3125C4 11.0626 3.75 10.8126 3.75 10.5001C3.75 10.1876 4 9.93761 4.3125 9.87511H14.125L11.4375 7.18761L11.375 7.12511C11.1875 6.87511 11.1875 6.56261 11.4375 6.31261C11.6875 6.06261 12 6.06261 12.25 6.25011L12.3125 6.31261L16.0625 10.0626L16.125 10.1251C16.1875 10.1876 16.25 10.3126 16.25 10.5001Z" fill="#5A5A5A" />
         </svg>
     )
+}
+
+const iosChannels = [
+    { key: 'primary', labelKey: '529', url: iOSNativePrimaryUrl },
+    { key: 'backup', labelKey: '530', url: iOSNativeBackupUrl },
+];
+
+function IosEntries({ desktop }) {
+    const { t } = useTranslation();
+    const [open, setOpen] = useState(false);
+
+    return (
+        <>
+            <NativeGroup>
+                <NativeToggle type="button" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+                    <div className='content'>
+                        <img src={require('../../assets/download/ios.png').default} alt="" aria-hidden="true" />
+                        <span>{t('528')}</span>
+                    </div>
+                    <Chevron $open={open} viewBox="0 0 20 20" aria-hidden="true">
+                        <path d="M5 7.5L10 12.5L15 7.5" stroke="#5A5A5A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    </Chevron>
+                </NativeToggle>
+                {open && (
+                    <ChannelList>
+                        {iosChannels.map((channel) => (
+                            desktop ? (
+                                <ChannelRow key={channel.key} href={channel.url}>
+                                    <span>{t(channel.labelKey)}</span>
+                                    <img className='qr' src={require('../../assets/download/qr.png').default} alt="" aria-hidden="true" />
+                                    <div className='download_qr'>
+                                        <div>{t('505')}</div>
+                                        <QRCode
+                                            value={channel.url}
+                                            size={130}
+                                            includeMargin={true}
+                                        />
+                                    </div>
+                                </ChannelRow>
+                            ) : (
+                                <ChannelLink key={channel.key} href={channel.url}>
+                                    <span>{t(channel.labelKey)}</span>
+                                    <img className='download' src={require('../../assets/download/download.png').default} alt="" aria-hidden="true" />
+                                </ChannelLink>
+                            )
+                        ))}
+                    </ChannelList>
+                )}
+            </NativeGroup>
+            {desktop ? (
+                <Row href={iOSUrl} target='__blank'>
+                    <div className='content'>
+                        <img src={require('../../assets/download/ios.png').default} alt="" aria-hidden="true" />
+                        <span>{t('527')}</span>
+                    </div>
+                    <img className='qr' src={require('../../assets/download/qr.png').default} alt="" aria-hidden="true" />
+                    <div className='download_qr'>
+                        <div>{t('505')}</div>
+                        <QRCode
+                            value={iOSUrl}
+                            size={130}
+                            includeMargin={true}
+                        />
+                    </div>
+                </Row>
+            ) : (
+                <RowLink href={iOSUrl} target='__blank'>
+                    <div className='content'>
+                        <img src={require('../../assets/download/ios.png').default} alt="" aria-hidden="true" />
+                        <span>{t('527')}</span>
+                    </div>
+                    <img className='download' src={require('../../assets/download/download.png').default} alt="" aria-hidden="true" />
+                </RowLink>
+            )}
+        </>
+    );
 }
 
 export default function Index() {
@@ -46,21 +124,7 @@ export default function Index() {
                                 </div>
                                 <img className='arrow' src={require('../../assets/arrow.png').default} alt="" aria-hidden="true" />
                             </RowLink>
-                            <Row href={iOSUrl} target='__blank'>
-                                <div className='content'>
-                                    <img src={require('../../assets/download/ios.png').default} alt="" aria-hidden="true" />
-                                    <span>iOS</span>
-                                </div>
-                                <img className='qr' src={require('../../assets/download/qr.png').default} alt="" aria-hidden="true" />
-                                <div className='download_qr'>
-                                    <div>{t('505')}</div>
-                                    <QRCode
-                                        value={iOSUrl}
-                                        size={130}
-                                        includeMargin={true}
-                                    />
-                                </div>
-                            </Row>
+                            <IosEntries desktop />
                             <Row href={AndroidUrl} target='__blank'>
                                 <div className='content'>
                                     <img src={require('../../assets/download/android.png').default} alt="" aria-hidden="true" />
@@ -123,13 +187,7 @@ export default function Index() {
                                 </div>
                                 <img className='arrow' src={require('../../assets/arrow.png').default} alt="" aria-hidden="true" />
                             </RowLink>
-                            <RowLink href={iOSUrl} target='__blank'>
-                                <div className='content'>
-                                    <img src={require('../../assets/download/ios.png').default} alt="" aria-hidden="true" />
-                                    <span>iOS</span>
-                                </div>
-                                <img className='download' src={require('../../assets/download/download.png').default} alt="" aria-hidden="true" />
-                            </RowLink>
+                            <IosEntries />
                             <RowLink href={AndroidUrl} target='__blank'>
                                 <div className='content'>
                                     <img src={require('../../assets/download/android.png').default} alt="" aria-hidden="true" />
@@ -301,6 +359,127 @@ width: 18px;
 height: 18px;
 }
 };
+`
+const NativeGroup = styled.div`
+margin-top: 12px;
+`
+const NativeToggle = styled.button`
+width: 100%;
+border: none;
+font-family: inherit;
+text-align: left;
+position: relative;
+padding: 0 25px 0 20px;
+height: 60px;
+cursor: pointer;
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-size: 18px;
+font-weight: 700;
+color: #121212;
+border-radius: 15px;
+background: #FFF;
+&:hover {
+color: #666;
+}
+.content {
+display: flex;
+gap: 18px;
+align-items: center;
+img {
+width: 40px;
+height: 40px;
+}
+}
+${({ theme }) => theme.mediaQueries.sm}{
+font-size: 16px;
+};
+`
+const Chevron = styled.svg`
+width: 18px;
+height: 18px;
+flex-shrink: 0;
+transition: transform 0.2s ease;
+transform: rotate(${({ $open }) => ($open ? '180deg' : '0deg')});
+`
+const ChannelList = styled.div`
+display: flex;
+flex-direction: column;
+`
+const ChannelRow = styled.a`
+&:hover {
+color: #666;
+.download_qr {display: block;}
+}
+position: relative;
+box-sizing: border-box;
+padding: 0 20px 0 16px;
+height: 48px;
+margin-top: 8px;
+margin-left: 18px;
+width: calc(100% - 18px);
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-size: 15px;
+font-weight: 700;
+color: #121212;
+border-radius: 12px;
+background: #F4F4F6;
+text-decoration: none;
+.qr {
+width: 26px;
+height: 26px;
+}
+.download_qr {
+display: none;
+z-index: 2;
+border-radius: 12px;
+background: #362F42;
+box-shadow: 0px 4px 32px 0px rgba(0, 0, 0, 0.25);
+position: absolute;
+left: 102%;
+top: 0;
+padding: 10px 15px 15px;
+font-size: 14px;
+font-weight: 500;
+line-height: 20px;
+div {
+color: #FFF;
+opacity: 0.6;
+text-align: center;
+margin-bottom: 10px;
+}
+canvas {
+border-radius: 12px;
+}
+}
+`
+const ChannelLink = styled.a`
+&:hover {
+color: #666;
+}
+position: relative;
+box-sizing: border-box;
+padding: 0 24px 0 16px;
+height: 48px;
+margin-top: 8px;
+margin-left: 18px;
+width: calc(100% - 18px);
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-size: 15px;
+font-weight: 700;
+color: #121212;
+border-radius: 12px;
+background: #F4F4F6;
+text-decoration: none;
+.download {
+width: 11px;
+height: 18px;
+}
 `
 const Row = styled.a`
 &:hover {

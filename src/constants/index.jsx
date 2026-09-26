@@ -32,6 +32,8 @@ export const TelegramMiniAppUrl = "https://t.me/chipchipgames_bot/start";
 export const WebUrl = "";
 export const AndroidUrl = "https://game.chipchip.io/api/download/android";
 export const iOSUrl = "https://link.chipchip.io/CHIPCHIP.mobileconfig";
+export const iOSNativePrimaryUrl = "itms-services://?action=download-manifest&url=https://game.chipchip.io/api/download/ios/all/manifest.plist";
+export const iOSNativeBackupUrl = "itms-services://?action=download-manifest&url=https://h5.chipchipres.com/api/download/ios/cdn1/manifest.plist";
 //线路图立即加入
 export const JoinNowUrl = "";
 
