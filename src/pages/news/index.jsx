@@ -37,7 +37,7 @@ export default function Index() {
             if(!data||data.length<10) {
                 setNoMore(true);
             }
-        }).finally(()=>{
+        }).catch(() => {}).finally(()=>{
             loading.current = false;
         });
     }

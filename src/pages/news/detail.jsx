@@ -28,12 +28,12 @@ export default function Index() {
     useEffect(() => {
         articlePageListApi({pageIndex:1,pageSize:10}).then(({data})=>{
             setList(data);
-        });
+        }).catch(() => {});
     }, []);
     useEffect(() => {
         articleGetApi({id}).then(({data})=>{
             setData(data);
-        });
+        }).catch(() => {});
     }, [id]);
     if (shouldRender) {
         return (

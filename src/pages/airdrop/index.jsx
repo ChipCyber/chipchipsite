@@ -28,7 +28,7 @@ export default function Index() {
         }, 1000);
         knowledgePageListApi({pageIndex:1,pageSize:5,knowledgeType:2}).then(({data})=>{
                     setFaqList(data);
-        });
+        }).catch(() => {});
         return () => clearInterval(timer);
     }, []);
     const refreshList = () => {
@@ -66,7 +66,7 @@ export default function Index() {
             const resList = data.active;
             setList(resList.sort((a, b) => b.start_time - a.start_time));
             refreshList();
-        });
+        }).catch(() => {});
     }
     useLanguageChange(fetchData);
     const goDetailAction = (item) => {

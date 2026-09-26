@@ -53,7 +53,7 @@ export default function Index() {
             if (!data || data.length >= res.totalCount) {
                 setNoMore(true);
             }
-        }).finally(() => {
+        }).catch(() => {}).finally(() => {
             loading.current = false;
         });
     }

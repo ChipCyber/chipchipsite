@@ -35,10 +35,10 @@ export default function Home() {
     useEffect(() => {
         articlePageListApi({pageIndex:1,pageSize:4}).then(({data})=>{
             setArticleList(data);
-        });
+        }).catch(() => {});
         knowledgePageListApi({pageIndex:1,pageSize:5,knowledgeType:1}).then(({data})=>{
             setFaqList(data);
-        });
+        }).catch(() => {});
     }, [language]);
     if (shouldRender) {
         return (
