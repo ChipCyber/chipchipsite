@@ -4,11 +4,17 @@ import { useTranslation } from 'react-i18next';
 
 const DownloadAppSection = () => {
     const { t } = useTranslation();
-    const [activeTab, setActiveTab] = useState('ios');
+    const [activeTab, setActiveTab] = useState('iosNative');
 
     return (
         <SectionContainer>
             <TabMenu>
+                <TabButton
+                    active={activeTab === 'iosNative'}
+                    onClick={() => setActiveTab('iosNative')}
+                >
+                    {t('532')}
+                </TabButton>
                 <TabButton
                     active={activeTab === 'ios'}
                     onClick={() => setActiveTab('ios')}
@@ -22,6 +28,44 @@ const DownloadAppSection = () => {
                     {t('522')}
                 </TabButton>
             </TabMenu>
+
+            {activeTab === 'iosNative' && (
+                <AppContent>
+                    <Step>
+                        <strong>{t('509')}​</strong>
+                        <p>{t('533')}</p>
+                        <img src={require('@/assets/download/IOSNative1.png').default} alt="iOS Native Step 1" style={{ maxWidth: '300px' }} />
+                    </Step>
+                    <Step>
+                        <strong>{t('510')}​</strong>
+                        <p>{t('534')}</p>
+                        <img src={require('@/assets/download/IOSNative2.jpg').default} alt="iOS Native Step 2" style={{ maxWidth: '300px' }} />
+                    </Step>
+                    <Step>
+                        <strong>{t('511')}​</strong>
+                        <p>{t('535')}</p>
+                        <img src={require('@/assets/download/IOSNative3.png').default} alt="iOS Native Step 3" style={{ maxWidth: '300px' }} />
+                    </Step>
+                    <Step>
+                        <strong>{t('512')}​</strong>
+                        <p>{t('536')}</p>
+                        <img src={require('@/assets/download/IOSNative4.png').default} alt="iOS Native Step 4" style={{ maxWidth: '300px' }} />
+                    </Step>
+                    <Step>
+                        <strong>{t('513')}​</strong>
+                        <p>{t('537')}</p>
+                        <img src={require('@/assets/download/IOSNative5.jpg').default} alt="iOS Native Step 5" style={{ maxWidth: '300px' }} />
+                    </Step>
+                    <Step>
+                        <strong>{t('514')}​</strong>
+                        <p>{t('538')}</p>
+                    </Step>
+                    <Step>
+                        <strong>{t('531')}​</strong>
+                        <p>{t('539')}</p>
+                    </Step>
+                </AppContent>
+            )}
 
             {activeTab === 'ios' && (
                 <AppContent>
