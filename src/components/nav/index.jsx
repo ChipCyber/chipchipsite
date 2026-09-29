@@ -215,24 +215,25 @@ class Nav extends Component {
                     {/* <NavCenterLink to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLink> */}
                     {/* <NavCenterLink to='/ido' onClick={this.closeMenu} isActive={()=>pathname==='/ido'}>IDO</NavCenterLink> */}
                     {/* <NavCenterLinkDisabled>Fair Launch</NavCenterLinkDisabled> */}
-                    <NavCenterLink to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLink> 
+                    {/* <NavCenterLink to='/airdrop' onClick={this.closeMenu} isActive={()=>pathname==='/airdrop'}>{t('101')}</NavCenterLink> */}
                     {/* <NavCenterLinkAuto to='/ngnf' onClick={this.closeMenu} isActive={()=>pathname==='/ngnf'}>$NGNF</NavCenterLinkAuto> */}
                     {/* <NavCenterLink to='/mint' onClick={this.closeMenu} isActive={()=>pathname==='/mint'}>Fair Launch</NavCenterLink> */}
-                    <NavCenterLinkAuto to='/roadmap' onClick={this.closeMenu} isActive={()=>pathname==='/roadmap'}>{t('102')}</NavCenterLinkAuto>
+                    {/* <NavCenterLinkAuto to='/roadmap' onClick={this.closeMenu} isActive={()=>pathname==='/roadmap'}>{t('102')}</NavCenterLinkAuto> */}
                     {/* <NavCenterLinkAuto to='/fairDealing' onClick={this.closeMenu} isActive={()=>pathname==='/fairDealing'}>{t('1001')}</NavCenterLinkAuto> */}
-                    <NavCenterLinkAuto to='/news' onClick={this.closeMenu} isActive={()=>pathname==='/news'}>{t('103')}</NavCenterLinkAuto>
-                    <NavCenterNoLink className='default'>
+                    <NavCenterLink to='/news' onClick={this.closeMenu} isActive={()=>pathname==='/news'}>{t('103')}</NavCenterLink>
+                    <NavCenterLink to='/download' onClick={this.closeMenu} isActive={()=>pathname==='/download'}>{t('112')}</NavCenterLink>
+                    {/* <NavCenterNoLink className='default'>
                         <span>{t('104')}</span>
                         <img src={require('@/assets/arrow_down.png').default} alt="" aria-hidden="true"/>
                         {showMore&&<Modal className='modal'>
-                            <ModalContent>
+                            <ModalContent> */}
                                 {/* <ModalRow to='/ngnf' onClick={this.closeMore} isActive={()=>pathname==='/ngnf'}>$NGNF</ModalRow> */}
-                                <ModalRow to='/roadmap' onClick={this.closeMore} isActive={()=>pathname==='/roadmap'}>{t('102')}</ModalRow>
+                                {/* <ModalRow to='/roadmap' onClick={this.closeMore} isActive={()=>pathname==='/roadmap'}>{t('102')}</ModalRow> */}
                                 {/* <ModalRow to='/fairDealing' onClick={this.closeMenu} isActive={()=>pathname==='/fairDealing'}>{t('1001')}</ModalRow> */}
-                                <ModalRow to='/news' onClick={this.closeMore} isActive={()=>pathname==='/news'}>{t('103')}</ModalRow>
+                                {/* <ModalRow to='/news' onClick={this.closeMore} isActive={()=>pathname==='/news'}>{t('103')}</ModalRow>
                             </ModalContent>
                         </Modal>}
-                    </NavCenterNoLink>
+                    </NavCenterNoLink> */}
                 </NavCenter>
                 <NavRight>
                     {(pathname==='/airdropDetail')&&(isEmpty(currentWalletAddress)?
@@ -260,7 +261,7 @@ class Nav extends Component {
                     // </PModal>}
                     // </PersonalBody>
                     }
-                    <BtnImg onClick={()=>history.push('/download')} src={require('@/assets/nav/download.png').default} alt='download'/>
+                    {/* <BtnImg onClick={()=>history.push('/download')} src={require('@/assets/nav/download.png').default} alt='download'/> */}
                     <LanguageButton/>
                     <MenuImg onClick={()=>this.setState({showMenu:!showMenu})} src={showMenu?require('@/assets/nav/menu_close.png').default:require('@/assets/nav/menu.png').default} alt='menu'/>
                 </NavRight>
@@ -318,11 +319,12 @@ class Nav extends Component {
                             <Row><NavLink to='/' onClick={this.closeMenu}>{t('100')}</NavLink></Row>
                             <Row><NavLink to='/fairDealing'onClick={this.closeMenu}>{t('1001')}</NavLink></Row>
                             {/* <Row><NavLink to='/displacement' onClick={this.closeMenu}>{t('207')}</NavLink></Row> */}
-                            <Row><NavLink to='/airdrop' onClick={this.closeMenu}>{t('101')}</NavLink></Row>
+                            {/* <Row><NavLink to='/airdrop' onClick={this.closeMenu}>{t('101')}</NavLink></Row> */}
                             {/* <Row><NavLink to='/ngnf' onClick={this.closeMenu}>$NGNF</NavLink></Row> */}
                             {/* <Row><NavLink to='/ido' onClick={this.closeMenu}>IDO</NavLink></Row> */}
-                            <Row><NavLink to='/roadmap' onClick={this.closeMenu}>{t('102')}</NavLink></Row>
+                            {/* <Row><NavLink to='/roadmap' onClick={this.closeMenu}>{t('102')}</NavLink></Row> */}
                             <Row><NavLink to='/news' onClick={this.closeMenu}>{t('103')}</NavLink></Row>
+                            <Row><NavLink to='/download' onClick={this.closeMenu}>{t('112')}</NavLink></Row>
                         </Group>
                         <Group>
                             <Row>CHIPCHIP</Row>
@@ -339,7 +341,7 @@ class Nav extends Component {
                             <ItemA href={UserAgreementUrl} target='__blank'>{t('183')}</ItemA>
                             <ItemA href={PrivacyPolicyUrl} target='__blank'>{t('184')}</ItemA>
                             <ItemA href={BlogUrl} target='__blank'>{t('185')}</ItemA>
-                            <Item><NavLink to='/download' onClick={this.closeMenu}>{t('112')}</NavLink></Item>
+                            {/* <Item><NavLink to='/download' onClick={this.closeMenu}>{t('112')}</NavLink></Item> */}
                         </Group>
                     </DialogM>
                 </DialogOverlay>
@@ -650,15 +652,15 @@ margin-top: 20px;
 width: 204px;
 };
 `
-const BtnImg = styled.img`
-cursor: pointer;
-width: 32px;
-height: 32px;
-display: none;
-${({ theme }) => theme.mediaQueries.sm}{
-display: block;
-};
-`
+// const BtnImg = styled.img`
+// cursor: pointer;
+// width: 32px;
+// height: 32px;
+// display: none;
+// ${({ theme }) => theme.mediaQueries.sm}{
+// display: block;
+// };
+// `
 const MenuImg = styled.img`
 width: 16px;
 height: 16px;

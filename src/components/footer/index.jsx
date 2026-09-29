@@ -31,9 +31,11 @@ export default function Footer() {
                         <div className='title'>{t('178')}</div>
                         <div className='row'>
                             {/* <NavLink className='link' to={'/ido'}>IDO</NavLink> */}
-                            <NavLink className='link' to={'/airdrop'}>{t('101')}</NavLink>
-                            <NavLink className='link' to={'/roadmap'}>{t('102')}</NavLink>
+                            {/* <NavLink className='link' to={'/airdrop'}>{t('101')}</NavLink> */}
+                            {/* <NavLink className='link' to={'/roadmap'}>{t('102')}</NavLink> */}
+                            <NavLink className='link' to={'/fairDealing'}>{t('1001')}</NavLink>
                             <NavLink className='link' to={'/news'}>{t('103')}</NavLink>
+                            <NavLink className='link' to={'/download'}>{t('112')}</NavLink>
                         </div>
                     </div>
                     <div>

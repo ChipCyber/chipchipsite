@@ -43,15 +43,15 @@ import Home from "./pages/home";
 import { setWalletInfo, refreshWalletBalance } from '@/store/userSlice';
 import { recentConnector } from "@/wallet";
 
-const Airdrop = React.lazy(() => import("./pages/airdrop"));
-const AirdropDetail = React.lazy(() => import("./pages/airdrop/detail"));
+// const Airdrop = React.lazy(() => import("./pages/airdrop"));
+// const AirdropDetail = React.lazy(() => import("./pages/airdrop/detail"));
 const FAQ = React.lazy(() => import("./pages/faq"));
 const FAQDetail = React.lazy(() => import("./pages/faq/detail"));
 const News = React.lazy(() => import("./pages/news"));
 const NewsDetail = React.lazy(() => import("./pages/news/detail"));
 const Download = React.lazy(() => import("./pages/download"));
 const FairDealing = React.lazy(() => import("./pages/fairDealing"));
-const Roadmap = React.lazy(() => import("./pages/roadmap"));
+// const Roadmap = React.lazy(() => import("./pages/roadmap"));
 
 function App() {
   const { changeLanguage } = useLanguage();
@@ -108,17 +108,16 @@ function App() {
                 <Home/>
                 <Footer/>
               </Route>
-              <Route path="/airdrop" exact>
+              {/* <Route path="/airdrop" exact>
                 <Nav/>
                 <Airdrop/>
-                {/* <Copyright/> */}
                 <Footer/>
-              </Route>
-              <Route path="/airdropDetail" exact>
+              </Route> */}
+              {/* <Route path="/airdropDetail" exact>
                 <Nav/>
                 <AirdropDetail/>
                 <Copyright/>
-              </Route>
+              </Route> */}
               {/* <Route path="/ngnf" exact>
                 <Nav/>
                 <NGNF/>
@@ -158,11 +157,11 @@ function App() {
                 <FairDealing/>
                 <Footer/>
               </Route>
-              <Route path="/roadmap" exact>
+              {/* <Route path="/roadmap" exact>
                 <Nav/>
                 <Roadmap/>
                 <Footer/>
-              </Route>
+              </Route> */}
               {/* <Route path="/ido" exact>
                 <Nav/>
                 <IDO/>

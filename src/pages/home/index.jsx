@@ -58,7 +58,7 @@ export default function Home() {
                         </Top1Tip>
                         <Top1TipBtnRow>
                             {/* <Top1TipDisabledBtn disabled>Fair Launch</Top1TipDisabledBtn> */}
-                            <Top1TipBorderBtn className='custom' to='/airdrop'>{t('101')}</Top1TipBorderBtn>
+                            {/* <Top1TipBorderBtn className='custom' to='/airdrop'>{t('101')}</Top1TipBorderBtn> */}
                             {/* <Top1TipBorderBtn className='custom' to='/displacement'>{t('111')}</Top1TipBorderBtn> */}
                             <Top1TipBorderBtn className='custom' to='/download'>
                                 <img src={require('../../assets/home/download.png').default} alt="" aria-hidden="true"/>
@@ -130,52 +130,6 @@ export default function Home() {
                         </Top3RowItem>
                     </Top3Row>
                 </Top3>
-                <Top4>
-                    <TopBg src={require('../../assets/home/bg4.png').default} alt="" aria-hidden="true"/>
-                    <Top4Content>
-                        {/* <Top4Title>
-                            <span>{t('125')}</span>
-                            <img src={require('../../assets/home/img4_title.png').default} alt="" aria-hidden="true"/>
-                        </Top4Title>
-                        <Top4Row1>
-                            <Top4Row1Left>
-                                <div className='title'>{t('126')}</div>
-                                <div className='desc'>{t('127')}</div>
-                                <div className='desc'>{t('128')}<a href={GitbookTokenUrl} target='__blank'>Gitbook</a></div>
-                                <Top4Row1LeftCard>
-                                    <img src={require('../../assets/home/img41.png').default} alt="" aria-hidden="true"/>
-                                    <Top4Row1LeftCardContent>
-                                        <Top4Row1LeftCardItem>
-                                            <div className='item_title'>NGNF</div>
-                                            <div className='item_desc'>{t('342')}</div>
-                                        </Top4Row1LeftCardItem>
-                                        <Top4Row1LeftCardItem>
-                                            <div className='item_title'>1 billion</div>
-                                            <div className='item_desc'>{t('192')}</div>
-                                        </Top4Row1LeftCardItem>
-                                        <Top4Row1LeftCardItem>
-                                            <div className='item_title'>Solana</div>
-                                            <div className='item_desc'>{t('344')}</div>
-                                        </Top4Row1LeftCardItem>
-                                    </Top4Row1LeftCardContent>
-                                </Top4Row1LeftCard>
-                            </Top4Row1Left>
-                            <Chart><img src={require("../../assets/home/chart_icon.png").default} alt="" aria-hidden="true"/></Chart>
-                        </Top4Row1> */}
-                        <Top4Row2>
-                            <Top4Row2Img className='wow animate__animated animate__fadeInLeft' src={require('../../assets/home/img42.png').default} alt={t('10002')}/>
-                            <Top4Row2Right className='wow animate__animated animate__fadeInRight'>
-                                <div className='title'>{t('200')}</div>
-                                <div className='subTitle'>{t('129')}</div>
-                                <div className='desc'>{t('130')}</div>
-                                <Top2Btn className='custom' onClick={()=>history.push('/airdrop')}>
-                                    <span>{t('131')}</span>
-                                    <img src={require('../../assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
-                                </Top2Btn>
-                            </Top4Row2Right>
-                        </Top4Row2>
-                    </Top4Content>
-                </Top4>
                 <ImgRow src={require('../../assets/home/logo_row.png').default} alt="" aria-hidden="true"/>
                 {/* <Top5>
                     <Top5Content>
@@ -194,48 +148,6 @@ export default function Home() {
                         <Top5ImgShadow src={require('../../assets/home/img5_box_shadow.png').default}/>
                     </Top5Content>
                 </Top5> */}
-                <Top6>
-                    <Top6Bg src={require('../../assets/home/bg6.png').default} alt="" aria-hidden="true"/>
-                    <Top6Title>{t('102')}</Top6Title>
-                    <Top6Content>
-                        <Top6Img src={require('../../assets/home/roadmap.png').default} alt='Roadmap milestone icon'/>
-                        <Top6Row>
-                            <Top6RowItem>
-                                <div className='title'>
-                                    <span>Q2 2023</span>
-                                    <img src={require('../../assets/home/flag.png').default} alt="" aria-hidden="true"/>
-                                </div>
-                                <Top6Tip className='wow animate__animated animate__fadeInLeft'>
-                                    <Top6TipRow>{t('135')}</Top6TipRow>
-                                </Top6Tip>
-                            </Top6RowItem>
-                            <Top6RowItem>
-                                <div className='title'>
-                                    <span style={{color:'#20CFF1'}}>Q2 2024</span>
-                                    <img src={require('../../assets/home/flag.png').default} alt="" aria-hidden="true"/>
-                                </div>
-                                <Top6Tip className='wow animate__animated animate__fadeInUp'>
-                                    <Top6TipRow>{t('144')}</Top6TipRow>
-                                    <Top6TipRow>{t('145')}</Top6TipRow>
-                                    <Top6TipRow>{t('146')}</Top6TipRow>
-                                    <Top6TipRow>{t('147')}</Top6TipRow>
-                                </Top6Tip>
-                            </Top6RowItem>
-                            <Top6RowItem>
-                                <div className='title'>
-                                    <span style={{color:'#1AE796'}}>Q3 2025</span>
-                                </div>
-                                <Top6Tip className='wow animate__animated animate__fadeInRight'>
-                                    <Top6TipRow>{t('165')}<br/><a href='' target='__blank'>{t('166')}</a></Top6TipRow>
-                                </Top6Tip>
-                                <Top6Btn className='custom' onClick={()=>history.push('/roadmap')}>
-                                    <span>{t('104')}</span>
-                                    <img src={require('../../assets/home/arrow_enter.png').default} alt="" aria-hidden="true"/>
-                                </Top6Btn>
-                            </Top6RowItem>
-                        </Top6Row>
-                    </Top6Content>
-                </Top6>
                 <Top7>
                     <Top7BlueBgRadio/>
                     <Top7RedBgRadio/>
@@ -344,10 +256,10 @@ export default function Home() {
                     <div className='title'>CHIPCHIP.IO</div>
                     <h1 className='desc'>{t('106')}</h1>
                     <div className='tip'>{t('107')}<br/>{t('109')}<br/>{t('108')}<br/>{t('110')}</div>
-                    <div className='row'>
+                    {/* <div className='row'> */}
                         {/* <Top1TipDisabledBtn disabled>Fair Launch</Top1TipDisabledBtn> */}
-                        <Top1TipBorderBtn to='/airdrop'>{t('101')}</Top1TipBorderBtn>
-                    </div>
+                        {/* <Top1TipBorderBtn to='/airdrop'>{t('101')}</Top1TipBorderBtn> */}
+                    {/* </div> */}
                     <div className='row'>
                         {/* <Top1TipBorderBtn to='/displacement'>{t('111')}</Top1TipBorderBtn> */}
                         <Top1TipBorderBtn to='/download'>
@@ -426,16 +338,6 @@ export default function Home() {
                     </Top4H5CardItem>
                 </Top4H5Card>
             </Top4H5> */}
-            <Top5H5>
-                <img className='bg' src={require('../../assets/home/h5/bg5.png').default} alt="" aria-hidden="true"/>
-                <div className='t_title'>{t('200')}</div>
-                <div className='t_sub_title'>{t('129')}</div>
-                <div className='desc'>{t('130')}</div>
-                <BtnH5 className='custom' onClick={()=>history.push('/airdrop')}>
-                    <span>{t('131')}</span>
-                    <img src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
-                </BtnH5>
-            </Top5H5>
             <div style={{overflow:'hidden',height:30}}>
                 <img style={{objectFit:'contain',verticalAlign:'top',height:'100%'}} src={require('../../assets/home/h5/logo_row.png').default} alt="" aria-hidden="true"/>
             </div>
@@ -458,44 +360,6 @@ export default function Home() {
                     <img className='box_shadow' src={require('../../assets/home/h5/img6_box_shadow.png').default} alt="" aria-hidden="true"/>
                 </div>
             </Top6H5> */}
-            <Top7H5>
-                <img className='bg' src={require('../../assets/home/h5/bg7.png').default} alt="" aria-hidden="true"/>
-                <div className='t_title'>{t('102')}</div>
-                <div className='content'>
-                    <Top7H5Left>
-                        <Top7H5Item>
-                            <div className='title'>
-                                <span>Q2 2023</span>
-                                <img src={require('../../assets/home/h5/flag.png').default} alt="" aria-hidden="true"/>
-                            </div>
-                            <div className='desc'>{t('135')}</div>
-                        </Top7H5Item>
-                        <Top7H5Item>
-                            <div className='title'>
-                                <span style={{color:'#1AE796'}}>Q3 2025</span>
-                            </div>
-                            <div className='desc'>{t('165')}<br/><a href='#' target='__blank'>{t('166')}</a></div>
-                        </Top7H5Item>
-                    </Top7H5Left>
-                    <Top7H5Center src={require('../../assets/home/h5/roadmap.png').default} alt='Roadmap milestone icon'/>
-                    <Top7H5Right>
-                        <Top7H5Item>
-                            <div className='title'>
-                                <span style={{color:'#20CFF1'}}>Q2 2024</span>
-                                <img src={require('../../assets/home/h5/flag.png').default} alt="" aria-hidden="true"/>
-                            </div>
-                            <div className='desc'>{t('144')}</div>
-                            <div className='desc'>{t('145')}</div>
-                            <div className='desc'>{t('146')}</div>
-                            <div className='desc'>{t('147')}</div>
-                        </Top7H5Item>
-                    </Top7H5Right>
-                </div>
-                <BtnH5 className='custom' onClick={()=>history.push('/roadmap')} style={{margin:'0 auto',marginTop:50}}>
-                    <span>{t('171')}</span>
-                    <img src={require('../../assets/nav/login_arrow.png').default} alt="" aria-hidden="true"/>
-                </BtnH5>
-            </Top7H5>
             <Top8H5>
                 <Top8H5BlueBgRadio/>
                 <Top8H5RedBgRadio/>
