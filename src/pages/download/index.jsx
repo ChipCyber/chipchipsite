@@ -27,6 +27,8 @@ const iosChannels = [
     { key: 'backup', labelKey: '530', url: iOSNativeBackupUrl },
 ];
 
+const isIosNativeMaintenance = true;
+
 function IosEntries({ desktop }) {
     const { t } = useTranslation();
     const [open, setOpen] = useState(false);
@@ -34,16 +36,26 @@ function IosEntries({ desktop }) {
     return (
         <>
             <NativeGroup>
-                <NativeToggle type="button" aria-expanded={open} onClick={() => setOpen((value) => !value)}>
+                <NativeToggle
+                    type="button"
+                    disabled={isIosNativeMaintenance}
+                    aria-disabled={isIosNativeMaintenance}
+                    aria-expanded={!isIosNativeMaintenance && open}
+                    onClick={() => {
+                        if (!isIosNativeMaintenance) {
+                            setOpen((value) => !value);
+                        }
+                    }}
+                >
                     <div className='content'>
                         <img src={require('../../assets/download/ios.png').default} alt="" aria-hidden="true" />
                         <span>{t('528')}</span>
                     </div>
-                    <Chevron $open={open} viewBox="0 0 20 20" aria-hidden="true">
-                        <path d="M5 7.5L10 12.5L15 7.5" stroke="#5A5A5A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    <Chevron $open={!isIosNativeMaintenance && open} viewBox="0 0 20 20" aria-hidden="true">
+                        <path d="M5 7.5L10 12.5L15 7.5" stroke={isIosNativeMaintenance ? "#999" : "#5A5A5A"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                     </Chevron>
                 </NativeToggle>
-                {open && (
+                {!isIosNativeMaintenance && open && (
                     <ChannelList>
                         {iosChannels.map((channel) => (
                             desktop ? (
@@ -382,6 +394,21 @@ border-radius: 15px;
 background: #FFF;
 &:hover {
 color: #666;
+}
+&:disabled {
+cursor: no-drop;
+cursor: not-allowed;
+color: #999;
+background: #FFF;
+&:hover {
+color: #999;
+}
+svg path {
+stroke: #999;
+}
+.content img {
+opacity: 0.5;
+}
 }
 .content {
 display: flex;
